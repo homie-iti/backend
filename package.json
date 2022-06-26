@@ -1,0 +1,28 @@
+{
+	"name": "homie-backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "./src/app.js",
+	"scripts": {
+		"start": "nodemon ./src/app.js",
+		"start:db": "mongod --dbpath \"./db\"",
+		"test": "jasmine"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^5.0.1",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.1",
+		"express": "^4.18.1",
+		"express-validator": "^6.14.2",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^6.4.0",
+		"morgan": "^1.10.0"
+	},
+	"devDependencies": {
+		"jasmine": "^4.2.1",
+		"jasmine-spec-reporter": "^7.0.0",
+		"nodemon": "^2.0.18"
+	}
+}
