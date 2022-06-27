@@ -1,23 +1,19 @@
-const mongoose=require("mongoose");
+const mongoose = require("mongoose");
 
-const schema=new mongoose.Schema({
-    _id:{
-        type:mongoose.Types.ObjectId
-    },
+const schema = new mongoose.Schema({
+	_id: {
+		type: mongoose.Types.ObjectId,
+	},
 
-   cityName:{
-    type:String,
-    required:true
+	cityName: {
+		type: String,
+		required: [true, "city cityName is required"],
+	},
+	// you need sure
+	units: {
+		type: [{ type: mongoose.Types.ObjectId, ref: "units" }],
+		required: [true, "city units is required"],
+	},
+});
 
-   },
-// you need sure
-   units:{type:[{type:mongoose.Types.ObjectId,
-                  ref:"units"}],
-                  required:true,
-   }
-
-})
-
-
-
-mongoose.model("cities",schema)
+mongoose.model("cities", schema);

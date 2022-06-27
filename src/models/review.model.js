@@ -8,20 +8,20 @@ const schema = new mongoose.Schema(
 		agentId: {
 			type: mongoose.Types.ObjectId,
 			ref: "agents",
-			required: true,
+			required: [true, "review agentId is required"],
 		},
 		unitId: {
 			type: mongoose.Types.ObjectId,
 			ref: "units",
-			required: true,
+			required: [true, "review unitId is required"],
 		},
 		comment: {
 			type: String,
-			required: true,
+			required: [true, "review comment is required"],
 		},
 		rating: {
 			type: Number,
-			required: true,
+			required: [true, "review rating is required"],
 			min: 1,
 			max: 5,
 		},

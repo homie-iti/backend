@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
 	},
 	landlordUnits: {
 		type: [{ type: mongoose.Types.ObjectId, ref: "units" }],
-		required: true,
+		required: [true, "landlord landlordUnits is required"],
 	},
 });
 module.exports = mongoose.model("landlords", schema);

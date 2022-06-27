@@ -6,45 +6,51 @@ const schema = new mongoose.Schema(
 		landlordId: {
 			type: mongoose.Types.ObjectId,
 			ref: "landlords",
-			required: [true, "Please add the landlord id."],
+			required: [true, "unit landlordId is required"],
 		},
 		agentId: { type: mongoose.Types.ObjectId, ref: "agents" },
 		cities: {
 			type: mongoose.Types.ObjectId,
 			ref: "cities",
-			required: [true, "Please add the unit city."],
+			required: [true, "unit city is required"],
 		},
 		estateType: {
 			type: String,
-			required: [true, "Please add the unit type."],
+			required: [true, "unit estateType is required"],
 			enum: ["studio", "shared-room", "single-room", "apartment"], // TODO we need to check if these are all the
 		},
 		address: {
 			type: addressSchema,
-			required: [true, "Please add the unit address."],
+			required: [true, "unit address is required"],
 		},
 		dailyPrice: {
 			type: Number,
-			required: [true, "Please add the unit daily price."],
+			required: [true, "unit dailyPrice is required"],
 		},
 		isAvailable: Boolean,
-		images: [{ type: String, required: [true, "Please add the unit images."] }],
+		images: [{ type: String, required: [true, "unit images is required"] }],
 		isPetsAllowed: Boolean,
 		numberOfResidents: {
 			type: Number,
-			required: [true, "Please add the allowed number of residents."],
+			required: [true, "unit numberOfResidents is required"],
 		},
 		unitInfo: {
 			description: {
 				type: String,
-				required: [true, "Please add the unit description."],
+				required: [true, "unit unitInfo description is required"],
 			},
-			rooms: { type: Number, required: [true, "Please add the unit rooms."] },
+			rooms: {
+				type: Number,
+				required: [true, "unit unitInfo rooms is required"],
+			},
 			bathrooms: {
 				type: Number,
-				required: [true, "Please add the unit bathrooms."],
+				required: [true, "unit unitInfo bathrooms is required"],
 			},
-			floor: { type: Number, required: [true, "Please add the unit floor."] },
+			floor: {
+				type: Number,
+				required: [true, "unit unitInfo floor is required"],
+			},
 		},
 	},
 	{ timestamps: true }

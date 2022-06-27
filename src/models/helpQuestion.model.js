@@ -8,7 +8,7 @@ const schema = new mongoose.Schema(
 		userId: {
 			type: mongoose.Types.ObjectId,
 			ref: "users",
-			required: true,
+			required: [true, "help question userId is required"],
 		},
 		adminId: {
 			type: mongoose.Types.ObjectId,
@@ -16,11 +16,11 @@ const schema = new mongoose.Schema(
 		},
 		question: {
 			type: String,
-			required: true,
+			required: [true, "help question question is required"],
 		},
 		answer: {
 			type: String,
-			required: true,
+			required: [true, "help question answer is required"],
 		},
 	},
 	{ timestamps: true }

@@ -9,32 +9,32 @@ const schema = new mongoose.Schema(
 
 		fullName: {
 			type: String,
-			required: [true, "Please add a name"],
+			required: [true, "user fullName is required"],
 		},
 		age: {
 			type: Number,
 			min: 18,
-			required: [true, "Please add an age"],
+			required: [true, "user age is required"],
 		},
 		email: {
 			type: String,
 			unique: true,
-			required: [true, "Please add an email"],
+			required: [true, "user email is required"],
 			// match:{}
 		},
 		gender: {
 			type: String,
 			enum: ["male", "female"],
-			required: [true, "Please add a gender"],
+			required: [true, "user gender is required"],
 		},
 		password: {
 			type: String,
-			required: [true, "Please add a password"],
+			required: [true, "user password is required"],
 		},
-		phone: { type: String, required: [true, "Please add a phone number"] },
+		phone: { type: String, required: [true, "user phone is required"] },
 		national_id: {
 			type: Number,
-			required: [true, "Please add a national id"],
+			required: [true, "user national_id is required"],
 			unique: true,
 		},
 		image: { type: String },

@@ -21,7 +21,7 @@ const schema = new mongoose.Schema({
 			},
 		],
 
-		required: true,
+		required: [true, "agent units is required"],
 	},
 
 	favoriteUnits: [
