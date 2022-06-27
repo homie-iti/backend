@@ -18,8 +18,9 @@ require("./models/user.model");
 const app = express();
 const port = process.env.PORT || 8080;
 
+const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 mongoose
-	.connect(process.env.DB_URL)
+	.connect(homieDB_URL)
 	.then(() => {
 		app.listen(port, () => {
 			console.log("App listens on port", port);
