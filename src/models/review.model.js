@@ -17,8 +17,8 @@ const schema = new mongoose.Schema(
     },
     comment: {
       type: String,
-      min: "",
-      max: "280",
+      min: 0,
+      max: 280,
       required: [true, "review comment is required"],
     },
     rating: {
