@@ -4,7 +4,6 @@ const { body, param, query } = require("express-validator");
 
 const userController = require("./../controllers/user.controller");
 
-router.route( "/users" )
-      .get( userController.getAllUsers );
+router.route("/users").get(userController.getAllUsers);
 
 module.exports = router;

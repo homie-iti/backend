@@ -4,10 +4,6 @@ const { body, param, query } = require("express-validator");
 
 const unitController = require("./../controllers/unit.controller");
 
-router.route( "/units" )
-      .get( unitController.getAllUnits );
-
-
-
+router.route("/units").get(unitController.getAllUnits);
 
 module.exports = router;
