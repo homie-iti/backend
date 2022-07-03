@@ -9,7 +9,7 @@ const schema = new mongoose.Schema(
 			required: [true, "unit landlordId is required"],
 		},
 		agentId: { type: mongoose.Types.ObjectId, ref: "agents" },
-		cities: {
+		cityId: {
 			type: mongoose.Types.ObjectId,
 			ref: "cities",
 			required: [true, "unit city is required"],
@@ -51,7 +51,26 @@ const schema = new mongoose.Schema(
 				type: Number,
 				required: [true, "unit unitInfo floor is required"],
 			},
+
 		},
+
+		gender: {
+			type: String,
+			required: [true, "unit gender is required"],
+			enum: ["Male, Female"]
+		},
+
+		geoLocation: {
+			type: {
+				type: String,
+				enum: ['Point'], // 'location.type' must be 'Point'
+				required: [true, "unit location is required"],
+			},
+			coordinates: {
+				type: [Number],
+				required: [true, "unit coordinates is required"],
+			}
+		}
 	},
 	{ timestamps: true }
 );
