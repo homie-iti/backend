@@ -5,11 +5,11 @@ const recommendationsController = require("../controllers/recommednationsControl
 
 
 
-router.route(`/recommendations/cities`)
-    .get(recommendationsController.getCities)
+// router.route(`/recommendations/cities`)
+//     .get(recommendationsController.getCities)
 
 
-router.route(`/recommendations/citiesNumber=Number`)
+router.route(`/recommendations`)
     .get(recommendationsController.getCities)
 
 
