@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const unitRoute = require("./routers/unit.route");
 const userRoute = require("./routers/user.route");
+const recommendationsRoute = require("./routers/recommendationsRoute")
 
 require("./models/address.model");
 require("./models/admin.model");
@@ -20,6 +21,7 @@ require("./models/user.model");
 
 const app = express();
 const port = process.env.PORT || 8080;
+
 
 const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 mongoose
@@ -38,6 +40,7 @@ app.use(morgan(":method :url :status - :response-time ms"));
 
 app.use(unitRoute);
 app.use(userRoute);
+app.use(recommendationsRoute);
 
 // not-found middleware
 app.use((request, response, next) => {
