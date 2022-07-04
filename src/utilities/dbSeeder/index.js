@@ -5,36 +5,63 @@ const { faker } = require("@faker-js/faker");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const seedHelpQuestion = require("./seeders/helpQuestion.seeder");
-const seedAdmin = require("./seeders/admin.seeder");
+const seedHelpQuestions = require("./seeders/helpQuestions.seeder");
+const seedAdmins = require("./seeders/admins.seeder");
+const seedUsers = require("./seeders/users.seeder");
+const seedCities = require("./seeders/cities.seeder");
+const { addUnitsToCities } = require("./seeders/cities.seeder");
+const seedUnits = require("./seeders/units.seeder");
 
 require("../../models/address.model");
 // require("../../models/admin.model");
 require("../../models/agent.model");
-require("../../models/city.model");
+// require("../../models/city.model");
 require("../../models/contract.model");
 // require("../../models/helpQuestion.model");
 require("../../models/landlord.model");
 require("../../models/review.model");
-require("../../models/unit.model");
-require("../../models/user.model");
+// require("../../models/unit.model");
+// require("../../models/user.model");
 
 const collectionsIds = {
 	adminsIds: [],
+	usersIds: [],
 	helpQuestionsIds: [],
+	citiesIds: [],
+	unitsIds: [],
 };
 
 async function seedDB() {
 	console.log("Don't close DB connection while seeding.");
 	console.log("----------------------");
 	try {
-		collectionsIds.adminsIds = [...(await seedAdmin(10))];
+		collectionsIds.adminsIds = [...(await seedAdmins(10))];
 		console.log("+ admins seeded");
 
+		collectionsIds.usersIds = [...(await seedUsers(1000))];
+		console.log("+ users seeded");
+
 		collectionsIds.helpQuestionsIds = [
-			...(await seedHelpQuestion(5000, collectionsIds.adminsIds)),
+			...(await seedHelpQuestions(
+				500,
+				collectionsIds.adminsIds,
+				collectionsIds.usersIds
+			)),
 		];
 		console.log("+ help questions seeded");
+
+		collectionsIds.citiesIds = [...(await seedCities(50))];
+		console.log("+ cities seeded");
+
+		collectionsIds.unitsIds = [
+			...(await seedUnits(
+				800,
+				collectionsIds.usersIds,
+				collectionsIds.citiesIds
+			)),
+		];
+		addUnitsToCities(collectionsIds.unitsIds);
+		console.log("+ units seeded");
 
 		console.log("----------------------");
 		console.log("Database seeded! :)");
@@ -49,7 +76,7 @@ const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${p
 	try {
 		await mongoose.connect(homieDB_URL);
 		await seedDB();
-		process.exit();
+		// process.exit();
 	} catch (error) {
 		console.log("DB Connection Error", error);
 	}

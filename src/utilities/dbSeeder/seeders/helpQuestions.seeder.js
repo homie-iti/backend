@@ -8,9 +8,9 @@ function randomIntFromInterval(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-async function seedHelpQuestion(numberOfDocuments, adminsIds) {
+async function seedHelpQuestion(numberOfDocuments, adminsIds, usersIds) {
 	const collection = mongoose.model("helpQuestions");
-	mongoose.connection.db.dropCollection("helpquestions");
+	await mongoose.connection.db.dropCollection("helpquestions");
 	// collection.drop();
 
 	let data = [];
@@ -18,8 +18,12 @@ async function seedHelpQuestion(numberOfDocuments, adminsIds) {
 
 	for (let i = 0; i < numberOfDocuments; i++) {
 		const _id = faker.database.mongodbObjectId();
-		const userId = faker.database.mongodbObjectId();
-		const adminId = adminsIds[randomIntFromInterval(0, adminsIds.length)];
+		const userId = mongoose.Types.ObjectId(
+			usersIds[randomIntFromInterval(0, usersIds.length)]
+		);
+		const adminId = mongoose.Types.ObjectId(
+			adminsIds[randomIntFromInterval(0, adminsIds.length)]
+		);
 		const question = faker.lorem.sentence().slice(0, -1) + "?";
 		const answer = faker.lorem.paragraph(1);
 
@@ -27,7 +31,7 @@ async function seedHelpQuestion(numberOfDocuments, adminsIds) {
 		data.push({ _id, userId, adminId, question, answer });
 	}
 
-	collection.insertMany(data);
+	await collection.insertMany(data);
 	return ids;
 }
 
