@@ -11,12 +11,13 @@ function randomIntFromInterval(min, max) {
 async function seedCities(numberOfDocuments) {
 	const collection = mongoose.model("cities");
 	await mongoose.connection.db.dropCollection("cities");
-	// collection.drop();
 
 	let data = [];
 	const ids = [];
 	for (let i = 0; i < numberOfDocuments; i++) {
-		const _id = faker.database.mongodbObjectId();
+		const _id = mongoose.Types.ObjectId(
+			faker.unique(faker.database.mongodbObjectId)
+		);
 		const cityName = faker.address.cityName();
 		const units = [];
 
@@ -34,39 +35,18 @@ async function seedCities(numberOfDocuments) {
 
 async function addUnitsToCities(unitsIds) {
 	const collection = mongoose.model("cities");
-	// await mongoose.connection.db.dropCollection("cities");
-	// collection.drop();
 	const cities = await collection.find({});
 
-	const newCities = cities.map((city) => {
+	cities.forEach(async (city) => {
 		const unitsStart = randomIntFromInterval(0, unitsIds.length - 25);
 		const unitsEnd = unitsStart + randomIntFromInterval(0, 24);
 
-		const slicedUnits = unitsIds
-			.slice(unitsStart, unitsEnd)
-			.map((unitId) => mongoose.Types.ObjectId(unitId));
+		let slicedUnits = unitsIds.slice(unitsStart, unitsEnd);
+		slicedUnits = slicedUnits.map((unitId) => mongoose.Types.ObjectId(unitId));
 
-		city.units.push([...slicedUnits]);
-		return city;
+		city.units = slicedUnits;
+		await city.save();
 	});
-
-	// let data = [];
-	// const ids = [];
-	// for (let i = 0; i < numberOfDocuments; i++) {
-	// 	const _id = faker.database.mongodbObjectId();
-	// 	const cityName = faker.address.cityName();
-	// 	const units = [];
-
-	// 	ids.push(_id);
-	// 	data.push({
-	// 		_id,
-	// 		cityName,
-	// 		units,
-	// 	});
-	// }
-
-	await collection.insertMany(newCities);
-	// return ids;
 }
 
 module.exports = seedCities;
