@@ -6,7 +6,7 @@ require("dotenv").config();
 
 const unitRoute = require("./routers/unit.route");
 const userRoute = require("./routers/user.route");
-const recommendationsRoute = require("./routers/recommendationsRoute")
+const recommendationsRoute = require("./routers/recommendationsRoute");
 
 require("./models/address.model");
 require("./models/admin.model");
@@ -21,7 +21,6 @@ require("./models/user.model");
 
 const app = express();
 const port = process.env.PORT || 8080;
-
 
 const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 mongoose
