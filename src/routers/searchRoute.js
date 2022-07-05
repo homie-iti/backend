@@ -8,7 +8,7 @@ const router = express.Router();
 router
   .route("/search/:cityName")
   .get(
-    [param("cityName").isAlpha().withMessage("city name should be character")],
+    [param("cityName").isString().withMessage("city name should be character")],
     validationMW,
     search.getCityByName
   );
