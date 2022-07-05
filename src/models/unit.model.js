@@ -3,13 +3,13 @@ const addressSchema = require("./address.model");
 const schema = new mongoose.Schema(
 	{
 		_id: mongoose.Types.ObjectId,
-		landlordId: {
+		landlord: {
 			type: mongoose.Types.ObjectId,
 			ref: "landlords",
 			required: [true, "unit landlordId is required"],
 		},
-		agentId: { type: mongoose.Types.ObjectId, ref: "agents" },
-		cityId: {
+		agent: { type: mongoose.Types.ObjectId, ref: "agents" },
+		city: {
 			type: mongoose.Types.ObjectId,
 			ref: "cities",
 			required: [true, "unit city is required"],
