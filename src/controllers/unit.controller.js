@@ -2,7 +2,10 @@ let Unit = require("../models/unit.model");
 let Review = require("../models/review.model");
 
 module.exports.getAllUnits = (request, response, next) => {
-  Unit.find({}, "estateType images unitInfo dailyPrice address ")
+  Unit.find(
+    {},
+    "estateType images unitInfo isAvailable isPetsAllowed gender dailyPrice address "
+  )
     .populate({ path: "landlordId", select: "fullName phone image" })
     .then((data) => {
       response.status(200).json(data);
