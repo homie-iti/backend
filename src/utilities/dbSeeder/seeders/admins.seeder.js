@@ -11,7 +11,9 @@ async function seedAdmin(numberOfDocuments) {
 	let data = [];
 	const ids = [];
 	for (let i = 0; i < numberOfDocuments; i++) {
-		const _id = faker.database.mongodbObjectId();
+		const _id = mongoose.Types.ObjectId(
+			faker.unique(faker.database.mongodbObjectId)
+		);
 		const firstName = faker.name.firstName();
 		const lastName = faker.name.lastName();
 		const fullName = faker.name.firstName() + " " + faker.name.lastName();

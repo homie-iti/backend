@@ -16,7 +16,9 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
 	let data = [];
 	const ids = [];
 	for (let i = 0; i < numberOfDocuments; i++) {
-		const _id = faker.database.mongodbObjectId();
+		const _id = mongoose.Types.ObjectId(
+			faker.unique(faker.database.mongodbObjectId)
+		);
 		const landlordId = mongoose.Types.ObjectId(
 			usersIds[randomIntFromInterval(0, usersIds.length)]
 		);
