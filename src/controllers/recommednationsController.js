@@ -1,6 +1,6 @@
 
 const mongoose = require("mongoose");
-require("../models/city.model");
+require("../models/cityModel");
 let City = mongoose.model("cities")
 
 

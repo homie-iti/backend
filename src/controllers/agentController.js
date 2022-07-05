@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require("../models/agent.model");
+require("../models/agentModel");
 
 let Agent = mongoose.model("agents");
 
