@@ -5,12 +5,12 @@ const schema = new mongoose.Schema(
     _id: {
       type: mongoose.Types.ObjectId,
     },
-    agent: {
+    agentId: {
       type: mongoose.Types.ObjectId,
       ref: "agents",
       required: [true, "review agentId is required"],
     },
-    unit: {
+    unitId: {
       type: mongoose.Types.ObjectId,
       ref: "units",
       required: [true, "review unitId is required"],
@@ -31,4 +31,4 @@ const schema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports=mongoose.model("reviews", schema);
+module.exports = mongoose.model("reviews", schema);

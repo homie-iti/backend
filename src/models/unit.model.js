@@ -3,37 +3,48 @@ const addressSchema = require("./address.model");
 const schema = new mongoose.Schema(
   {
     _id: mongoose.Types.ObjectId,
+
     landlordId: {
       type: mongoose.Types.ObjectId,
       ref: "landlords",
       required: [true, "unit landlordId is required"],
     },
+
     agentId: { type: mongoose.Types.ObjectId, ref: "agents" },
+
     cityId: {
       type: mongoose.Types.ObjectId,
       ref: "cities",
       required: [true, "unit city is required"],
     },
+
     estateType: {
       type: String,
       required: [true, "unit estateType is required"],
       enum: ["studio", "shared-room", "single-room", "apartment"], // TODO we need to check if these are all the
     },
+
     address: {
       type: addressSchema,
       required: [true, "unit address is required"],
     },
+
     dailyPrice: {
       type: Number,
       required: [true, "unit dailyPrice is required"],
     },
+
     isAvailable: Boolean,
+
     images: [{ type: String, required: [true, "unit images is required"] }],
+
     isPetsAllowed: Boolean,
+
     numberOfResidents: {
       type: Number,
       required: [true, "unit numberOfResidents is required"],
     },
+
     unitInfo: {
       description: {
         type: String,

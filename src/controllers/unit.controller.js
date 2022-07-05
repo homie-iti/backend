@@ -16,7 +16,10 @@ module.exports.getAllUnits = (request, response, next) => {
 };
 
 module.exports.getUnitById = (request, response, next) => {
-  Unit.findOne({ _id: request.params.id })
+  Unit.findOne(
+    { _id: request.params.id },
+    "estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice"
+  )
     .populate({ path: "landlordId", select: "fullName phone image" })
     .then((data) => {
       if (data == null) next(new Error("Unit Doesn't Exist"));
