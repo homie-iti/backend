@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
 	fullName: {
 		type: String,
 		required: [true, "admin name is required"],
+		match:[/^[A-Z][a-z ]{3,}[A-Z][a-z ]{3,}[A-Z][a-z]{3,}$/,"please enter fullName (three words)the first letter capital "]
 	},
 	age: {
 		type: Number,
@@ -17,19 +18,26 @@ const schema = new mongoose.Schema({
 		type: String,
 		unique: true,
 		required: [true, "admin email is required"],
-		// match:{}
+		match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
 	},
 	password: {
 		type: String,
 		required: [true, "admin password is required"],
+		match:[ /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/,"password must be than 8 characters , contains at least one lowercase  one uppercase  at least one digit and special character"]
 	},
-	phone: { type: String, required: [true, "admin phone number is required"] },
+	phone: { type: String, 
+		required: [true, "admin phone number is required"],
+		match: [/^(002)?^01[1205][0-9]{8}$/, 'Please fill a valid phone number']
+	
+	},
 	national_id: {
 		type: Number,
 		unique: true,
 		required: [true, "admin national id number is required"],
 	},
-	image: { type: String },
+	image: { type: String ,
+		match: [/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)$/, 'Please fill a valid url address image']
+	},
 });
 
 module.exports = mongoose.model("admins", schema);
