@@ -16,11 +16,16 @@ async function seedAdmin(numberOfDocuments) {
 		);
 		const firstName = faker.name.firstName();
 		const lastName = faker.name.lastName();
-		const fullName = faker.name.firstName() + " " + faker.name.lastName();
+		const fullName =
+			faker.name.firstName() +
+			" " +
+			faker.name.middleName() +
+			" " +
+			faker.name.lastName();
 		const age = faker.mersenne.rand(45, 20);
 		const email = faker.internet.email(firstName, lastName);
 		const password = faker.internet.password();
-		const phone = faker.phone.number("01#########");
+		const phone = faker.phone.number("012########");
 		const national_id = parseInt(faker.phone.number("##############"));
 		const image = faker.internet.avatar();
 

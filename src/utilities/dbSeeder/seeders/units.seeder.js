@@ -20,14 +20,15 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
 			faker.unique(faker.database.mongodbObjectId)
 		);
 		const landlordId = mongoose.Types.ObjectId(
-			usersIds[randomIntFromInterval(0, usersIds.length)]
+			usersIds[randomIntFromInterval(0, usersIds.length - 1)]
 		);
-		const cities = mongoose.Types.ObjectId(
-			citiesIds[randomIntFromInterval(0, citiesIds.length)]
+		const cityId = mongoose.Types.ObjectId(
+			citiesIds[randomIntFromInterval(0, citiesIds.length - 1)]
 		);
 		const estateType = ["studio", "shared-room", "single-room", "apartment"][
 			randomIntFromInterval(0, 3)
 		];
+		const gender = ["male", "female", "any"][randomIntFromInterval(0, 2)];
 		const address = {
 			city: faker.address.cityName(),
 			streetName: faker.address.street(),
@@ -49,11 +50,16 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
 			floor: randomIntFromInterval(1, 15),
 		};
 
+		geoLocation = {
+			type: "Point",
+			coordinates: [faker.address.latitude(), faker.address.longitude()],
+		};
+
 		ids.push(_id);
 		data.push({
 			_id,
 			landlordId,
-			cities,
+			cityId,
 			estateType,
 			dailyPrice,
 			isPetsAllowed,
@@ -62,6 +68,8 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
 			images,
 			address,
 			numberOfResidents,
+			gender,
+			geoLocation,
 		});
 	}
 
