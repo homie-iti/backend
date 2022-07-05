@@ -1,36 +1,38 @@
 {
-  "name": "homie-backend",
-  "version": "1.0.0",
-  "description": "Homie is an online rental accommodation platform for young professionals and international students who came to Egypt looking for apartment.  \r We allow users to rent a unit as agents and they are also allowed to rent their units as landlords.",
-  "main": "./src/app.js",
-  "scripts": {
-    "start": "nodemon ./src/app.js",
-    "start:db": "mongod --dbpath \"./db\"",
-    "test": "jasmine"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^5.0.1",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.1",
-    "express": "^4.18.1",
-    "express-validator": "^6.14.2",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.4.0",
-    "morgan": "^1.10.0"
-  },
-  "devDependencies": {
-    "jasmine": "^4.2.1",
-    "jasmine-spec-reporter": "^7.0.0",
-    "nodemon": "^2.0.18"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/homie-iti/backend.git"
-  },
-  "bugs": {
-    "url": "https://github.com/homie-iti/backend/issues"
-  },
-  "homepage": "https://github.com/homie-iti/backend#readme"
+	"name": "homie-backend",
+	"version": "1.0.0",
+	"description": "Homie is an online rental accommodation platform for young professionals and international students who came to Egypt looking for apartment.  \r We allow users to rent a unit as agents and they are also allowed to rent their units as landlords.",
+	"main": "./src/app.js",
+	"scripts": {
+		"start": "nodemon ./src/app.js",
+		"start:db": "mongod --dbpath \"./db\"",
+		"start:db-seeder": "node ./src/utilities/dbSeeder/index.js",
+		"test": "jasmine"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^5.0.1",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.1",
+		"express": "^4.18.1",
+		"express-validator": "^6.14.2",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^6.4.2",
+		"morgan": "^1.10.0"
+	},
+	"devDependencies": {
+		"@faker-js/faker": "^7.3.0",
+		"jasmine": "^4.2.1",
+		"jasmine-spec-reporter": "^7.0.0",
+		"nodemon": "^2.0.18"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/homie-iti/backend.git"
+	},
+	"bugs": {
+		"url": "https://github.com/homie-iti/backend/issues"
+	},
+	"homepage": "https://github.com/homie-iti/backend#readme"
 }

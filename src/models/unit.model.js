@@ -51,26 +51,25 @@ const schema = new mongoose.Schema(
 				type: Number,
 				required: [true, "unit unitInfo floor is required"],
 			},
-
 		},
 
 		gender: {
 			type: String,
 			required: [true, "unit gender is required"],
-			enum: ["Male, Female"]
+			enum: ["male", "female", "any"],
 		},
 
 		geoLocation: {
 			type: {
 				type: String,
-				enum: ['Point'], // 'location.type' must be 'Point'
+				enum: ["Point"], // 'location.type' must be 'Point'
 				required: [true, "unit location is required"],
 			},
 			coordinates: {
 				type: [Number],
 				required: [true, "unit coordinates is required"],
-			}
-		}
+			},
+		},
 	},
 	{ timestamps: true }
 );
