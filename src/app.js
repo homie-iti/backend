@@ -4,22 +4,22 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const unitRoute = require("./routers/unit.route");
-const userRoute = require("./routers/user.route");
+const unitRoute = require("./routers/unitRoute");
+const userRoute = require("./routers/userRoute");
 const recommendationsRoute = require("./routers/recommendationsRoute");
 const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
 
-require("./models/address.model");
-require("./models/admin.model");
-require("./models/agent.model");
-require("./models/city.model");
-require("./models/contract.model");
-require("./models/helpQuestion.model");
-require("./models/landlord.model");
-require("./models/review.model");
-require("./models/unit.model");
-require("./models/user.model");
+require("./models/addressModel");
+require("./models/adminModel");
+require("./models/agentModel");
+require("./models/cityModel");
+require("./models/contractModel");
+require("./models/helpQuestionModel");
+require("./models/landlordModel");
+require("./models/reviewModel");
+require("./models/unitModel");
+require("./models/userModel");
 
 const app = express();
 const port = process.env.PORT || 8080;

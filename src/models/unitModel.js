@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const addressSchema = require("./address.model");
+const addressSchema = require("./addressModel");
 const schema = new mongoose.Schema(
 	{
 		_id: mongoose.Types.ObjectId,

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const addressSchema = require("./address.model");
+const addressSchema = require("./addressModel");
 //some property lose
 const schema = new mongoose.Schema(
 	{

@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { body, param, query } = require("express-validator");
 
-const userController = require("./../controllers/user.controller");
+const unitController = require("../controllers/unitController");
 
-router.route("/users").get(userController.getAllUsers);
+router.route("/units").get(unitController.getAllUnits);
 
 module.exports = router;
