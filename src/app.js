@@ -8,6 +8,8 @@ const unitRoute = require("./routers/unit.route");
 const userRoute = require("./routers/user.route");
 const cityRoute = require("./routers/city.route");
 const recommendationsRoute = require("./routers/recommendationsRoute");
+const agentRoute = require("../src/routers/agentRoute");
+const searchRoute = require("../src/routers/searchRoute");
 
 require("./models/address.model");
 require("./models/admin.model");
@@ -39,6 +41,8 @@ app.use(cors());
 app.use(morgan(":method :url :status - :response-time ms"));
 app.use(express.json());
 
+app.use(searchRoute);
+app.use(agentRoute);
 app.use(unitRoute);
 app.use(userRoute);
 app.use(cityRoute);
