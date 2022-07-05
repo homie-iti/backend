@@ -63,15 +63,3 @@ module.exports.deleteAgent = (request, response, next) => {
       next(error);
     });
 };
-
-module.exports.uploadAgent = (request, response, next) => {
-  console.log(request.file);
-  Agent.findOne({ _id: request.params.id })
-    .then((data) => {
-      response.status(200).json({ data: "uploaded" });
-    })
-    // .save()
-    .catch((error) => {
-      next(error);
-    });
-};
