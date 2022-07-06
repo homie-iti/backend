@@ -5,7 +5,7 @@ const { body, param, query } = require("express-validator");
 const router = express.Router();
 
 router.route("/landlord")
-    .get(alndlord.getAllLandLord)
+    .get(landlordController.getAllLandLord)
     .post(
         [
             body("id").isMongoId().withMessage("landlord id should be MongoId"),

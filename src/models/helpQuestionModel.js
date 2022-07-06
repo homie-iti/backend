@@ -12,7 +12,7 @@ const schema = new mongoose.Schema(
 		},
 		adminId: {
 			type: mongoose.Types.ObjectId,
-			ref: "users",
+			ref: "admins",
 		},
 		question: {
 			type: String,

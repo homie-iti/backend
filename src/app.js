@@ -4,25 +4,29 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const unitRoute = require("./routers/unit.route");
-const userRoute = require("./routers/user.route");
-const recommendationsRoute = require("./routers/recommendationsRoute")
+const unitRoute = require("./routers/unitRoute");
+const userRoute = require("./routers/userRoute");
+const cityRoute = require("./routers/cityRoute");
+const recommendationsRoute = require("./routers/recommendationsRoute");
+const agentRoute = require("../src/routers/agentRoute");
+const searchRoute = require("../src/routers/searchRoute");
+const helpRoute = require("../src/routers/helpQuestionRoute");
 const landlordRoute = require("./routers/landlordRoute")
 
-require("./models/address.model");
-require("./models/admin.model");
-require("./models/agent.model");
-require("./models/city.model");
-require("./models/contract.model");
-require("./models/helpQuestion.model");
-require("./models/landlord.model");
-require("./models/review.model");
-require("./models/unit.model");
-require("./models/user.model");
+
+require("./models/addressModel");
+require("./models/adminModel");
+require("./models/agentModel");
+require("./models/cityModel");
+require("./models/contractModel");
+require("./models/helpQuestionModel");
+require("./models/landlordModel");
+require("./models/reviewModel");
+require("./models/unitModel");
+require("./models/userModel");
 
 const app = express();
 const port = process.env.PORT || 8080;
-
 
 const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 mongoose
@@ -40,10 +44,14 @@ app.use(cors());
 app.use(morgan(":method :url :status - :response-time ms"));
 app.use(express.json())
 
+app.use(searchRoute);
+app.use(agentRoute);
 app.use(unitRoute);
 app.use(userRoute);
+app.use(cityRoute);
 app.use(recommendationsRoute);
 app.use(landlordRoute)
+app.use(helpRoute);
 
 // not-found middleware
 app.use((request, response, next) => {

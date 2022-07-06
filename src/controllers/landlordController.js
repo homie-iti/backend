@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require("../models/landlord.model");
+require("../models/landlordModel");
 
 let Landlord = mongoose.model("landlords");
 
