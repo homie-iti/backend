@@ -47,3 +47,30 @@ module.exports.getUnitReviews = (request, response, next) => {
       next(error);
     });
 };
+
+module.exports.updateUnitData = (request, response, next) => {
+  Unit.findOne({ _id: request.body.id })
+    .then((data) => {
+      // console.log(data);
+      if (data == null) next(new Error("Unit Doesn't Exist"));
+      else {
+        const updates = request.body;
+        // console.log(updates);
+        for (let property in updates) {
+          if (property in data === false) {
+            data.property = updates[property];
+            console.log(data);
+            console.log(property, updates[property]);
+          }
+          data[property] = updates[property] || data[property];
+        }
+        data.save().then((data) => {
+          console.log(data);
+          response.status(200).json({ data: "Unit Data Updated" });
+        });
+      }
+    })
+    .catch((error) => next(error));
+};
+
+
