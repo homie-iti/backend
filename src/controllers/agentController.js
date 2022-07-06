@@ -51,6 +51,15 @@ module.exports.getAgentByID = (request, response, next) => {
 module.exports.createAgent = (request, response, next) => {
   let object = new Agent({
     _id: request.body.id,
+    fullName: request.body.fullName,
+    age: request.body.age,
+    email: request.body.email,
+    password: request.body.password,
+    gender: request.body.gender,
+    phone: request.body.phone,
+    national_id: request.body.national_id,
+    image: request.body.image,
+    address: request.body.address,
   });
   object
     .save()
@@ -60,18 +69,18 @@ module.exports.createAgent = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-module.exports.updateAgent = async (request, response, next) => {
-  try {
-    const data = await Agent.findById(request.body.id);
-    for (const key in request.body) {
-      data[key] = request.body[key];
-    }
-
-    await data.save();
-    response.status(200).json({ data: "updated" });
-  } catch (error) {
-    next(error);
-  }
+module.exports.updateAgent = (request, response, next) => {
+  Agent.findById(request.body.id)
+    .then((data) => {
+      for (const key in request.body) {
+        data[key] = request.body[key];
+      }
+      data.save();
+      response.status(200).json({ data: "updated" });
+    })
+    .catch((error) => {
+      next(error);
+    });
 };
 
 module.exports.deleteAgent = (request, response, next) => {

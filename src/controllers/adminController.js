@@ -26,7 +26,6 @@ module.exports.getAdminByID = (request, response, next) => {
 
 module.exports.createAdmin = (request, response, next) => {
   let object = new Admin({
-    _id: request.body.id,
     fullName: request.body.fullName,
     age: request.body.age,
     email: request.body.email,
