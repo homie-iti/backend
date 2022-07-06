@@ -29,24 +29,24 @@ router
     adminController.createAdmin
   )
   .put(
-    [
-      body("id").isMongoId().withMessage("admin id should be MongoId"),
-      body("fullname")
-        .isString()
-        .withMessage("student name should be characters"),
-      body("age").isNumeric().withMessage("age should be number"),
-      body("password")
-        .isString()
-        .withMessage("admin password should be string"),
-      body("phone").isNumeric().withMessage("admin phone should be number"),
-      body("nationalID")
-        .isNumeric()
-        .withMessage("admin national ID should be number"),
-      body("image").isString().withMessage("admin image should be string"),
-      body("email").isString().withMessage("admin email should be string"),
-      body("address").isObject().withMessage("admin address should be object"),
-    ],
-    validationMW,
+    // [
+    //   body("id").isMongoId().withMessage("admin id should be MongoId"),
+    //   body("fullname")
+    //     .isString()
+    //     .withMessage("student name should be characters"),
+    //   body("age").isNumeric().withMessage("age should be number"),
+    //   body("password")
+    //     .isString()
+    //     .withMessage("admin password should be string"),
+    //   body("phone").isNumeric().withMessage("admin phone should be number"),
+    //   body("nationalID")
+    //     .isNumeric()
+    //     .withMessage("admin national ID should be number"),
+    //   body("image").isString().withMessage("admin image should be string"),
+    //   body("email").isString().withMessage("admin email should be string"),
+    //   body("address").isObject().withMessage("admin address should be object"),
+    // ],
+    // validationMW,
     adminController.updateAdmin
   );
 
