@@ -7,9 +7,7 @@ require("dotenv").config();
 const unitRoute = require("./routers/unit.route");
 const userRoute = require("./routers/user.route");
 const recommendationsRoute = require("./routers/recommendationsRoute")
-const favoriteUnits = require("./routers/favouriteRoute")
-const sortingUnits = require("./routers/sortingRoute")
-const filteringUnits = require("./routers/filtringRoute")
+const landlordRoute = require("./routers/landlordRoute")
 
 require("./models/address.model");
 require("./models/admin.model");
@@ -45,9 +43,7 @@ app.use(express.json())
 app.use(unitRoute);
 app.use(userRoute);
 app.use(recommendationsRoute);
-app.use(favoriteUnits)
-app.use(sortingUnits)
-app.use(filteringUnits)
+app.use(landlordRoute)
 
 // not-found middleware
 app.use((request, response, next) => {
