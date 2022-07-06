@@ -18,13 +18,15 @@ async function seedCities(numberOfDocuments) {
 		const _id = mongoose.Types.ObjectId(
 			faker.unique(faker.database.mongodbObjectId)
 		);
-		const cityName = faker.address.cityName();
+		const name = faker.address.cityName();
+		const cover = faker.image.city();
 		const units = [];
 
 		ids.push(_id);
 		data.push({
 			_id,
-			cityName,
+			name,
+			cover,
 			units,
 		});
 	}
@@ -38,8 +40,8 @@ async function addUnitsToCities(unitsIds) {
 	const cities = await collection.find({});
 
 	cities.forEach(async (city) => {
-		const unitsStart = randomIntFromInterval(0, unitsIds.length - 25);
-		const unitsEnd = unitsStart + randomIntFromInterval(0, 24);
+		const unitsStart = randomIntFromInterval(0, unitsIds.length - 101);
+		const unitsEnd = unitsStart + randomIntFromInterval(0, 100);
 
 		let slicedUnits = unitsIds.slice(unitsStart, unitsEnd);
 		slicedUnits = slicedUnits.map((unitId) => mongoose.Types.ObjectId(unitId));

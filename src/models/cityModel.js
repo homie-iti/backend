@@ -5,7 +5,10 @@ const schema = new mongoose.Schema({
 		type: mongoose.Types.ObjectId,
 	},
 
-	cityName: {
+	cover: {
+		type: String,
+	},
+	name: {
 		type: String,
 		required: [true, "city cityName is required"],
 	},

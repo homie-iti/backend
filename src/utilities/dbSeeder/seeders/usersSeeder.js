@@ -49,4 +49,24 @@ async function seedUsers(numberOfDocuments) {
 	return ids;
 }
 
+async function addLandlordOrAgent(id, type) {
+	const collection = mongoose.model("users");
+	const user = await collection.findOne({ _id: id });
+
+	user[type] = true;
+	await user.save();
+
+	// cities.forEach(async (city) => {
+	// 	const unitsStart = randomIntFromInterval(0, unitsIds.length - 101);
+	// 	const unitsEnd = unitsStart + randomIntFromInterval(0, 100);
+
+	// 	let slicedUnits = unitsIds.slice(unitsStart, unitsEnd);
+	// 	slicedUnits = slicedUnits.map((unitId) => mongoose.Types.ObjectId(unitId));
+
+	// 	city.units = slicedUnits;
+	// 	await city.save();
+	// });
+}
+
 module.exports = seedUsers;
+module.exports.addLandlordOrAgent = addLandlordOrAgent;
