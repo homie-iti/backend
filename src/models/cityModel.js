@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
   cover: {
     type: String,
   },
-  cityName: {
+  name: {
     type: String,
     required: [true, "city cityName is required"],
   },
