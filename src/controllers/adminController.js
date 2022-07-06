@@ -44,7 +44,6 @@ module.exports.createAdmin = (request, response, next) => {
 
 module.exports.updateAdmin = (request, response, next) => {
   // console.log(request.body.id);
-
   Admin.findById(request.body.id)
     .then((data) => {
       for (const key in request.body) {
