@@ -12,10 +12,6 @@ const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
 const helpRoute = require("../src/routers/helpQuestionRoute");
 const landlordRoute = require("./routers/landlordRoute");
-<<<<<<< HEAD
-=======
-
->>>>>>> 30367deb55834520bb5b6f8dd31ae725a355bbcc
 const adminRoute = require("../src/routers/adminRoute");
 
 require("./models/addressModel");
