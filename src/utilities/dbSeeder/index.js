@@ -13,6 +13,7 @@ const { addUnitsToCities } = require("./seeders/citiesSeeder");
 const seedUnits = require("./seeders/unitsSeeder");
 const seedAgents = require("./seeders/agentsSeeder");
 const seedLandlords = require("./seeders/landlordsSeeder");
+const seedReviews = require("./seeders/reviewsSeeder");
 
 require("../../models/addressModel");
 // require("../../models/adminModel");
@@ -32,6 +33,7 @@ const collectionsIds = {
 	citiesIds: [],
 	unitsIds: [],
 	landlordsIds: [],
+	reviewsIds: [],
 };
 
 async function seedDB() {
@@ -84,7 +86,7 @@ async function seedDB() {
 		console.log("- started agents seeding");
 		collectionsIds.agentsIds = [
 			...(await seedAgents(
-				30,
+				500,
 				collectionsIds.usersIds,
 				collectionsIds.unitsIds
 			)),
@@ -96,12 +98,24 @@ async function seedDB() {
 		console.log("- started landlords seeding");
 		collectionsIds.landlordsIds = [
 			...(await seedLandlords(
-				30,
+				215,
 				collectionsIds.usersIds,
 				collectionsIds.unitsIds
 			)),
 		];
 		console.log("+ landlords seeded");
+
+		console.log("..");
+
+		console.log("- started reviews seeding");
+		collectionsIds.reviewsIds = [
+			...(await seedReviews(
+				111,
+				collectionsIds.usersIds,
+				collectionsIds.unitsIds
+			)),
+		];
+		console.log("+ reviews seeded");
 
 		console.log("----------------------");
 		console.log("Database seeded! :)");
