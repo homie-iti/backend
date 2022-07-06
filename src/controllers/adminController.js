@@ -3,6 +3,7 @@ require("../models/adminModel");
 
 let Admin = mongoose.model("admins");
 
+// Get All Admins
 module.exports.getAllAdmins = (request, response, next) => {
   Admin.find({})
     .then((data) => {
@@ -13,6 +14,7 @@ module.exports.getAllAdmins = (request, response, next) => {
     });
 };
 
+// Get Admin By ID
 module.exports.getAdminByID = (request, response, next) => {
   Admin.findOne({ _id: request.params.id })
     .then((data) => {
@@ -24,6 +26,7 @@ module.exports.getAdminByID = (request, response, next) => {
     });
 };
 
+// Create Admin
 module.exports.createAdmin = (request, response, next) => {
   let object = new Admin({
     fullName: request.body.fullName,
@@ -42,6 +45,7 @@ module.exports.createAdmin = (request, response, next) => {
     .catch((error) => next(error));
 };
 
+// Update Admin By ID
 module.exports.updateAdmin = (request, response, next) => {
   // console.log(request.body.id);
   Admin.findById(request.body.id)
@@ -57,6 +61,7 @@ module.exports.updateAdmin = (request, response, next) => {
     });
 };
 
+// Delete Admin By ID
 module.exports.deleteAdmin = (request, response, next) => {
   Admin.deleteOne({ _id: request.params.id })
     .then((data) => {

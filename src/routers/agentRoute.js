@@ -65,4 +65,36 @@ router
     agentController.deleteAgent
   );
 
+router
+  .route("/agent/agentUnits")
+  .get(
+    [param("id").isMongoId().withMessage("favourite id should be objectID")],
+    validationMW,
+    agentController.updateAgentUnits
+  )
+  .put(
+    // [
+    //   body("id").isMongoId().withMessage("agent id should be MongoId"),
+    //   body("agentUnits")
+    //     .isMongoId()
+    //     .withMessage("agent Units should be MongoId"),
+    // ],
+    // validationMW,
+    agentController.updateAgentUnits
+  );
+
+router
+  .route("/agent/agentUnits/:id")
+  .get(
+    [param("id").isMongoId().withMessage("favourite id should be objectID")],
+    validationMW,
+    agentController.updateAgentUnits
+  )
+
+  .delete(
+    // [param("id").isMongoId().withMessage("favourite id should be objectID")],
+    // validationMW,
+    agentController.RemoveAgentUnits
+  );
+
 module.exports = router;
