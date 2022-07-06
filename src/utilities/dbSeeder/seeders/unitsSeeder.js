@@ -28,7 +28,9 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
 		const estateType = ["studio", "shared-room", "single-room", "apartment"][
 			randomIntFromInterval(0, 3)
 		];
-		const gender = ["male", "female", "any"][randomIntFromInterval(0, 2)];
+		const allowedGender = ["male", "female", "any"][
+			randomIntFromInterval(0, 2)
+		];
 		const address = {
 			city: faker.address.cityName(),
 			streetName: faker.address.street(),
@@ -37,6 +39,7 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
 
 		const dailyPrice = faker.commerce.price();
 		const isAvailable = faker.datatype.boolean();
+		const cover = faker.image.unsplash.buildings();
 		const images = new Array(randomIntFromInterval(2, 14)).fill(
 			faker.image.unsplash.buildings()
 		);
@@ -65,10 +68,11 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
 			isPetsAllowed,
 			isAvailable,
 			unitInfo,
+			cover,
 			images,
 			address,
 			numberOfResidents,
-			gender,
+			allowedGender,
 			geoLocation,
 		});
 	}
