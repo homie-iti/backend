@@ -18,21 +18,11 @@ router.route("/landlord")
     .put(
         [
             body("id").isMongoId().withMessage("landlord id should be MongoId"),
-            body("landlordUnits").isArray().withMessage("landlord Units should be an Array")
+            body("landlordUnits").isMongoId().withMessage("landlord Units should be MongoId")
         ],
         validationMW,
         landlordController.updateLandlordUnits
     )
-    .delete(
-        [
-            body("id").isMongoId().withMessage("landlord id should be MongoId"),
-            body("landlordUnits").isArray().withMessage("landlord Units should be an Array")
-        ],
-        validationMW,
-        landlordController.RemoveLandlordUnits
-    )
-
-
 
 router.route("/landlord/:id")
     .get(
@@ -45,6 +35,17 @@ router.route("/landlord/:id")
         validationMW,
         landlordController.deleteLandlordById
     );
+
+
+router.route("/landlord/:id/unit")
+    .delete(
+        [param("id").isMongoId().withMessage("landlord id should be objectID")],
+        body("landlordUnits").isMongoId().withMessage("landlord Units should be MongoId"),
+
+        validationMW,
+        landlordController.RemoveLandlordUnits
+    );
+
 
 
 module.exports = router;
