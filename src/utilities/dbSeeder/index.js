@@ -5,12 +5,12 @@ const { faker } = require("@faker-js/faker");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const seedHelpQuestions = require("./seeders/helpQuestions.seeder");
-const seedAdmins = require("./seeders/admins.seeder");
-const seedUsers = require("./seeders/users.seeder");
-const seedCities = require("./seeders/cities.seeder");
-const { addUnitsToCities } = require("./seeders/cities.seeder");
-const seedUnits = require("./seeders/units.seeder");
+const seedHelpQuestions = require("./seeders/helpQuestionsSeeder");
+const seedAdmins = require("./seeders/adminsSeeder");
+const seedUsers = require("./seeders/usersSeeder");
+const seedCities = require("./seeders/citiesSeeder");
+const { addUnitsToCities } = require("./seeders/citiesSeeder");
+const seedUnits = require("./seeders/unitsSeeder");
 
 require("../../models/addressModel");
 // require("../../models/admin.model");
