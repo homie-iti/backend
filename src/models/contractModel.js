@@ -35,6 +35,7 @@ const schema = new mongoose.Schema(
 		// contractType: {},
 		paymentMethod: {
 			type: String,
+			enum: ["paypal", "bank", "cash"],
 			required: [true, "contract paymentMethod is required"],
 		},
 		totalAmount: {
