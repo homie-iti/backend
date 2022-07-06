@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const validationMW = require("../middlewares/validationMW");
-const { helpQuestionPostValidtion, helpQuestionUpdateValidtion } = require("../middlewares/validtion")
+const { helpQuestionPostValidtion, helpQuestionUpdateValidtion,helpQuestionDeleteValidtion } = require("../middlewares/validtion")
 const helpController = require("./../controllers/helpQuestionController");
 
 router.route("/helpQuestion")
@@ -20,7 +20,7 @@ router.route("/helpQuestion")
 router.route("/helpQuestion/:id")
     .get(helpController.getQuestionById)
 
-    .delete(helpController.deleteQuestion)
+    .delete( helpQuestionDeleteValidtion, validationMW ,helpController.deleteQuestion)
 
 
 module.exports = router;

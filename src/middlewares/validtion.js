@@ -9,7 +9,12 @@ module.exports.helpQuestionPostValidtion=[
 ]
 
 module.exports.helpQuestionUpdateValidtion = [
-    body("id").isNumeric().withMessage("helpQuestion id should be a number"),
+    body("id").isMongoId().withMessage("helpQuestion id is not valid "),
     body("question").isAlpha().withMessage("Question name should be characters"),
     body("answer").optional().isAlpha().withMessage("Answer name should be characters"),
+]
+
+module.exports.helpQuestionDeleteValidtion = [
+    
+    body("id").isMongoId().withMessage("helpQuestion id is not valid "),
 ]
