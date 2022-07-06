@@ -68,7 +68,7 @@ module.exports.updateUser = (request, response, next) => {
   console.log(requested)
   const isValidUpdates = requested.every(i => allowed.includes(i))
   console.log(isValidUpdates)
-  if (!isValidUpdates) { next(new Error("Question not allowed")) }
+  if (!isValidUpdates) { next(new Error("User not allowed")) }
   else {
 
     let newUser = request.body;
@@ -76,7 +76,7 @@ module.exports.updateUser = (request, response, next) => {
       { $set: newUser }, { new: false, runValidators: true })
       .then(data => {
         if (!data) {
-          next(new Error("Question not found"))
+          next(new Error("User not found"))
         }
         else {
           response.status(200).json("updated");
@@ -91,9 +91,9 @@ module.exports.updateUser = (request, response, next) => {
 module.exports.deleteUser = (request, response, next) => {
   User.deleteOne({ _id: request.body._id })
     .then(data => {
-      if (data.deletedCount == 0) { next(new Error("QuestionID not found")) }
+      if (data.deletedCount == 0) { next(new Error("userID not found")) }
       else {
-        response.status(200).json(data);
+        response.status(200).json({data:"deleted"});
       }
     })
     .catch(error => next(error))
@@ -102,11 +102,13 @@ module.exports.deleteUser = (request, response, next) => {
 
 
 module.exports.deleteManyUser = (request, response, next) => {
-  const { ids } = req.body;
+  const { ids } = request.body;
   User.deleteMany({ _id: { $in: ids } })
     .then(data => {
-      response.status(200).json(data);
-
+      if (data.deletedCount == 0) { next(new Error("userID not found")) }
+      else {
+        response.status(200).json({data:"deleted"});
+      }
     })
     .catch(console.error(error => {
       next(error)
