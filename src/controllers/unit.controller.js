@@ -18,7 +18,12 @@ module.exports.getAllUnits = (request, response, next) => {
 module.exports.getUnitById = (request, response, next) => {
   Unit.findOne(
     { _id: request.params.id },
-    "estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice"
+    // "estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice"
+    {
+      estateType: 1,
+      images: 1,
+      unitInfo:1 //{ ...unitInfo, isAvailable, isPetsAllowed },
+    }
   )
     .populate({ path: "landlordId", select: "fullName phone image" })
     .then((data) => {
