@@ -11,10 +11,7 @@ const recommendationsRoute = require("./routers/recommendationsRoute");
 const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
 const helpRoute = require("../src/routers/helpQuestionRoute");
-<<<<<<< HEAD
-const landlordRoute = require("./routers/landlordRoute")
-=======
->>>>>>> af076832b892ed597815a3e2e4dff795acc192a4
+const landlordRoute = require("./routers/landlordRoute");
 
 const adminRoute = require("../src/routers/adminRoute");
 
@@ -46,7 +43,7 @@ mongoose
 
 app.use(cors());
 app.use(morgan(":method :url :status - :response-time ms"));
-app.use(express.json())
+app.use(express.json());
 
 app.use(adminRoute);
 app.use(searchRoute);
@@ -55,7 +52,7 @@ app.use(unitRoute);
 app.use(userRoute);
 app.use(cityRoute);
 app.use(recommendationsRoute);
-app.use(landlordRoute)
+app.use(landlordRoute);
 app.use(helpRoute);
 
 // not-found middleware
