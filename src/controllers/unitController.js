@@ -19,7 +19,7 @@ module.exports.getAllUnits = (request, response, next) => {
 module.exports.getUnitById = (request, response, next) => {
   Unit.findOne(
     { _id: request.params.id },
-    "estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice"
+    "estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice covers"
   )
     .populate({ path: "landlordId", select: "fullName phone image" })
     .then((data) => {
@@ -35,7 +35,7 @@ module.exports.getUnitById = (request, response, next) => {
 
 module.exports.getUnitReviews = (request, response, next) => {
   Review.findOne({ "unit._id": request.params.id }, "rating comment")
-    .populate({ path: "unitId", select: "city estateType address" })
+    .populate({ path: "unitId", select: "city estateType address cover" })
     .populate({ path: "agentId", select: "fullName image" })
     .then((data) => {
       if (data == null) next(new Error("This Unit Haven't Reviews Yet."));
@@ -72,5 +72,3 @@ module.exports.updateUnitData = (request, response, next) => {
     })
     .catch((error) => next(error));
 };
-
-

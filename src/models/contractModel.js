@@ -20,33 +20,33 @@ const schema = new mongoose.Schema(
       required: [true, "contract unitId is required"],
     },
 
-		rentalStart: {
-			type: Date,
-			required: [true, "contract rentalStart is required"],
-		},
-		rentalEnd: {
-			type: Date,
-			required: [true, "contract rentalEnd is required"],
-		},
-		paymentAmount: {
-			type: Number,
-			required: [true, "contract paymentAmount is required"],
-		},
-		// contractType: {},
-		paymentMethod: {
-			type: String,
-			enum: ["paypal", "bank", "cash"],
-			required: [true, "contract paymentMethod is required"],
-		},
-		totalAmount: {
-			type: Number,
-			required: [true, "contract totalAmount is required"],
-		},
-		offerPercentage: {
-			type: Number,
-			required: [true, "contract offerPercentage is required"],
-		},
-	},
-	{ timestamps: true }
+    rentalStart: {
+      type: Date,
+      required: [true, "contract rentalStart is required"],
+    },
+    rentalEnd: {
+      type: Date,
+      required: [true, "contract rentalEnd is required"],
+    },
+    paymentAmount: {
+      type: Number,
+      required: [true, "contract paymentAmount is required"],
+    },
+    // contractType: {},
+    paymentMethod: {
+      type: String,
+      enum: ["paypal", "bank", "cash"],
+      required: [true, "contract paymentMethod is required"],
+    },
+    totalAmount: {
+      type: Number,
+      required: [true, "contract totalAmount is required"],
+    },
+    offerPercentage: {
+      type: Number,
+      required: [true, "contract offerPercentage is required"],
+    },
+  },
+  { timestamps: true }
 );
 module.exports = mongoose.model("contracts", schema);

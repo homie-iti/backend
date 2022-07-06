@@ -12,7 +12,6 @@ const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
 
 const contractRoute = require("./../src/routers/contractRoute");
-const helpRoute = require("../src/routers/helpQuestionRoute");
 
 const helpRoute = require("../src/routers/helpQuestionRoute");
 const landlordRoute = require("./routers/landlordRoute");
