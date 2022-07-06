@@ -39,6 +39,7 @@ mongoose
 
 app.use(cors());
 app.use(morgan(":method :url :status - :response-time ms"));
+app.use(express.json());
 
 app.use(adminRoute);
 app.use(searchRoute);

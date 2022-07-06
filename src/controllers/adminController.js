@@ -27,7 +27,7 @@ module.exports.getAdminByID = (request, response, next) => {
 module.exports.createAdmin = (request, response, next) => {
   let object = new Admin({
     _id: request.body.id,
-    fullname: request.body.fullname,
+    fullName: request.body.fullName,
     age: request.body.age,
     email: request.body.email,
     password: request.body.password,
@@ -44,6 +44,7 @@ module.exports.createAdmin = (request, response, next) => {
 };
 
 module.exports.updateAdmin = async (request, response, next) => {
+  // console.log(request.body.id);
   try {
     const data = await Admin.findById(request.body.id);
     for (const key in request.body) {
