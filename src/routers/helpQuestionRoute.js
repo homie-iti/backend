@@ -8,13 +8,12 @@ router.route("/helpQuestion")
 
     .get(helpController.getAllQuestion)
 
-
     .post(helpQuestionPostValidtion, validationMW, helpController.createQuestion)
 
     .put(helpQuestionUpdateValidtion, validationMW, helpController.updateHelpQuestion)
 
-
-
+    .delete(helpController.deleteAllQuestion)
+    .delete(helpController.deleteManyQuestion)
 
 
 router.route("/helpQuestion/:id")

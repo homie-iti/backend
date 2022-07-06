@@ -78,7 +78,7 @@ module.exports.getQuestionById=(request,response,next)=>{
 }
 
   module.exports.deleteQuestion=(request,response,next)=>{
-    Teacher.deleteOne({_id:request.body._id})
+    HelpQuestion.deleteOne({_id:request.body._id})
            .then(data=>{
             if(data.deletedCount==0){ next(new Error("QuestionID not found") )}
             else{
@@ -89,4 +89,27 @@ module.exports.getQuestionById=(request,response,next)=>{
   }
 
   
-  
+  module.exports.deleteManyQuestion=(request,response,next)=>{
+    const {ids} = req.body;
+    HelpQuestion.deleteMany({ _id: {$in: ids}})
+    .then(data=>{
+        response.status(200).json({data:"deleted"});
+
+    })
+    .catch(console.error(error=>{
+        next(error)
+    }))
+
+}
+module.exports.deleteAllQuestion=(request,response,next)=>{
+
+  HelpQuestion.deleteMany({})
+  .then(data=>{
+      response.status(200).json({data:"deleted"});
+
+  })
+  .catch(console.error(error=>{
+      next(error)
+  }))
+
+}
