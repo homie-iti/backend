@@ -43,19 +43,20 @@ module.exports.createAdmin = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-module.exports.updateAdmin = async (request, response, next) => {
+module.exports.updateAdmin = (request, response, next) => {
   // console.log(request.body.id);
-  try {
-    const data = await Admin.findById(request.body.id);
-    for (const key in request.body) {
-      data[key] = request.body[key];
-    }
 
-    await data.save();
-    response.status(200).json({ data: "updated" });
-  } catch (error) {
-    next(error);
-  }
+  Admin.findById(request.body.id)
+    .then((data) => {
+      for (const key in request.body) {
+        data[key] = request.body[key];
+      }
+      data.save();
+      response.status(200).json({ data: "updated" });
+    })
+    .catch((error) => {
+      next(error);
+    });
 };
 
 module.exports.deleteAdmin = (request, response, next) => {
