@@ -1,28 +1,28 @@
-const express = require("express");
-const router = express.Router();
+// const express = require("express");
+// const router = express.Router();
 
-const validationMW = require("../middlewares/validationMW");
-const { userPostValidtion, userUpdateValidation,userDeleteValidtion } = require("../middlewares/validtion")
-const userController = require("./../controllers/userController");
+// const validationMW = require("../middlewares/validationMW");
+// const { userPostValidtion, userUpdateValidation,userDeleteValidtion } = require("../middlewares/validtion")
+// const userController = require("./../controllers/userController");
 
-router.route("/users")
+// router.route("/users")
 
-.get(userController.getAllUsers)
-
-
-.post(userPostValidtion,validationMW,userController.createUser)
-
-.put( userUpdateValidation, validationMW,userController.updateUser)
-
-.delete(userController.deleteManyUser)
+// .get(userController.getAllUsers)
 
 
-router.route("/users/:id")
-  .get(userController.getUserById)
+// .post(userPostValidtion,validationMW,userController.createUser)
 
-  .delete( userDeleteValidtion,validationMW,userController.deleteUser)
+// .put( userUpdateValidation, validationMW,userController.updateUser)
+
+// .delete(userController.deleteManyUser)
+
+
+// router.route("/users/:id")
+//   .get(userController.getUserById)
+
+//   .delete( userDeleteValidtion,validationMW,userController.deleteUser)
 
     
 
 
-module.exports = router;
+// module.exports = router;

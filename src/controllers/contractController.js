@@ -9,4 +9,10 @@ module.exports.getLandlordContracts = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-
+module.exports.getAllLandlords = (request, response, next) => {
+  Landlord.find({})
+    .then((data) => {
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};

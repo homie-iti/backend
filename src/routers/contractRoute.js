@@ -7,5 +7,6 @@ const validationMW = require("./../middlewares/validationMW");
 
 router.get("/landlord/contracts/:id", contractController.getLandlordContracts);
 
-router.get("/landlors", contractController.getAllLandlords);
+router.get( "/landlords", contractController.getAllLandlords );
+
 module.exports = router;

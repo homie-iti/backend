@@ -5,14 +5,13 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const unitRoute = require("./routers/unitRoute");
-const userRoute = require("./routers/userRoute");
+//const userRoute = require("./routers/userRoute");
 const cityRoute = require("./routers/cityRoute");
 const recommendationsRoute = require("./routers/recommendationsRoute");
 const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
 const contractRoute = require("./../src/routers/contractRoute");
-const helpRoute = require("../src/routers/helpQuestionRoute"); 
-
+const helpRoute = require("../src/routers/helpQuestionRoute");
 
 require("./models/addressModel");
 require("./models/adminModel");
@@ -47,7 +46,7 @@ app.use(express.json());
 app.use(searchRoute);
 app.use(agentRoute);
 app.use(unitRoute);
-app.use(userRoute);
+// app.use(userRoute);
 app.use(cityRoute);
 app.use(recommendationsRoute);
 app.use(contractRoute);
