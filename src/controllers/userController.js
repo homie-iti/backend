@@ -52,3 +52,66 @@ module.exports.createUser = (request, response, next) => {
     })
     .catch((error) => next(error));
 };
+
+module.exports.updateUser = (request, response, next) => {
+  let allowed = [
+    "_id",
+    "fullName",
+    "age",
+    "email",
+    "gender",
+    "password",
+    "phone",
+    "image",
+    "address",
+    "national_id",
+  ];
+  console.log(allowed);
+  let requested = Object.keys(request.body);
+  console.log(requested);
+  const isValidUpdates = requested.every((i) => allowed.includes(i));
+  console.log(isValidUpdates);
+  if (!isValidUpdates) {
+    next(new Error("Question not allowed"));
+  } else {
+    let newUser = request.body;
+    User.findOneAndUpdate(
+      { _id: request.body._id },
+      { $set: newUser },
+      { new: false, runValidators: true }
+    )
+      .then((data) => {
+        if (!data) {
+          next(new Error("Question not found"));
+        } else {
+          response.status(200).json("updated");
+        }
+      })
+      .catch((error) => next(error));
+  }
+};
+
+module.exports.deleteUser = (request, response, next) => {
+  User.deleteOne({ _id: request.body._id })
+    .then((data) => {
+      if (data.deletedCount == 0) {
+        next(new Error("QuestionID not found"));
+      } else {
+        response.status(200).json(data);
+      }
+    })
+    .catch((error) => next(error));
+};
+
+module.exports.deleteManyUser = (request, response, next) => {
+  const { ids } = req.body;
+  User.deleteMany({ _id: { $in: ids } })
+    .then((data) => {
+      response.status(200).json(data);
+    })
+    .catch(
+      console.error((error) => {
+        next(error);
+      })
+    );
+};
