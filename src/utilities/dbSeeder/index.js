@@ -5,23 +5,23 @@ const { faker } = require("@faker-js/faker");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const seedHelpQuestions = require("./seeders/helpQuestions.seeder");
-const seedAdmins = require("./seeders/admins.seeder");
-const seedUsers = require("./seeders/users.seeder");
-const seedCities = require("./seeders/cities.seeder");
-const { addUnitsToCities } = require("./seeders/cities.seeder");
-const seedUnits = require("./seeders/units.seeder");
+const seedHelpQuestions = require("./seeders/helpQuestionsSeeder");
+const seedAdmins = require("./seeders/adminsSeeder");
+const seedUsers = require("./seeders/usersSeeder");
+const seedCities = require("./seeders/citiesSeeder");
+const { addUnitsToCities } = require("./seeders/citiesSeeder");
+const seedUnits = require("./seeders/unitsSeeder");
 
-require("../../models/address.model");
-// require("../../models/admin.model");
-require("../../models/agent.model");
-// require("../../models/city.model");
-require("../../models/contract.model");
-// require("../../models/helpQuestion.model");
-require("../../models/landlord.model");
-require("../../models/review.model");
-// require("../../models/unit.model");
-// require("../../models/user.model");
+require("../../models/addressModel");
+// require("../../models/adminModel");
+require("../../models/agentModel");
+// require("../../models/cityModel");
+require("../../models/contractModel");
+// require("../../models/helpQuestionModel");
+require("../../models/landlordModel");
+require("../../models/reviewModel");
+// require("../../models/unitModel");
+// require("../../models/userModel");
 
 const collectionsIds = {
 	adminsIds: [],
