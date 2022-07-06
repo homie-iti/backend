@@ -20,7 +20,7 @@ async function seedAgent(numberOfDocuments, usersIds, unitsIds) {
 
 		if (ids.some((id) => _id === id)) continue;
 
-		console.log(_id);
+		// console.log(_id);
 
 		const agentUnitsRandomNumber = randomIntFromInterval(1, 10);
 		const agentUnits = [];

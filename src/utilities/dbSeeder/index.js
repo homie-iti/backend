@@ -38,12 +38,19 @@ async function seedDB() {
 	console.log("Don't close DB connection while seeding.");
 	console.log("----------------------");
 	try {
+		console.log("- started admins seeding");
 		collectionsIds.adminsIds = [...(await seedAdmins(10))];
 		console.log("+ admins seeded");
 
+		console.log("..");
+
+		console.log("- started users seeding");
 		collectionsIds.usersIds = [...(await seedUsers(1000))];
 		console.log("+ users seeded");
 
+		console.log("..");
+
+		console.log("- started help questions seeding");
 		collectionsIds.helpQuestionsIds = [
 			...(await seedHelpQuestions(
 				500,
@@ -53,9 +60,15 @@ async function seedDB() {
 		];
 		console.log("+ help questions seeded");
 
+		console.log("..");
+
+		console.log("- started cities seeding");
 		collectionsIds.citiesIds = [...(await seedCities(50))];
 		console.log("+ cities seeded");
 
+		console.log("..");
+
+		console.log("- started units seeding");
 		collectionsIds.unitsIds = [
 			...(await seedUnits(
 				800,
@@ -66,6 +79,9 @@ async function seedDB() {
 		addUnitsToCities(collectionsIds.unitsIds);
 		console.log("+ units seeded");
 
+		console.log("..");
+
+		console.log("- started agents seeding");
 		collectionsIds.agentsIds = [
 			...(await seedAgents(
 				30,
@@ -75,6 +91,9 @@ async function seedDB() {
 		];
 		console.log("+ agents seeded");
 
+		console.log("..");
+
+		console.log("- started landlords seeding");
 		collectionsIds.landlordsIds = [
 			...(await seedLandlords(
 				30,
@@ -82,7 +101,7 @@ async function seedDB() {
 				collectionsIds.unitsIds
 			)),
 		];
-		console.log("+ landlord seeded");
+		console.log("+ landlords seeded");
 
 		console.log("----------------------");
 		console.log("Database seeded! :)");
