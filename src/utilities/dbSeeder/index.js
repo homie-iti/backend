@@ -22,7 +22,7 @@ require("../../models/addressModel");
 require("../../models/contractModel");
 // require("../../models/helpQuestionModel");
 // require("../../models/landlordModel");
-require("../../models/reviewModel");
+// require("../../models/reviewModel");
 // require("../../models/unitModel");
 // require("../../models/userModel");
 
@@ -32,6 +32,7 @@ const collectionsIds = {
 	helpQuestionsIds: [],
 	citiesIds: [],
 	unitsIds: [],
+	agentsIds: [],
 	landlordsIds: [],
 	reviewsIds: [],
 };
@@ -111,7 +112,7 @@ async function seedDB() {
 		collectionsIds.reviewsIds = [
 			...(await seedReviews(
 				111,
-				collectionsIds.usersIds,
+				collectionsIds.agentsIds,
 				collectionsIds.unitsIds
 			)),
 		];
