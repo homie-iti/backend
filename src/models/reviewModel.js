@@ -31,4 +31,4 @@ const schema = new mongoose.Schema(
   { timestamps: true }
 );
 
-mongoose.model("reviews", schema);
+module.exports = mongoose.model("reviews", schema);

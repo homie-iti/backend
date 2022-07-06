@@ -7,6 +7,16 @@ const schema = new mongoose.Schema(
 			type: mongoose.Types.ObjectId,
 		},
 
+		isLandlord: {
+			type: Boolean,
+			default: false,
+		},
+
+		isAgent: {
+			type: Boolean,
+			default: false,
+		},
+
 		fullName: {
 			type: String,
 			required: [true, "user fullName is required"],

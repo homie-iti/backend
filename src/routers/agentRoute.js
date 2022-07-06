@@ -12,7 +12,7 @@ router
       body("id").isMongoId().withMessage("agent id should be MongoId"),
       body("fullname")
         .isString()
-        .withMessage("student name should be characters"),
+        .withMessage("agent name should be characters"),
       body("age").isNumeric().withMessage("age should be number"),
       body("password")
         .isString()
@@ -34,7 +34,7 @@ router
       body("id").isMongoId().withMessage("agent id should be MongoId"),
       body("fullname")
         .isString()
-        .withMessage("student name should be characters"),
+        .withMessage("agent name should be characters"),
       body("age").isNumeric().withMessage("age should be number"),
       body("password")
         .isString()

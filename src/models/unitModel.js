@@ -3,37 +3,50 @@ const addressSchema = require("./addressModel");
 const schema = new mongoose.Schema(
 	{
 		_id: mongoose.Types.ObjectId,
+
 		landlordId: {
 			type: mongoose.Types.ObjectId,
 			ref: "landlords",
 			required: [true, "unit landlordId is required"],
 		},
+
 		agentId: { type: mongoose.Types.ObjectId, ref: "agents" },
+
 		cityId: {
 			type: mongoose.Types.ObjectId,
 			ref: "cities",
 			required: [true, "unit city is required"],
 		},
+
 		estateType: {
 			type: String,
 			required: [true, "unit estateType is required"],
 			enum: ["studio", "shared-room", "single-room", "apartment"], // TODO we need to check if these are all the
 		},
+
 		address: {
 			type: addressSchema,
 			required: [true, "unit address is required"],
 		},
+
 		dailyPrice: {
 			type: Number,
 			required: [true, "unit dailyPrice is required"],
 		},
+
 		isAvailable: Boolean,
+
+		cover: { type: String, required: [true, "unit cover is required"] },
+
 		images: [{ type: String, required: [true, "unit images is required"] }],
+
 		isPetsAllowed: Boolean,
+
 		numberOfResidents: {
 			type: Number,
 			required: [true, "unit numberOfResidents is required"],
 		},
+
 		unitInfo: {
 			description: {
 				type: String,
@@ -53,7 +66,7 @@ const schema = new mongoose.Schema(
 			},
 		},
 
-		gender: {
+		allowedGender: {
 			type: String,
 			required: [true, "unit gender is required"],
 			enum: ["male", "female", "any"],
@@ -73,4 +86,5 @@ const schema = new mongoose.Schema(
 	},
 	{ timestamps: true }
 );
-mongoose.model("units", schema);
+
+module.exports = mongoose.model("units", schema);
