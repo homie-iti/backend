@@ -1,7 +1,7 @@
 const { faker } = require("@faker-js/faker");
 const mongoose = require("mongoose");
 
-require("../../../models/user.model");
+require("../../../models/userModel");
 
 async function seedUsers(numberOfDocuments) {
 	const collection = mongoose.model("users");

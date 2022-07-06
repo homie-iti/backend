@@ -20,7 +20,7 @@ const schema = new mongoose.Schema({
 				numberOfRenting: { type: Number },
 			},
 		],
-
+		_id: false,
 		required: [true, "agent units is required"],
 	},
 

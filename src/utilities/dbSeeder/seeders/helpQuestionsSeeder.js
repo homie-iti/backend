@@ -1,7 +1,7 @@
 const { faker } = require("@faker-js/faker");
 const mongoose = require("mongoose");
 
-require("../../../models/helpQuestion.model");
+require("../../../models/helpQuestionModel");
 
 function randomIntFromInterval(min, max) {
 	// min and max included

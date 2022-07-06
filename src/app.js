@@ -11,6 +11,8 @@ const recommendationsRoute = require("./routers/recommendationsRoute");
 const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
 const contractRoute = require("./../src/routers/contractRoute");
+const helpRoute = require("../src/routers/helpQuestionRoute"); 
+
 
 require("./models/addressModel");
 require("./models/adminModel");
@@ -49,6 +51,7 @@ app.use(userRoute);
 app.use(cityRoute);
 app.use(recommendationsRoute);
 app.use(contractRoute);
+app.use(helpRoute);
 
 // not-found middleware
 app.use((request, response, next) => {

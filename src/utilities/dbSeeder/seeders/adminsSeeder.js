@@ -1,7 +1,7 @@
 const { faker } = require("@faker-js/faker");
 const mongoose = require("mongoose");
 
-require("../../../models/admin.model");
+require("../../../models/adminModel");
 
 async function seedAdmin(numberOfDocuments) {
 	const collection = mongoose.model("admins");
@@ -22,6 +22,14 @@ async function seedAdmin(numberOfDocuments) {
 			faker.name.middleName() +
 			" " +
 			faker.name.lastName();
+
+		if (
+			!fullName.match(
+				/^[A-Z][A-Za-z ]{3,}[A-Z][A-Za-z ]{3,}[A-Z][A-Za-z ]{3,}$/
+			)
+		)
+			continue;
+
 		const age = faker.mersenne.rand(45, 20);
 		const email = faker.internet.email(firstName, lastName);
 		const password = faker.internet.password();
