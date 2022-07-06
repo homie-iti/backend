@@ -8,7 +8,7 @@ function randomIntFromInterval(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-async function seedAgent(numberOfDocuments, unitsIds) {
+async function seedAgent(numberOfDocuments, usersIds, unitsIds) {
 	const collection = mongoose.model("agents");
 	await mongoose.connection.db.dropCollection("agents");
 	// collection.drop();
@@ -16,9 +16,11 @@ async function seedAgent(numberOfDocuments, unitsIds) {
 	let data = [];
 	const ids = [];
 	for (let i = 0; i < numberOfDocuments; i++) {
-		const _id = mongoose.Types.ObjectId(
-			faker.unique(faker.database.mongodbObjectId)
-		);
+		const _id = usersIds[randomIntFromInterval(0, usersIds.length - 1)];
+
+		if (ids.some((id) => _id === id)) continue;
+
+		console.log(_id);
 
 		const agentUnitsRandomNumber = randomIntFromInterval(1, 10);
 		const agentUnits = [];

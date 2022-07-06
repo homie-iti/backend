@@ -65,7 +65,11 @@ async function seedDB() {
 		console.log("+ units seeded");
 
 		collectionsIds.agentsIds = [
-			...(await seedAgents(30, collectionsIds.unitsIds)),
+			...(await seedAgents(
+				30,
+				collectionsIds.usersIds,
+				collectionsIds.unitsIds
+			)),
 		];
 		console.log("+ agents seeded");
 
