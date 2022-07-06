@@ -11,10 +11,11 @@ const seedUsers = require("./seeders/usersSeeder");
 const seedCities = require("./seeders/citiesSeeder");
 const { addUnitsToCities } = require("./seeders/citiesSeeder");
 const seedUnits = require("./seeders/unitsSeeder");
+const seedAgents = require("./seeders/agentsSeeder");
 
 require("../../models/addressModel");
 // require("../../models/adminModel");
-require("../../models/agentModel");
+// require("../../models/agentModel");
 // require("../../models/cityModel");
 require("../../models/contractModel");
 // require("../../models/helpQuestionModel");
@@ -62,6 +63,11 @@ async function seedDB() {
 		];
 		addUnitsToCities(collectionsIds.unitsIds);
 		console.log("+ units seeded");
+
+		collectionsIds.agentsIds = [
+			...(await seedAgents(30, collectionsIds.unitsIds)),
+		];
+		console.log("+ agents seeded");
 
 		console.log("----------------------");
 		console.log("Database seeded! :)");
