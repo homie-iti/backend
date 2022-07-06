@@ -9,6 +9,7 @@ const userRoute = require("./routers/userRoute");
 const recommendationsRoute = require("./routers/recommendationsRoute");
 const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
+const adminRoute = require("../src/routers/adminRoute");
 
 require("./models/addressModel");
 require("./models/adminModel");
@@ -39,6 +40,7 @@ mongoose
 app.use(cors());
 app.use(morgan(":method :url :status - :response-time ms"));
 
+app.use(adminRoute);
 app.use(searchRoute);
 app.use(agentRoute);
 app.use(unitRoute);
