@@ -5,9 +5,9 @@ const { body, param, query } = require("express-validator");
 const validationMW = require("../middlewares/validationMW");
 const router = express.Router();
 
-router.route("/search/:cityName").get(
+router.route("/search/:name").get(
   [
-    param("cityName")
+    param("name")
       .matches(/^[A-Za-z\s]+$/)
       .withMessage("city name should be character"),
   ],

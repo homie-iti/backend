@@ -12,7 +12,10 @@ router.route("/helpQuestion")
 
     .put(helpQuestionUpdateValidtion, validationMW, helpController.updateHelpQuestion)
 
-    .delete(helpController.deleteAllQuestion)
+// router.route("/helpQuestion/all")
+//     .delete(helpController.deleteAllQuestion)
+
+router.route("/helpQuestion/many")
     .delete(helpController.deleteManyQuestion)
 
 
