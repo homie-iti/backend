@@ -12,6 +12,7 @@ const seedCities = require("./seeders/citiesSeeder");
 const { addUnitsToCities } = require("./seeders/citiesSeeder");
 const seedUnits = require("./seeders/unitsSeeder");
 const seedAgents = require("./seeders/agentsSeeder");
+const seedLandlords = require("./seeders/landlordsSeeder");
 
 require("../../models/addressModel");
 // require("../../models/adminModel");
@@ -19,7 +20,7 @@ require("../../models/addressModel");
 // require("../../models/cityModel");
 require("../../models/contractModel");
 // require("../../models/helpQuestionModel");
-require("../../models/landlordModel");
+// require("../../models/landlordModel");
 require("../../models/reviewModel");
 // require("../../models/unitModel");
 // require("../../models/userModel");
@@ -30,6 +31,7 @@ const collectionsIds = {
 	helpQuestionsIds: [],
 	citiesIds: [],
 	unitsIds: [],
+	landlordsIds: [],
 };
 
 async function seedDB() {
@@ -72,6 +74,15 @@ async function seedDB() {
 			)),
 		];
 		console.log("+ agents seeded");
+
+		collectionsIds.landlordsIds = [
+			...(await seedLandlords(
+				30,
+				collectionsIds.usersIds,
+				collectionsIds.unitsIds
+			)),
+		];
+		console.log("+ landlord seeded");
 
 		console.log("----------------------");
 		console.log("Database seeded! :)");
