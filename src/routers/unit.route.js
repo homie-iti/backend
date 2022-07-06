@@ -3,7 +3,7 @@ const router = express.Router();
 const { body, param, query } = require("express-validator");
 
 const unitController = require("./../controllers/unit.controller");
-const validationMW = require("./../middlewares/validationMW");
+// const validationMW = require("./../middlewares/validationMW");
 
 router.route("/units").get(unitController.getAllUnits);
 
