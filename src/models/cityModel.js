@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-	_id: {
-		type: mongoose.Types.ObjectId,
-	},
-
 	cover: {
 		type: String,
 	},
+
 	name: {
 		type: String,
 		required: [true, "city cityName is required"],
