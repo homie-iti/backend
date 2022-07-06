@@ -7,6 +7,7 @@ module.exports.getAllQuestion=(request,response,next)=>{
   
     HelpQuestion.find({})
     .then(data=>{
+      if(data==null) next(new Error("User not Found"))
         response.status(200).json(data);
 
     })

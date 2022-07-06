@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 require("../models/userModel");
+require("../models/landlordModel");
+require("../models/agentModel");
+require("../models/userModel");
 let User = mongoose.model("users");
+let Landlord = mongoose.model("landlords");
+let Agent = mongoose.model("agents");
 
 
 // module.exports.getAllUsers = (request, response, next) => {
@@ -11,6 +16,17 @@ let User = mongoose.model("users");
 module.exports.getAllUsers = (request, response, next) => {
   User.find({})
     .then(data => {
+      if(data==null)next(new Error("User not Found"))
+      if(data.isLandlord==true){
+      Landlord.findone({_id:request.params.id}).populate({path:"isLandlord",select:{_id:0,landlordUnits:1}})
+     }
+     if(data.isAgent){
+      Agent.findone({_id:request.body.id}).populate({path:"isAgent",select:{_id:0,agentUnits:1}})
+     }
+     else if (data.isLandlord==true && data.isAgent==true){
+      Agent.findone({_id:request.body.id}).populate({path:"isAgent",select:{_id:0,agentUnits:1}})
+      Landlord.findone({_id:request.body.id}).populate({path:"isLandlord",select:{_id:0,landlordUnits:1}})
+     }
       response.status(200).json(data);
 
     })
@@ -115,3 +131,49 @@ module.exports.deleteManyUser = (request, response, next) => {
     }))
 
 }
+
+
+
+module.exports.getAllFavUnits = ((request, response, next) => {
+  User.find({ _id: request.params.id }).populate({ path: "favoriteUnits" }).select({ favoriteUnits: 1, _id: 1 })
+      .then(data => {
+          if (data == null) { next(new Error("Agent Fav Unit is not defined")) }
+          else {
+              response.status(200).json(data)
+          }
+      })
+      .catch(error => {
+          next(error);
+      })
+
+});
+
+
+
+
+module.exports.updateFavUnit = ((request, response, next) => {
+  User.findByIdAndUpdate({ _id: request.params.id }, { $addToSet: { favoriteUnits: request.body.favoriteUnits } })
+      .then(data => {
+          response.status(200).json(data);
+
+      })
+      .catch(error => {
+          next(error);
+      })
+
+});
+
+module.exports.removeFavUnit = ((request, response, next) => {
+  User.updateOne({ _id: request.params.id }, { $pull: { favoriteUnits: request.body.favoriteUnits } })
+
+      .then(data => {
+          response.status(200).json(data);
+
+      })
+      .catch(error => {
+          next(error);
+      })
+
+
+});
+
