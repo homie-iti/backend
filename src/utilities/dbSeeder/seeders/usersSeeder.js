@@ -19,7 +19,7 @@ async function seedUsers(numberOfDocuments) {
 		const fullName = faker.name.firstName() + " " + faker.name.lastName();
 		const age = faker.mersenne.rand(45, 20);
 		const email = faker.internet.email(firstName, lastName);
-		const gender = age % 2 >= 0 ? "male" : "female";
+		const gender = age % 2 === 0 ? "male" : "female";
 		const password = faker.internet.password();
 		const phone = faker.phone.number("01#########");
 		const national_id = faker.phone.number("##############");
