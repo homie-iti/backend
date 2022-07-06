@@ -113,11 +113,11 @@ async function seedDB() {
 const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 
 (async function () {
-	try {
-		await mongoose.connect(homieDB_URL);
-		await seedDB();
-		// process.exit();
-	} catch (error) {
-		console.log("DB Connection Error", error);
-	}
+  try {
+    await mongoose.connect(homieDB_URL);
+    await seedDB();
+    // process.exit();
+  } catch (error) {
+    console.log("DB Connection Error", error);
+  }
 })();

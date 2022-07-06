@@ -1,5 +1,6 @@
 const { faker } = require("@faker-js/faker");
 const mongoose = require("mongoose");
+const { addLandlordOrAgent } = require("./usersSeeder.js");
 
 require("../../../models/agentModel");
 
@@ -21,6 +22,8 @@ async function seedAgent(numberOfDocuments, usersIds, unitsIds) {
 		if (ids.some((id) => _id === id)) continue;
 
 		// console.log(_id);
+
+		addLandlordOrAgent(_id, "isAgent");
 
 		const agentUnitsRandomNumber = randomIntFromInterval(1, 10);
 		const agentUnits = [];

@@ -5,6 +5,18 @@ let Agent = mongoose.model("agents");
 
 module.exports.getAllAgents = (request, response, next) => {
   Agent.find({})
+    .populate({
+      path: "_id",
+      select: {},
+    })
+    .populate({
+      path: "agentUnits",
+      select: {},
+    })
+    .populate({
+      path: "favoriteUnits",
+      select: {},
+    })
     .then((data) => {
       response.status(200).json(data);
     })
@@ -15,6 +27,18 @@ module.exports.getAllAgents = (request, response, next) => {
 
 module.exports.getAgentByID = (request, response, next) => {
   Agent.findOne({ _id: request.params.id })
+    .populate({
+      path: "_id",
+      select: {},
+    })
+    .populate({
+      path: "agentUnits",
+      select: {},
+    })
+    .populate({
+      path: "favoriteUnits",
+      select: {},
+    })
     .then((data) => {
       if (data == null) next(new Error(" Agent not found"));
       response.status(200).json(data);

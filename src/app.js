@@ -10,8 +10,14 @@ const cityRoute = require("./routers/cityRoute");
 const recommendationsRoute = require("./routers/recommendationsRoute");
 const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
+
 const contractRoute = require("./../src/routers/contractRoute");
 const helpRoute = require("../src/routers/helpQuestionRoute");
+
+const helpRoute = require("../src/routers/helpQuestionRoute");
+const landlordRoute = require("./routers/landlordRoute");
+
+const adminRoute = require("../src/routers/adminRoute");
 
 require("./models/addressModel");
 require("./models/adminModel");
@@ -43,6 +49,7 @@ app.use(cors());
 app.use(morgan(":method :url :status - :response-time ms"));
 app.use(express.json());
 
+app.use(adminRoute);
 app.use(searchRoute);
 app.use(agentRoute);
 app.use(unitRoute);
@@ -50,6 +57,7 @@ app.use(unitRoute);
 app.use(cityRoute);
 app.use(recommendationsRoute);
 app.use(contractRoute);
+app.use(landlordRoute);
 app.use(helpRoute);
 
 // not-found middleware
