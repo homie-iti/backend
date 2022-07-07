@@ -3,6 +3,7 @@ require("../models/agentModel");
 
 let Agent = mongoose.model("agents");
 
+// Get All Agents
 module.exports.getAllAgents = (request, response, next) => {
   Agent.find({})
     .populate({
@@ -25,6 +26,7 @@ module.exports.getAllAgents = (request, response, next) => {
     });
 };
 
+// Get Agent By ID
 module.exports.getAgentByID = (request, response, next) => {
   Agent.findOne({ _id: request.params.id })
     .populate({
@@ -48,9 +50,19 @@ module.exports.getAgentByID = (request, response, next) => {
     });
 };
 
+// create Agent
 module.exports.createAgent = (request, response, next) => {
   let object = new Agent({
     _id: request.body.id,
+    fullName: request.body.fullName,
+    age: request.body.age,
+    email: request.body.email,
+    password: request.body.password,
+    gender: request.body.gender,
+    phone: request.body.phone,
+    national_id: request.body.national_id,
+    image: request.body.image,
+    address: request.body.address,
   });
   object
     .save()
@@ -60,20 +72,22 @@ module.exports.createAgent = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-module.exports.updateAgent = async (request, response, next) => {
-  try {
-    const data = await Agent.findById(request.body.id);
-    for (const key in request.body) {
-      data[key] = request.body[key];
-    }
-
-    await data.save();
-    response.status(200).json({ data: "updated" });
-  } catch (error) {
-    next(error);
-  }
+// Update Agent By ID
+module.exports.updateAgent = (request, response, next) => {
+  Agent.findById(request.body.id)
+    .then((data) => {
+      for (const key in request.body) {
+        data[key] = request.body[key];
+      }
+      data.save();
+      response.status(200).json({ data: "updated" });
+    })
+    .catch((error) => {
+      next(error);
+    });
 };
 
+// Delete Agent By ID
 module.exports.deleteAgent = (request, response, next) => {
   Agent.deleteOne({ _id: request.params.id })
     .then((data) => {
@@ -82,6 +96,34 @@ module.exports.deleteAgent = (request, response, next) => {
       } else {
         response.status(200).json({ data: "deleted" });
       }
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+// Update Agent Units
+module.exports.updateAgentUnits = (request, response, next) => {
+  Agent.findByIdAndUpdate(
+    { _id: request.body.id },
+    { $addToSet: { agentUnits: request.body.agentUnits } }
+  )
+    .then((data) => {
+      response.status(200).json(data);
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+// Remove From Agent Units
+module.exports.RemoveAgentUnits = (request, response, next) => {
+  Agent.updateOne(
+    { _id: request.params.id },
+    { $pull: { agentUnits: request.body.agentUnits } }
+  )
+    .then((data) => {
+      response.status(200).json(data);
     })
     .catch((error) => {
       next(error);

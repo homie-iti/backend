@@ -9,7 +9,6 @@ router
   .get(adminController.getAllAdmins)
   .post(
     [
-      body("id").isMongoId().withMessage("admin id should be MongoId"),
       body("age").isNumeric().withMessage("age should be number"),
       body("password")
         .isString()
