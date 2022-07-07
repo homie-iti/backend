@@ -29,7 +29,7 @@ router.route("/users/myFavourite/:id")
 
 
 
-router.route("users/myFavourite/:id/unit")
+router.route("/users/myFavourite/:id/unit")
     .delete(userController.removeFavUnit)
 
 

@@ -3,9 +3,9 @@ const addressSchema = require("./addressModel");
 //some property lose
 const schema = new mongoose.Schema(
   {
-    _id: {
-      type: mongoose.Types.ObjectId,
-    },
+    // _id: {
+    //   type: mongoose.Types.ObjectId,
+    // },
     isLandlord: {
 			type: Boolean,
 			default: false,
