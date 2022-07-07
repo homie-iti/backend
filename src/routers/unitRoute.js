@@ -30,8 +30,6 @@ router.get(
   unitController.getUnitReviews
 );
 
-router.get("/reviews", unitController.getAllReviews);
-
 router
   .route("/reviews")
   .get(unitController.getAllReviews)

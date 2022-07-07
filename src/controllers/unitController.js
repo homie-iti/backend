@@ -22,7 +22,7 @@ module.exports.getUnitById = (request, response, next) => {
     { _id: request.params.id },
     "estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice covers"
   )
-    .populate({ path: "landlordId" })
+    .populate({ path: "landlordId", select: "fullName phone image" })
     .then((data) => {
       if (data == null) next(new Error("Unit Doesn't Exist"));
       else {
@@ -77,11 +77,11 @@ module.exports.updateUnitData = (request, response, next) => {
 module.exports.addUnit = (request, response, next) => {
   let newUnit = new Unit({
     landlordId: request.body.landlordId,
-    agentId: request.body.agentId,
     cityId: request.body.cityId,
     estateType: request.body.estateType,
     dailyPrice: request.body.dailyPrice,
     cover: request.body.cover,
+    numberOfResidents: request.body.numberOfResidents,
   });
 
   newUnit
@@ -91,6 +91,7 @@ module.exports.addUnit = (request, response, next) => {
     })
     .catch((error) => next(error));
 };
+
 
 module.exports.getAllReviews = (request, response, next) => {
   Review.find({})

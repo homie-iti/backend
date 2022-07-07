@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const unitRoute = require("./routers/unitRoute");
-//const userRoute = require("./routers/userRoute");
+const userRoute = require("./routers/userRoute");
 const cityRoute = require("./routers/cityRoute");
 const recommendationsRoute = require("./routers/recommendationsRoute");
 const agentRoute = require("../src/routers/agentRoute");
