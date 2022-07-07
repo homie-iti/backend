@@ -42,7 +42,7 @@ mongoose
 
 app.use(cors());
 app.use(morgan(":method :url :status - :response-time ms"));
-app.use(express.json())
+app.use(express.json());
 
 app.use(adminRoute);
 app.use(searchRoute);
@@ -51,7 +51,7 @@ app.use(unitRoute);
 app.use(userRoute);
 app.use(cityRoute);
 app.use(recommendationsRoute);
-app.use(landlordRoute)
+app.use(landlordRoute);
 app.use(helpRoute);
 
 // not-found middleware

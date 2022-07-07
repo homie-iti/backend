@@ -13,17 +13,19 @@ const { addUnitsToCities } = require("./seeders/citiesSeeder");
 const seedUnits = require("./seeders/unitsSeeder");
 const seedAgents = require("./seeders/agentsSeeder");
 const seedLandlords = require("./seeders/landlordsSeeder");
+const seedReviews = require("./seeders/reviewsSeeder");
+const seedContracts = require("./seeders/contractsSeeder");
 
-require("../../models/addressModel");
-require("../../models/adminModel");
-require("../../models/agentModel");
-require("../../models/cityModel");
-require("../../models/contractModel");
-require("../../models/helpQuestionModel");
-require("../../models/landlordModel");
-require("../../models/reviewModel");
-require("../../models/unitModel");
-require("../../models/userModel");
+// require("../../models/addressModel");
+// require("../../models/adminModel");
+// require("../../models/agentModel");
+// require("../../models/cityModel");
+// require("../../models/contractModel");
+// require("../../models/helpQuestionModel");
+// require("../../models/landlordModel");
+// require("../../models/reviewModel");
+// require("../../models/unitModel");
+// require("../../models/userModel");
 
 const collectionsIds = {
 	adminsIds: [],
@@ -31,7 +33,10 @@ const collectionsIds = {
 	helpQuestionsIds: [],
 	citiesIds: [],
 	unitsIds: [],
+	agentsIds: [],
 	landlordsIds: [],
+	reviewsIds: [],
+	contractsIds: [],
 };
 
 async function seedDB() {
@@ -84,7 +89,7 @@ async function seedDB() {
 		console.log("- started agents seeding");
 		collectionsIds.agentsIds = [
 			...(await seedAgents(
-				30,
+				500,
 				collectionsIds.usersIds,
 				collectionsIds.unitsIds
 			)),
@@ -96,12 +101,37 @@ async function seedDB() {
 		console.log("- started landlords seeding");
 		collectionsIds.landlordsIds = [
 			...(await seedLandlords(
-				30,
+				215,
 				collectionsIds.usersIds,
 				collectionsIds.unitsIds
 			)),
 		];
 		console.log("+ landlords seeded");
+
+		console.log("..");
+
+		console.log("- started reviews seeding");
+		collectionsIds.reviewsIds = [
+			...(await seedReviews(
+				111,
+				collectionsIds.agentsIds,
+				collectionsIds.unitsIds
+			)),
+		];
+		console.log("+ reviews seeded");
+
+		console.log("..");
+
+		console.log("- started contracts seeding");
+		collectionsIds.contractsIds = [
+			...(await seedContracts(
+				700,
+				collectionsIds.landlordsIds,
+				collectionsIds.agentsIds,
+				collectionsIds.unitsIds
+			)),
+		];
+		console.log("+ contracts seeded");
 
 		console.log("----------------------");
 		console.log("Database seeded! :)");

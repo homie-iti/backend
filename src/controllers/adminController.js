@@ -3,6 +3,7 @@ require("../models/adminModel");
 
 let Admin = mongoose.model("admins");
 
+// Get All Admins
 module.exports.getAllAdmins = (request, response, next) => {
     Admin.find({})
         .then((data) => {
@@ -13,6 +14,7 @@ module.exports.getAllAdmins = (request, response, next) => {
         });
 };
 
+// Get Admin By ID
 module.exports.getAdminByID = (request, response, next) => {
     Admin.findOne({ _id: request.params.id })
         .then((data) => {
@@ -24,9 +26,9 @@ module.exports.getAdminByID = (request, response, next) => {
         });
 };
 
+// Create Admin
 module.exports.createAdmin = (request, response, next) => {
     let object = new Admin({
-        _id: request.body.id,
         fullName: request.body.fullName,
         age: request.body.age,
         email: request.body.email,
@@ -43,21 +45,23 @@ module.exports.createAdmin = (request, response, next) => {
         .catch((error) => next(error));
 };
 
-module.exports.updateAdmin = async (request, response, next) => {
+// Update Admin By ID
+module.exports.updateAdmin = (request, response, next) => {
     // console.log(request.body.id);
-    try {
-        const data = await Admin.findById(request.body.id);
-        for (const key in request.body) {
-            data[key] = request.body[key];
-        }
-
-        await data.save();
-        response.status(200).json({ data: "updated" });
-    } catch (error) {
-        next(error);
-    }
+    Admin.findById(request.body.id)
+        .then((data) => {
+            for (const key in request.body) {
+                data[key] = request.body[key];
+            }
+            data.save();
+            response.status(200).json({ data: "updated" });
+        })
+        .catch((error) => {
+            next(error);
+        });
 };
 
+// Delete Admin By ID
 module.exports.deleteAdmin = (request, response, next) => {
     Admin.deleteOne({ _id: request.params.id })
         .then((data) => {
