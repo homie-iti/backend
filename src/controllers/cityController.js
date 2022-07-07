@@ -98,12 +98,15 @@ exports.deleteCity = async (request, response, next) => {
 // });
 
 exports.addUnitToCity = async (request, response, next) => {
+	const uniqueUnits = [...new Set([...request.body.units])];
+	// userUnits =
+
 	try {
 		const data = await CityModel.updateOne(
 			{ _id: request.params.id },
 			{
 				$push: {
-					units: [request.body.id],
+					units: uniqueUnits,
 				},
 			}
 		);
@@ -112,21 +115,29 @@ exports.addUnitToCity = async (request, response, next) => {
 
 		if (data.matchedCount < 1) throw new Error("city  not found");
 		if (data.modifiedCount < 1)
-			throw new Error("unit couldn't be added to city");
+			throw new Error("units couldn't be added to city");
 
-		response.status(200).json({ data: "unit is added to city" });
+		response.status(200).json({
+			data: `unit is added to city${
+				uniqueUnits.length !== request.body.units.length
+					? " - removed duplicates"
+					: ""
+			}`,
+		});
 	} catch (error) {
 		next(error);
 	}
 };
 
 exports.deleteUnitFromCity = async (request, response, next) => {
+	const uniqueUnits = [...new Set([...request.body.units])];
+
 	try {
 		const data = await CityModel.updateOne(
 			{ _id: request.params.id },
 			{
 				$pull: {
-					units: request.body.id,
+					units: { $in: uniqueUnits },
 				},
 			}
 		);
@@ -134,9 +145,16 @@ exports.deleteUnitFromCity = async (request, response, next) => {
 		// console.log(data);
 
 		if (data.matchedCount < 1) throw new Error("city  not found");
-		if (data.modifiedCount < 1) throw new Error("unit isn't found in city");
+		if (data.modifiedCount < 1)
+			throw new Error("all of the entered units isn't in city");
 
-		response.status(200).json({ data: "unit deleted from city" });
+		response.status(200).json({
+			data: `units are deleted from city${
+				uniqueUnits.length !== request.body.units.length
+					? " - removed duplicates"
+					: ""
+			}`,
+		});
 	} catch (error) {
 		next(error);
 	}
