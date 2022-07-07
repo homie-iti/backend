@@ -1,5 +1,5 @@
-// const express = require("express");
-// const router = express.Router();
+ const express = require("express");
+ const router = express.Router();
 
 const validationMW = require("../middlewares/validationMW");
 const { userPostValidtion, userUpdateValidation, userDeleteValidtion } = require("../middlewares/validtion")
@@ -36,4 +36,4 @@ router.route("/users/myFavourite/:id/unit")
 
 
 
-// module.exports = router;
+ module.exports = router;

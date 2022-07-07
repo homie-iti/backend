@@ -6,9 +6,22 @@ let HelpQuestion = mongoose.model("helpQuestions");
 module.exports.getAllQuestion = (request, response, next) => {
 
     HelpQuestion.find({})
-    .then(data=>{
-      if(data==null) next(new Error("User not Found"))
-        response.status(200).json(data);
+        .then(data => {
+          if(data==null)next (new Error(" question not found"))
+            response.status(200).json(data);
+
+        })
+        .catch(console.error(error => {
+            next(error)
+        }))
+
+}
+
+module.exports.getQuestionById = (request, response, next) => {
+    HelpQuestion.findOne({ _id: request.params.id })
+        .then(data => {
+            if (data == null) next(new Error(" question not found"))
+            response.status(200).json(data);
 
         })
         .catch(error => {
