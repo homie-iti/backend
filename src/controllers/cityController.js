@@ -167,7 +167,7 @@ exports.updateCityProperties = async (request, response, next) => {
 			return acc;
 		}, {});
 
-		console.log(modificationsObject);
+		// console.log(modificationsObject);
 
 		if (modificationsObject.units)
 			modificationsObject.units = [...new Set([...modificationsObject.units])];
@@ -177,7 +177,7 @@ exports.updateCityProperties = async (request, response, next) => {
 			modificationsObject
 		);
 
-		console.log(data);
+		// console.log(data);
 
 		if (data.matchedCount < 1) throw new Error("city  not found");
 		if (data.modifiedCount < 1) throw new Error("props couldn't be modified");
