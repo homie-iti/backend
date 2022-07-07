@@ -21,6 +21,11 @@ router
     [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
     validationMW,
     unitController.getUnitById
+  )
+  .delete(
+    [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
+    validationMW,
+    unitController.deleteUnit
   );
 
 router.get(
