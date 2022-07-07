@@ -3,7 +3,7 @@ let Landlord = require("./../models/landlordModel");
 let Unit = require("./../models/unitModel");
 
 module.exports.getLandlordContracts = (request, response, next) => {
-  Contract.findOne({ "landlordId._id": request.params.id }, "landlordUnits")
+  Contract.findOne({ "landlordId._id": request.params.id })
     .then((data) => {
       console.log(data);
     })
@@ -44,6 +44,16 @@ module.exports.getAllContracts = (request, response, next) => {
     .populate({ path: "agentId", select: "fullName" })
     .populate({ path: "landlordId", select: "fullName" })
 
+    .then((data) => {
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+
+module.exports.addContract = (request, response, next) => {
+  let newContract = new Contract(request.body);
+  newContract
+    .save()
     .then((data) => {
       response.status(200).json(data);
     })
