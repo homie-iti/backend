@@ -8,6 +8,7 @@ require("dotenv").config();
 const seedHelpQuestions = require("./seeders/helpQuestionsSeeder");
 const seedAdmins = require("./seeders/adminsSeeder");
 const seedUsers = require("./seeders/usersSeeder");
+const { addUserFavorites } = require("./seeders/usersSeeder");
 const seedCities = require("./seeders/citiesSeeder");
 const { addUnitsToCities } = require("./seeders/citiesSeeder");
 const seedUnits = require("./seeders/unitsSeeder");
@@ -82,6 +83,7 @@ async function seedDB() {
 			)),
 		];
 		addUnitsToCities(collectionsIds.unitsIds);
+		addUserFavorites(collectionsIds.unitsIds);
 		console.log("+ units seeded");
 
 		console.log("..");

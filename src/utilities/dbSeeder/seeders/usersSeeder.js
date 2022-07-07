@@ -3,6 +3,11 @@ const mongoose = require("mongoose");
 
 require("../../../models/userModel");
 
+function randomIntFromInterval(min, max) {
+	// min and max included
+	return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 async function seedUsers(numberOfDocuments) {
 	const collection = mongoose.model("users");
 	await mongoose.connection.db.dropCollection("users");
@@ -30,6 +35,14 @@ async function seedUsers(numberOfDocuments) {
 			buildingNumber: faker.address.buildingNumber(),
 		};
 
+		// const favoriteUnitsRandomNumber = randomIntFromInterval(0, 20);
+		const favoriteUnits = [];
+		// for (let i = 0; i <= favoriteUnitsRandomNumber; i++) {
+		// 	const selectedUnit =
+		// 		unitsIds[randomIntFromInterval(0, unitsIds.length - 1)];
+		// 	favoriteUnits.push(selectedUnit);
+		// }
+
 		ids.push(_id);
 		data.push({
 			_id,
@@ -42,6 +55,7 @@ async function seedUsers(numberOfDocuments) {
 			national_id,
 			image,
 			address,
+			favoriteUnits,
 		});
 	}
 
@@ -68,5 +82,26 @@ async function addLandlordOrAgent(id, type) {
 	// });
 }
 
+async function addUserFavorites(unitsIds) {
+	const collection = mongoose.model("users");
+	const users = await collection.find({});
+
+	users.forEach(async (user) => {
+		const favoriteUnitsRandomNumber = randomIntFromInterval(0, 20);
+		// const favoriteUnits = [];
+		// user.favoriteUnits = favoriteUnits;
+		for (let i = 0; i <= favoriteUnitsRandomNumber; i++) {
+			const selectedUnit =
+				unitsIds[randomIntFromInterval(0, unitsIds.length - 1)];
+			user.favoriteUnits.push(selectedUnit);
+			await user.save();
+		}
+	});
+
+	// await mongoose.connection.db.dropCollection("users");
+	// await collection.
+}
+
 module.exports = seedUsers;
 module.exports.addLandlordOrAgent = addLandlordOrAgent;
+module.exports.addUserFavorites = addUserFavorites;
