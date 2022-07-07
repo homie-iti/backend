@@ -23,11 +23,17 @@ router
 // 	classController.updateClass
 // )
 
-router.route("/cities/:id").get(cityController.getCityById);
+router.route("/cities/:id").get(cityController.getCityById).put(
+	// classValidator.idParamValidator,
+	// classValidator.propParamValidator,
+	// validateMW,
+	cityController.updateCityProperties
+);
 
 router
 	.route("/cities/:id/units")
 	.post(cityController.addUnitToCity)
+	// .put(cityController.updateUnitsOfCity) // replace existing units
 	.delete(cityController.deleteUnitFromCity); //adding unit to city
 // 	.delete(
 // 		classValidator.idParamValidator,
@@ -37,11 +43,5 @@ router
 // 	);
 
 router.route("/cities/:id/:prop").get(cityController.getCityProperty);
-// .put(
-// 	classValidator.idParamValidator,
-// 	classValidator.propParamValidator,
-// 	validateMW,
-// 	classController.updateClassProps
-// );
 
 module.exports = router;

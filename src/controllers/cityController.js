@@ -120,7 +120,7 @@ exports.addUnitToCity = async (request, response, next) => {
 		response.status(200).json({
 			data: `unit is added to city${
 				uniqueUnits.length !== request.body.units.length
-					? " - removed duplicates"
+					? " - removed duplicates of your entry"
 					: ""
 			}`,
 		});
@@ -151,9 +151,39 @@ exports.deleteUnitFromCity = async (request, response, next) => {
 		response.status(200).json({
 			data: `units are deleted from city${
 				uniqueUnits.length !== request.body.units.length
-					? " - removed duplicates"
+					? " - removed duplicates of your entry"
 					: ""
 			}`,
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+exports.updateCityProperties = async (request, response, next) => {
+	try {
+		let modificationsObject = request.body.reduce((acc, curr) => {
+			acc[curr.prop] = curr.value;
+			return acc;
+		}, {});
+
+		console.log(modificationsObject);
+
+		if (modificationsObject.units)
+			modificationsObject.units = [...new Set([...modificationsObject.units])];
+
+		const data = await CityModel.updateOne(
+			{ _id: request.params.id },
+			modificationsObject
+		);
+
+		console.log(data);
+
+		if (data.matchedCount < 1) throw new Error("city  not found");
+		if (data.modifiedCount < 1) throw new Error("props couldn't be modified");
+
+		response.status(200).json({
+			data: `props are modified ${Object.keys(modificationsObject)}`,
 		});
 	} catch (error) {
 		next(error);
