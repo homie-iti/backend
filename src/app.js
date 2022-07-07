@@ -10,6 +10,7 @@ const cityRoute = require("./routers/cityRoute");
 const recommendationsRoute = require("./routers/recommendationsRoute");
 const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
+const contractRoute = require("./../src/routers/contractRoute");
 const helpRoute = require("../src/routers/helpQuestionRoute");
 const landlordRoute = require("./routers/landlordRoute")
 const adminRoute = require("../src/routers/adminRoute");
@@ -51,6 +52,7 @@ app.use(unitRoute);
 app.use(userRoute);
 app.use(cityRoute);
 app.use(recommendationsRoute);
+app.use(contractRoute);
 app.use(landlordRoute);
 app.use(helpRoute);
 
