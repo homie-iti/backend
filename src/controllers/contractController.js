@@ -3,15 +3,18 @@ let Landlord = require("./../models/landlordModel");
 let Unit = require("./../models/unitModel");
 
 module.exports.getLandlordContracts = (request, response, next) => {
-  Contract.findOne({ "landlordId._id": request.params.id })
+  Contract.findOne({ landlordId: request.params.id })
     .then((data) => {
-      console.log(data);
+      if (data == null) next(new Error("No Contracts For Entered Landlord"));
+      else {
+        response.status(200).json(data);
+      }
     })
     .catch((error) => next(error));
 };
 
 module.exports.getUnitContracts = (request, response, next) => {
-  Contract.findOne({ "unitId._id": request.params.id })
+  Contract.findOne({ unitId: request.params.id })
     .populate({
       path: "unitId",
       select: " cover estateType unitInfo dailyPrice numberOfResidents ",
