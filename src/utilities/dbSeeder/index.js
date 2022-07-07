@@ -15,15 +15,15 @@ const seedAgents = require("./seeders/agentsSeeder");
 const seedLandlords = require("./seeders/landlordsSeeder");
 
 require("../../models/addressModel");
-// require("../../models/adminModel");
-// require("../../models/agentModel");
-// require("../../models/cityModel");
+require("../../models/adminModel");
+require("../../models/agentModel");
+require("../../models/cityModel");
 require("../../models/contractModel");
-// require("../../models/helpQuestionModel");
-// require("../../models/landlordModel");
+require("../../models/helpQuestionModel");
+require("../../models/landlordModel");
 require("../../models/reviewModel");
-// require("../../models/unitModel");
-// require("../../models/userModel");
+require("../../models/unitModel");
+require("../../models/userModel");
 
 const collectionsIds = {
 	adminsIds: [],
@@ -113,11 +113,11 @@ async function seedDB() {
 const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 
 (async function () {
-  try {
-    await mongoose.connect(homieDB_URL);
-    await seedDB();
-    // process.exit();
-  } catch (error) {
-    console.log("DB Connection Error", error);
-  }
+	try {
+		await mongoose.connect(homieDB_URL);
+		await seedDB();
+		// process.exit();
+	} catch (error) {
+		console.log("DB Connection Error", error);
+	}
 })();

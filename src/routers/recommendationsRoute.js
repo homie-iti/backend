@@ -5,15 +5,18 @@ const recommendationsController = require("../controllers/recommednationsControl
 
 
 
-// router.route(`/recommendations/cities`)
-//     .get(recommendationsController.getCities)
-
 
 router.route(`/recommendations`)
     .get(recommendationsController.getCities)
 
 
 
+
+
+
+
+// router.route(`/recommendations/cities`)
+//     .get(recommendationsController.getCities)
 
 
 module.exports = router;
