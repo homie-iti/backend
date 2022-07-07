@@ -1,5 +1,6 @@
 let Unit = require("../models/unitModel");
 let Review = require("../models/reviewModel");
+let Landlord = require("./../models/landlordModel");
 
 module.exports.getAllUnits = (request, response, next) => {
   Unit.find(
@@ -21,7 +22,7 @@ module.exports.getUnitById = (request, response, next) => {
     { _id: request.params.id },
     "estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice covers"
   )
-    .populate({ path: "landlordId", select: "fullName phone image" })
+    .populate({ path: "landlordId" })
     .then((data) => {
       if (data == null) next(new Error("Unit Doesn't Exist"));
       else {
@@ -66,9 +67,45 @@ module.exports.updateUnitData = (request, response, next) => {
         }
         data.save().then((data) => {
           console.log(data);
-          response.status(200).json({ data: "Unit Data Updated" });
+          response.status(201).json({ data: "Unit Data Updated" });
         });
       }
+    })
+    .catch((error) => next(error));
+};
+
+module.exports.addUnit = (request, response, next) => {
+  let newUnit = new Unit({
+    landlordId: request.body.landlordId,
+    agentId: request.body.agentId,
+    cityId: request.body.cityId,
+    estateType: request.body.estateType,
+    dailyPrice: request.body.dailyPrice,
+    cover: request.body.cover,
+  });
+
+  newUnit
+    .save()
+    .then((data) => {
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+
+module.exports.getAllReviews = (request, response, next) => {
+  Review.find({})
+    .then((data) => {
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+
+module.exports.addReview = (request, response, next) => {
+  let newReview = new Review(request.body);
+  newContract
+    .save()
+    .then((data) => {
+      response.status(200).json(data);
     })
     .catch((error) => next(error));
 };

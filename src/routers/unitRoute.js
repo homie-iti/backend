@@ -12,6 +12,7 @@ const {
 router
   .route("/units")
   .get(unitController.getAllUnits)
+  .post(unitController.addUnit)
   .put(updateUnitValidations, validationMW, unitController.updateUnitData);
 
 router
@@ -28,5 +29,12 @@ router.get(
   validationMW,
   unitController.getUnitReviews
 );
+
+router.get("/reviews", unitController.getAllReviews);
+
+router
+  .route("/reviews")
+  .get(unitController.getAllReviews)
+  .post(unitController.addReview);
 
 module.exports = router;
