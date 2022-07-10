@@ -1,5 +1,4 @@
 let Contract = require("./../models/contractModel");
-//let Landlord = require("./../models/landlordModel");
 //let Unit = require("./../models/unitModel");
 
 module.exports.getLandlordContracts = (request, response, next) => {
@@ -29,14 +28,6 @@ module.exports.getUnitContracts = (request, response, next) => {
     })
     .catch((error) => next(error));
 };
-
-// module.exports.getAllLandlords = (request, response, next) => {
-//   Landlord.find({})
-//     .then((data) => {
-//       response.status(200).json(data);
-//     })
-//     .catch((error) => next(error));
-// };
 
 module.exports.getAllContracts = (request, response, next) => {
   Contract.find({}) //! discuss with team about data we want to display
