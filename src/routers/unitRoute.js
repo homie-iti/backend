@@ -12,9 +12,10 @@ const {
 router
   .route("/units")
   .get(unitController.getAllUnits)
-  .post(unitController.addUnit)
+  .post(unitController.createUnit)
   .put(updateUnitValidations, validationMW, unitController.updateUnitData);
 
+router.get("/cities", unitController.getAllcities);
 router
   .route("/units/:id")
   .get(
@@ -27,6 +28,8 @@ router
     validationMW,
     unitController.deleteUnit
   );
+
+router.put("/units/images", unitController.updateUnitImages);
 
 router.get(
   "/units/reviews/:id",
