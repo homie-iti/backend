@@ -2,6 +2,54 @@ let Unit = require("../models/unitModel");
 let Review = require("../models/reviewModel");
 let Landlord = require("./../models/landlordModel");
 
+const mongoose = require("mongoose");
+require("../models/cityModel");
+let City = mongoose.model("cities");
+
+module.exports.createUnit = (request, response, next) => {
+  const cityId = request.body.cityId;
+  const landlordId = request.body.landlordId;
+
+  let newUnit = new Unit({
+    landlordId: request.body.landlordId,
+    cityId: request.body.cityId,
+    unitInfo: request.body.unitInfo,
+    allowedGender: request.body.allowedGender,
+    estateType: request.body.estateType,
+    dailyPrice: request.body.dailyPrice,
+    cover: request.body.cover,
+    numberOfResidents: request.body.numberOfResidents,
+  });
+
+  Promise.all([
+    newUnit.save(),
+    City.findByIdAndUpdate(
+      cityId,
+      { $push: { units: newUnit._id } },
+      { new: true }
+    ),
+    Landlord.findByIdAndUpdate(
+      landlordId,
+      {
+        $push: { landlordUnits: newUnit._id },
+      },
+      { new: true }
+    ),
+  ])
+    .then((data) => {
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+
+module.exports.getAllcities = (request, response, next) => {
+  City.find({})
+    .then((data) => {
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+
 module.exports.getAllUnits = (request, response, next) => {
   Unit.find(
     {},
@@ -20,7 +68,7 @@ module.exports.getAllUnits = (request, response, next) => {
 module.exports.getUnitById = (request, response, next) => {
   Unit.findOne(
     { _id: request.params.id },
-    "estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice covers"
+    "estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice cover images"
   )
     .populate({ path: "landlordId", select: "fullName phone image" })
     .then((data) => {
@@ -34,6 +82,7 @@ module.exports.getUnitById = (request, response, next) => {
     });
 };
 
+
 module.exports.updateUnitData = (request, response, next) => {
   Unit.findOne({ _id: request.body.id })
     .then((data) => {
@@ -42,7 +91,7 @@ module.exports.updateUnitData = (request, response, next) => {
       else {
         const updates = request.body;
         // console.log(updates);
-        for (let property in updates) {
+        for (let property in data) {
           data[property] = updates[property] || data[property];
           if (property in data === false) {
             console.log(property, updates[property]);
@@ -72,20 +121,14 @@ module.exports.updateUnitData = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-module.exports.addUnit = (request, response, next) => {
-  let newUnit = new Unit({
-    landlordId: request.body.landlordId,
-    cityId: request.body.cityId,
-    estateType: request.body.estateType,
-    dailyPrice: request.body.dailyPrice,
-    cover: request.body.cover,
-    numberOfResidents: request.body.numberOfResidents,
-  });
 
-  newUnit
-    .save()
+module.exports.updateUnit = (request, resposne, next) => {
+  Unit.updateOne({ _id: request.params.id }, { $set: request.body })
     .then((data) => {
-      response.status(200).json(data);
+      if (data == null) next(new Error("Unit Not Found"));
+      else {
+        resposne.status(200).json(data);
+      }
     })
     .catch((error) => next(error));
 };
@@ -102,17 +145,28 @@ module.exports.deleteUnit = (request, resposne, next) => {
     .catch((error) => next(error));
 };
 
-//update specific property in unit
-// module.exports.delete = (request, resposne, next) => {
-//   Unit.updateOne({ _id: request.params.id })
-//     .then((data) => {
-//       if (data.deletedCount == 0) next(new Error("Unit Not Found"));
-//       else {
-//         resposne.status(200).json(data);
-//       }
-//     })
-//     .catch((error) => next(error));
-// };
+//Update Unit Images
+module.exports.updateUnitImages = (request, resposne, next) => {
+  Unit.updateOne(
+    { _id: request.body.id },
+    {
+      $push: {
+        images: { $each: [request.body.images] },
+      },
+      $pull: {
+        images: [...images, request.body.images],
+      },
+    }
+  )
+    .then((data) => {
+      // if (data.deletedCount == 0) next(new Error("Unit Not Found"));
+      // else {
+      //   resposne.status(200).json(data);
+      // }
+      console.log(data);
+    })
+    .catch((error) => next(error));
+};
 
 //!Thought we need to make reviews alone as controller & router (may need to get units with high review also)
 module.exports.getUnitReviews = (request, response, next) => {
