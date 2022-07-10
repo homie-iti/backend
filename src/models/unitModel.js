@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const addressSchema = require("./addressModel");
 const schema = new mongoose.Schema(
   {
-    _id: mongoose.Types.ObjectId,
+    //_id: mongoose.Types.ObjectId,
 
     landlordId: {
       type: mongoose.Types.ObjectId,
@@ -26,7 +26,7 @@ const schema = new mongoose.Schema(
 
     address: {
       type: addressSchema,
-      required: [true, "unit address is required"],
+      //required: [true, "unit address is required"],
     },
 
     dailyPrice: {
@@ -38,7 +38,8 @@ const schema = new mongoose.Schema(
 
     cover: { type: String, required: [true, "unit cover is required"] },
 
-    images: [{ type: String, required: [true, "unit images is required"] }],
+    //images: [{ type: String, required: [true, "unit images are required"] }],
+    images: [String],
 
     isPetsAllowed: Boolean,
 
@@ -76,11 +77,11 @@ const schema = new mongoose.Schema(
       type: {
         type: String,
         enum: ["Point"], // 'location.type' must be 'Point'
-        required: [true, "unit location is required"],
+        //required: [true, "unit location is required"],
       },
       coordinates: {
         type: [Number],
-        required: [true, "unit coordinates is required"],
+        //required: [true, "unit coordinates is required"],
       },
     },
   },
