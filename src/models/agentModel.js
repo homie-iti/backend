@@ -24,12 +24,12 @@ const schema = new mongoose.Schema({
 		required: [true, "agent units is required"],
 	},
 
-	favoriteUnits: [
-		{
-			type: mongoose.Types.ObjectId,
-			ref: "units",
-		},
-	],
+	// favoriteUnits: [
+	// 	{
+	// 		type: mongoose.Types.ObjectId,
+	// 		ref: "units",
+	// 	},
+	// ],
 });
 
 module.exports = mongoose.model("agents", schema);

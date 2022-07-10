@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const validationMW = require("../middlewares/validationMW");
-const { helpQuestionPostValidtion, helpQuestionUpdateValidtion,helpQuestionDeleteValidtion } = require("../middlewares/validtion")
+const {  helpQuestionPostValidtion , helpQuestionUpdateValidtion,helpQuestionDeleteValidtion } = require("../middlewares/validtion")
 const helpController = require("./../controllers/helpQuestionController");
 
 router.route("/helpQuestion")
