@@ -2,8 +2,6 @@ const { body, param, query } = require("express-validator");
 
 let addUnitValidations = [
   body("estateType")
-    .isAlpha()
-    .withMessage("EstateType Must Be Characters Only")
     .isIn(["studio", "shared-room", "single-room", "apartment"])
     .withMessage(
       "EstateType Must Be (Studio||Shared-Room||Single-Room||Apartment)"
@@ -20,22 +18,24 @@ let addUnitValidations = [
     .withMessage("Unit Building Number should be number"),
 
   body("dailyPrice").isNumeric().withMessage("Unit Daily Price Must Be Number"),
-  body(" isAvailable")
+  body("isAvailable")
     .isBoolean()
     .withMessage(
       "Unit Availability Must Be Added as true(available), false(unavailable)"
     ),
+  body("isPetsAllowed")
+    .isBoolean()
+    .withMessage("Pets Allowed or Not-allowed Must Be Added ")
+    .optional(),
 ];
 
 let updateUnitValidations = [
-  // body("estateType")
-  //   .isAlphanumeric()
-  //   .withMessage("EstateType Must Be Characters and can contain - ")
-  //   .isIn(["studio", "sharedRoom", "singleRoom", "apartment"])
-  //   .withMessage(
-  //     "EstateType Must Be (studio||sharedRoom||singleRoom||apartment)"
-  //   )
-  //   .optional(),
+  body("estateType")
+    .isIn(["studio", "shared-room", "single-room", "apartment"])
+    .withMessage(
+      "EstateType Must Be (Studio||Shared-Room||Single-Room||Apartment)"
+    )
+    .optional(),
 
   body("address")
     .isObject()
@@ -62,6 +62,10 @@ let updateUnitValidations = [
     .withMessage(
       "Unit Availability Must Be Added as true(available), false(unavailable)"
     )
+    .optional(),
+  body("isPetsAllowed")
+    .isBoolean()
+    .withMessage("Pets Allowed or Not-allowed Must Be Added ")
     .optional(),
 ];
 
