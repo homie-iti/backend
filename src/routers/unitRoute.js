@@ -15,7 +15,6 @@ router
   .post(unitController.createUnit)
   .put(updateUnitValidations, validationMW, unitController.updateUnitData);
 
-router.get("/cities", unitController.getAllcities);
 router
   .route("/units/:id")
   .get(
@@ -29,7 +28,10 @@ router
     unitController.deleteUnit
   );
 
-router.put("/units/images", unitController.updateUnitImages);
+router
+  .route("/units/images")
+  .put(unitController.updateUnitImages)
+  .delete(unitController.deleteUnitImages);
 
 router.get(
   "/units/reviews/:id",
