@@ -36,7 +36,7 @@ module.exports.createAdmin = (request, response, next) => {
     fullName: request.body.fullName,
     age: request.body.age,
     email: request.body.email,
-    password: bcrypt.hashSync(req.body.password, saltRounds),
+    password: bcrypt.hashSync(request.body.password, saltRounds),
     phone: request.body.phone,
     national_id: request.body.national_id,
     image: request.body.image,
