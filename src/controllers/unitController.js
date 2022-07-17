@@ -48,7 +48,7 @@ module.exports.createUnit = (request, response, next) => {
     allowedGender: request.body.allowedGender,
     estateType: request.body.estateType,
     dailyPrice: request.body.dailyPrice,
-    cover: request.body.cover,
+    //cover: request.body.cover,
     numberOfResidents: request.body.numberOfResidents,
   });
 
@@ -212,6 +212,22 @@ module.exports.addReview = (request, response, next) => {
     .save()
     .then((data) => {
       response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+
+module.exports.uploadCoverImage = (request, response, next) => {
+  //response.status(201).json("Cover Image Uploaded");
+  console.log(request.file);
+  console.log(request.file.path);
+
+  Unit.findOne({ _id: request.params.id })
+    .then((data) => {
+      console.log(data);
+      if (data == null) next(new Error("Unit Doesn't Exist"));
+      data.cover = request.file.path;
+      data.save();
+      response.status(201).json("Cover Image Uploaded");
     })
     .catch((error) => next(error));
 };
