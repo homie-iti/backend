@@ -4,6 +4,8 @@
 const validationMW = require("../middlewares/validationMW");
 const { userPostValidtion, userUpdateValidation, userDeleteValidtion } = require("../middlewares/validtion")
 const userController = require("./../controllers/userController");
+const upload=require('../middlewares/uploadImagesMW')
+
 
 router.route("/users")
 
@@ -15,6 +17,12 @@ router.route("/users")
   .put(userUpdateValidation, validationMW, userController.updateUser)
 
   .delete(userController.deleteManyUser)
+
+
+router.route("/user/profileImage/:id")
+  .post(upload("users/profileImage").single("profile"),
+  userController.uploadUserImage);
+ 
 
 
  router.route("/users/:id") 
@@ -34,6 +42,6 @@ router.route("/users/myFavourite/:id/unit")
     .delete(userController.removeFavUnit)
 
 
-
+  
 
  module.exports = router;
