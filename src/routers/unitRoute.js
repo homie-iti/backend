@@ -9,6 +9,8 @@ const {
   updateUnitValidations,
 } = require("./../middlewares/unitValidations");
 
+const uploadImage = require("./../middlewares/uploadImagesMW");
+
 router
   .route("/units")
   .get(unitController.getAllUnits)
@@ -32,6 +34,12 @@ router
   .route("/units/images")
   .put(unitController.updateUnitImages)
   .delete(unitController.deleteUnitImages);
+
+router.post(
+  "/units/cover/:id",
+  uploadImage("units/cover").single("cover"),
+  unitController.uploadCoverImage
+);
 
 router.get(
   "/units/reviews/:id",
