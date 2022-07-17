@@ -23,8 +23,6 @@ router.get(
   contractController.getLandlordContracts
 );
 
-router.get("/landlords", contractController.getAllLandlords);
-
 router
   .route("/contracts")
   .get(contractController.getAllContracts)
