@@ -177,13 +177,43 @@ module.exports.uploadUserImage = (request, response, next) => {
   console.log(request.file);
   console.log(request.file.path);
 
-  Unit.findOne({ _id: request.params.id })
+  User.findOne({ _id: request.params.id })
     .then((data) => {
       console.log(data);
-      if (data == null) next(new Error("Unit Doesn't Exist"));
+      if (data == null) next(new Error( "User Doesn't Exist"));
       data.cover = request.file.path;
       data.save();
-      response.status(201).json("Cover Image Uploaded");
+      response.status(201).json("User Image Uploaded");
     })
     .catch((error) => next(error));
 };
+// const updateTeacherImg = async (req, res, next) => {
+//   try {
+//       const image = req.file.path;
+//       const id = req.body.id;
+//       const teacher = await Teacher.findOneAndUpdate({ _id: id }, { image })
+//       try {
+//           fs.unlinkSync(`${process.cwd()}\\${teacher.image}`)
+//           //file removed
+//       } catch (err) {
+//           console.error(err)
+//       }
+//       res.status(200).json({ message: "Modified" });
+//   } catch (error) {
+//       res.status(400)
+//       next(error)
+//   }
+// }
+// async uploadImage(req, res){
+//   try {
+//       req.user.image = req.file.path
+//       await req.user.save();
+//       res.status(200).send(responseHelper(true, "done", "Upload Success"))
+//   } catch (error) {
+//       res.status(500).send(responseHelper(false, error, "Upolad filed"))
+//   }
+  
+//   res.send('done')
+// }
+
+// }
