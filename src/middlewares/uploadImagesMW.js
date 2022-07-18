@@ -27,7 +27,7 @@ const uploadImage = (folderName) => {
       fileSize: 2000000,
     },
     fileFilter: (req, file, cb) => {
-      file.originalname.toLowerCase();
+      file.originalname = file.originalname.toLowerCase();
       if (!file.originalname.match(/\.(jpg|jpeg|png|gif|jfif)$/)) {
         return cb(new Error("Please Upload Image"));
       }
