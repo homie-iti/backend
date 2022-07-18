@@ -48,7 +48,7 @@ module.exports.createUnit = (request, response, next) => {
     allowedGender: request.body.allowedGender,
     estateType: request.body.estateType,
     dailyPrice: request.body.dailyPrice,
-    cover: request.body.cover,
+    //cover: request.body.cover,
     numberOfResidents: request.body.numberOfResidents,
   });
 
@@ -113,7 +113,7 @@ module.exports.updateUnitData = (request, response, next) => {
 module.exports.deleteUnit = (request, resposne, next) => {
   const cityId = request.body.cityId;
   const landlordId = request.body.landlordId;
-
+  //!Promise.all needs to be checked (!Important)
   Promise.all([
     Unit.deleteOne({ _id: request.params.id }),
     City.findByIdAndUpdate(
@@ -139,13 +139,53 @@ module.exports.deleteUnit = (request, resposne, next) => {
     .catch((error) => next(error));
 };
 
+//Upload Unit Cover(//!Check if this route needs something else(addind landlord-delete the old cover when updated))
+module.exports.uploadCoverImage = (request, response, next) => {
+  console.log(request.file);
+  console.log(request.file.path);
+
+  Unit.findOne({ _id: request.params.id })
+    .then((data) => {
+      console.log(data);
+      if (data == null) next(new Error("Unit Doesn't Exist"));
+      data.cover = request.file.path;
+      data.save();
+      response.status(201).json("Cover Image Uploaded");
+    })
+    .catch((error) => next(error));
+};
+
+//Upload Unit Images (//!Check if we delete old images of the unit when landlord update them & check if we need to add the landrordId(relations) )
+module.exports.uploadUnitImages = (request, response, next) => {
+  console.log(request.files);
+  console.log(request.files.path);
+  Unit.findOne({ _id: request.params.id })
+    .then((data) => {
+      console.log(data);
+      console.log(data.images);
+
+      if (data == null) next(new Error("Unit Doesn't Exist"));
+
+      request.files.forEach((image) => {
+        console.log(image.path);
+        data.images.push(image.path);
+      });
+      data.save();
+      response.status(201).json("Unit Images Uploaded");
+    })
+    .catch((error) => next(error));
+};
+
 //Update Unit Images
 module.exports.updateUnitImages = (request, resposne, next) => {
   Unit.updateOne(
     { _id: request.body.id },
     {
-      $addToSet: {
-        images: { $each: request.body.images },
+      // $addToSet: {
+      //   images: { $each: request.body.images },
+      // },
+      $pull: {
+        images: request.body.images,
       },
     }
   )
@@ -158,7 +198,7 @@ module.exports.updateUnitImages = (request, resposne, next) => {
     .catch((error) => next(error));
 };
 
-//Delete Unit Images (check it again)
+//TODO Delete Unit Images (check it again)
 module.exports.deleteUnitImages = (request, resposne, next) => {
   Unit.updateOne(
     { _id: request.body.id },
