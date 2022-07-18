@@ -1,7 +1,4 @@
-const mongoose = require("mongoose");
-require("../models/agentModel");
-
-let Agent = mongoose.model("agents");
+let Agent = require("./../models/agentModel");
 
 // Get All Agents
 module.exports.getAllAgents = (request, response, next) => {
@@ -52,18 +49,7 @@ module.exports.getAgentByID = (request, response, next) => {
 
 // create Agent
 module.exports.createAgent = (request, response, next) => {
-  let object = new Agent({
-    _id: request.body.id,
-    fullName: request.body.fullName,
-    age: request.body.age,
-    email: request.body.email,
-    password: request.body.password,
-    gender: request.body.gender,
-    phone: request.body.phone,
-    national_id: request.body.national_id,
-    image: request.body.image,
-    address: request.body.address,
-  });
+  let object = new Agent(request.body);
   object
     .save()
     .then((data) => {

@@ -6,9 +6,11 @@ let Landlord = require("./../models/landlordModel");
 module.exports.getAllUnits = (request, response, next) => {
   Unit.find(
     {},
-    "estateType images unitInfo isAvailable isPetsAllowed gender dailyPrice address "
+    "estateType images unitInfo isAvailable isPetsAllowed gender dailyPrice address"
   )
     .populate({ path: "landlordId", select: "fullName phone image" })
+    // .populate({ path: "agentId" })
+
     .then((data) => {
       response.status(200).json(data);
     })
@@ -41,16 +43,7 @@ module.exports.createUnit = (request, response, next) => {
   const cityId = request.body.cityId;
   const landlordId = request.body.landlordId;
 
-  let newUnit = new Unit({
-    landlordId: request.body.landlordId,
-    cityId: request.body.cityId,
-    unitInfo: request.body.unitInfo,
-    allowedGender: request.body.allowedGender,
-    estateType: request.body.estateType,
-    dailyPrice: request.body.dailyPrice,
-    //cover: request.body.cover,
-    numberOfResidents: request.body.numberOfResidents,
-  });
+  let newUnit = new Unit(request.body);
 
   Promise.all([
     newUnit.save(),

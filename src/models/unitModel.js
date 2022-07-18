@@ -10,7 +10,7 @@ const schema = new mongoose.Schema(
       required: [true, "unit landlordId is required"],
     },
 
-    agentId: { type: mongoose.Types.ObjectId, ref: "agents" },
+    agentId: { type: mongoose.Types.ObjectId, ref: "users" },
 
     cityId: {
       type: mongoose.Types.ObjectId,

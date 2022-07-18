@@ -1,6 +1,4 @@
-const mongoose = require("mongoose");
-require("../models/unitModel");
-let Unit = mongoose.model("units");
+let Unit = require("./../models/unitModel");
 
 module.exports.filteredUnit = (request, response, next) => {
   filterQuery = request.query;

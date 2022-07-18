@@ -1,8 +1,5 @@
-const mongoose = require("mongoose");
-require("../models/adminModel");
-require("../models/userModel");
-let Admin = mongoose.model("admins");
-let User = mongoose.model("users");
+let Admin = require("./../models/adminModel");
+let User = require("./../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 

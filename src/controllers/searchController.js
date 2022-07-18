@@ -1,7 +1,4 @@
-const mongoose = require("mongoose");
-require("../models/cityModel");
-
-let Cities = mongoose.model("cities");
+let Cities = require("./../models/cityModel");
 
 module.exports.getCityByName = (request, response, next) => {
   Cities.find({ name: request.params.name }, { _id: 1, name: 1 })

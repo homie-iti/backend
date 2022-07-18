@@ -1,7 +1,4 @@
-const mongoose = require("mongoose");
-require("../models/adminModel");
-
-let Admin = mongoose.model("admins");
+let Admin = require("./../models/adminModel");
 
 const bcrypt = require("bcrypt");
 
