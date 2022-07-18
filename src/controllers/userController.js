@@ -146,7 +146,7 @@ module.exports.getAllFavUnits = ((request, response, next) => {
 
 module.exports.updateFavUnit = ((request, response, next) => {
   User.findByIdAndUpdate({ _id: request.params.id },
-     { $addToSet: { favoriteUnits: request.body.favoriteUnits } })
+    { $addToSet: { favoriteUnits: request.body.favoriteUnits } })
     .then(data => {
       response.status(200).json(data);
 
@@ -159,10 +159,10 @@ module.exports.updateFavUnit = ((request, response, next) => {
 
 module.exports.removeFavUnit = ((request, response, next) => {
   User.updateOne({ _id: request.params.id },
-     { $pull: { favoriteUnits: request.body.favoriteUnits } })
+    { $pull: { favoriteUnits: request.body.favoriteUnits } })
 
     .then(data => {
-      response.status(200).json({data:"deleted"});
+      response.status(200).json({ data: "deleted" });
 
     })
     .catch(error => {
