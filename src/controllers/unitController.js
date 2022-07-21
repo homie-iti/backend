@@ -103,7 +103,7 @@ module.exports.updateUnitData = (request, response, next) => {
 };
 
 //delete specific unit
-module.exports.deleteUnit = (request, resposne, next) => {
+module.exports.deleteUnit = (request, response, next) => {
   const cityId = request.body.cityId;
   const landlordId = request.body.landlordId;
   //!Promise.all needs to be checked (!Important)
@@ -126,13 +126,13 @@ module.exports.deleteUnit = (request, resposne, next) => {
       if (data.matchedCount == 0)
         next(new Error("Unit Not Found")); //! doesn't work check it again
       else {
-        resposne.status(200).json("Unit Deleted");
+        response.status(200).json("Unit Deleted");
       }
     })
     .catch((error) => next(error));
 };
 
-//Upload Unit Cover(//!Check if this route needs something else(addind landlord-delete the old cover when updated))
+//Upload Unit Cover(//!Check if this route needs something else(adding landlord-delete the old cover when updated))
 module.exports.uploadCoverImage = (request, response, next) => {
   console.log(request.file);
   console.log(request.file.path);
@@ -170,29 +170,26 @@ module.exports.uploadUnitImages = (request, response, next) => {
 };
 
 //Update Unit Images
-module.exports.updateUnitImages = (request, resposne, next) => {
+module.exports.updateUnitImages = (request, response, next) => {
   Unit.updateOne(
     { _id: request.body.id },
     {
-      // $addToSet: {
-      //   images: { $each: request.body.images },
-      // },
-      $pull: {
-        images: request.body.images,
+      $addToSet: {
+        images: { $each: request.body.images },
       },
     }
   )
     .then((data) => {
       if (data.matchedCount == 0) next(new Error("Unit Not Found"));
       else {
-        resposne.status(200).json("Unit Images Has Updated");
+        response.status(200).json("Unit Images Has Updated");
       }
     })
     .catch((error) => next(error));
 };
 
 //TODO Delete Unit Images (check it again)
-module.exports.deleteUnitImages = (request, resposne, next) => {
+module.exports.deleteUnitImages = (request, response, next) => {
   Unit.updateOne(
     { _id: request.body.id },
     {
@@ -204,7 +201,7 @@ module.exports.deleteUnitImages = (request, resposne, next) => {
     .then((data) => {
       if (data.matchedCount == 0) next(new Error("Unit Not Found"));
       else {
-        resposne.status(200).json(data);
+        response.status(200).json(data);
       }
     })
     .catch((error) => next(error));
