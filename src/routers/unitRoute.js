@@ -48,7 +48,7 @@ router.post(
   "/units/images/:id",
   [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
   validationMW,
-  uploadImage("units/unitImages").array("unitImages", 5),
+  uploadImage("units/unitsImages").array("unitImages", 5),
   unitController.uploadUnitImages
 );
 

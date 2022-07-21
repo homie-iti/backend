@@ -150,12 +150,12 @@ module.exports.uploadCoverImage = (request, response, next) => {
 
 //Upload Unit Images (//!Check if we delete old images of the unit when landlord update them & check if we need to add the landrordId(relations) )
 module.exports.uploadUnitImages = (request, response, next) => {
-  console.log(request.files);
-  console.log(request.files.path);
+  // console.log(request.files);
+  // console.log(request.files.path);
   Unit.findOne({ _id: request.params.id })
     .then((data) => {
       console.log(data);
-      console.log(data.images);
+      // console.log(data.images);
 
       if (data == null) next(new Error("Unit Doesn't Exist"));
 

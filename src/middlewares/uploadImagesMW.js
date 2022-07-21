@@ -9,10 +9,15 @@ const uploadImage = (folderName) => {
         `./src/uploads/${folderName}/`,
         req.params.id.toString()
       );
-      fs.mkdir(location, (err) => {});
+      fs.mkdir(location, { recursive: true }, (err) => {
+        if (err) {
+          return console.error(err);
+        }
+        console.log("Directory created successfully!");
+      });
       cb(null, location);
     },
-    //destination: `./src/uploads/${folderName}/`,
+    // destination: `./src/uploads/${folderName}/`,
     filename: (req, file, cb) => {
       cb(
         null,
