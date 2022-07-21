@@ -45,13 +45,6 @@ const schema = new mongoose.Schema({
     unique: true,
     required: [true, "admin national id number is required"],
   },
-  image: {
-    type: String,
-    match: [
-      /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)$/,
-      "Please fill a valid url address image",
-    ],
-  },
 });
 
 module.exports = mongoose.model("admins", schema);

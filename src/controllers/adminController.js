@@ -36,7 +36,6 @@ module.exports.createAdmin = (request, response, next) => {
     password: bcrypt.hashSync(request.body.password, saltRounds),
     phone: request.body.phone,
     national_id: request.body.national_id,
-    image: request.body.image,
   });
   object
     .save()

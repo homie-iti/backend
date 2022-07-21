@@ -1,5 +1,7 @@
 let Agent = require("./../models/agentModel");
+const bcrypt = require("bcrypt");
 
+const saltRounds = 10;
 // Get All Agents
 module.exports.getAllAgents = (request, response, next) => {
   Agent.find({})
@@ -49,7 +51,10 @@ module.exports.getAgentByID = (request, response, next) => {
 
 // create Agent
 module.exports.createAgent = (request, response, next) => {
-  let object = new Agent(request.body);
+  let object = new Agent({
+    ...request.body,
+    password: bcrypt.hashSync(request.body.password, saltRounds),
+  });
   object
     .save()
     .then((data) => {
