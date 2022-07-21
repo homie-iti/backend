@@ -6,8 +6,9 @@ const router = express.Router();
 
 router
   .route("/agent")
-  .get(agentController.getAllAgents)
+  .get(adminOnly, agentController.getAllAgents)
   .post(
+    adminOnly,
     [
       body("id").isMongoId().withMessage("agent id should be MongoId"),
       body("fullname")
@@ -30,6 +31,7 @@ router
     agentController.createAgent
   )
   .put(
+    adminOnly,
     [
       body("id").isMongoId().withMessage("agent id should be MongoId"),
       body("fullname")
@@ -55,11 +57,13 @@ router
 router
   .route("/agent/:id")
   .get(
+    adminAndOwner,
     [param("id").isMongoId().withMessage("agent id should be objectID")],
     validationMW,
     agentController.getAgentByID
   )
   .delete(
+    adminAndOwner,
     [param("id").isMongoId().withMessage("agent id should be objectID")],
     validationMW,
     agentController.deleteAgent
@@ -68,32 +72,36 @@ router
 router
   .route("/agent/agentUnits")
   .get(
-    [param("id").isMongoId().withMessage("favourite id should be objectID")],
+    adminAndOwner,
+    [param("id").isMongoId().withMessage("favorite id should be objectID")],
     validationMW,
     agentController.updateAgentUnits
   )
   .put(
-    // [
-    //   body("id").isMongoId().withMessage("agent id should be MongoId"),
-    //   body("agentUnits")
-    //     .isMongoId()
-    //     .withMessage("agent Units should be MongoId"),
-    // ],
-    // validationMW,
+    adminAndOwner,
+    [
+      body("id").isMongoId().withMessage("agent id should be MongoId"),
+      body("agentUnits")
+        .isMongoId()
+        .withMessage("agent Units should be MongoId"),
+    ],
+    validationMW,
     agentController.updateAgentUnits
   );
 
 router
   .route("/agent/agentUnits/:id")
   .get(
-    [param("id").isMongoId().withMessage("favourite id should be objectID")],
+    adminAndOwner,
+    [param("id").isMongoId().withMessage("favorite id should be objectID")],
     validationMW,
     agentController.updateAgentUnits
   )
 
   .delete(
-    // [param("id").isMongoId().withMessage("favourite id should be objectID")],
-    // validationMW,
+    adminAndOwner,
+    [param("id").isMongoId().withMessage("favorite id should be objectID")],
+    validationMW,
     agentController.RemoveAgentUnits
   );
 
