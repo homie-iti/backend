@@ -45,13 +45,13 @@ async function seedDB() {
 	try {
 		console.log("- started admins seeding");
 		collectionsIds.adminsIds = [...(await seedAdmins(10))];
-		console.log("+ admins seeded");
+		console.log("+ done");
 
 		console.log("..");
 
 		console.log("- started users seeding");
 		collectionsIds.usersIds = [...(await seedUsers(1000))];
-		console.log("+ users seeded");
+		console.log("+ done");
 
 		console.log("..");
 
@@ -63,13 +63,13 @@ async function seedDB() {
 				collectionsIds.usersIds
 			)),
 		];
-		console.log("+ help questions seeded");
+		console.log("+ done");
 
 		console.log("..");
 
 		console.log("- started cities seeding");
 		collectionsIds.citiesIds = [...(await seedCities(50))];
-		console.log("+ cities seeded");
+		console.log("+ done");
 
 		console.log("..");
 
@@ -82,7 +82,7 @@ async function seedDB() {
 			)),
 		];
 		addUnitsToCities(collectionsIds.unitsIds);
-		console.log("+ units seeded");
+		console.log("+ done");
 
 		console.log("..");
 
@@ -94,7 +94,7 @@ async function seedDB() {
 				collectionsIds.unitsIds
 			)),
 		];
-		console.log("+ agents seeded");
+		console.log("+ done");
 
 		console.log("..");
 
@@ -106,7 +106,7 @@ async function seedDB() {
 				collectionsIds.unitsIds
 			)),
 		];
-		console.log("+ landlords seeded");
+		console.log("+ done");
 
 		console.log("..");
 
@@ -118,7 +118,7 @@ async function seedDB() {
 				collectionsIds.unitsIds
 			)),
 		];
-		console.log("+ reviews seeded");
+		console.log("+ done");
 
 		console.log("..");
 
@@ -131,7 +131,7 @@ async function seedDB() {
 				collectionsIds.unitsIds
 			)),
 		];
-		console.log("+ contracts seeded");
+		console.log("+ done");
 
 		console.log("----------------------");
 		console.log("Database seeded! :)");
@@ -146,8 +146,8 @@ const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${p
 	try {
 		await mongoose.connect(homieDB_URL);
 		await seedDB();
-		// process.exit();
 	} catch (error) {
 		console.log("DB Connection Error", error);
 	}
+	process.exit();
 })();
