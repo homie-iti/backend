@@ -2,20 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { body, param, query } = require("express-validator");
 
-const {
-  getAllUnits,
-  getUnitById,
-  getAllReviews,
-  getUnitReviews,
-  addReview,
-  createUnit,
-  updateUnitData,
-  updateUnitImages,
-  deleteUnitImages,
-  deleteUnit,
-  uploadCoverImage,
-  uploadUnitImages,
-} = require("../controllers/unitController");
+const unitController = require("../controllers/unitController");
 
 const validationMW = require("./../middlewares/validationMW");
 const {
@@ -27,33 +14,34 @@ const uploadImage = require("./../middlewares/uploadImagesMW");
 
 router
   .route("/units")
-  .get(getAllUnits)
-  .post(createUnit)
-  .put(updateUnitValidations, validationMW, updateUnitData);
+  .get(unitController.getAllUnits)
+  .post(unitController.createUnit)
+  .put(updateUnitValidations, validationMW, unitController.updateUnitData);
 
 router
   .route("/units/:id")
   .get(
     [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
     validationMW,
-    getUnitById
+    unitController.getUnitById
   )
   .delete(
     [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
     validationMW,
-    deleteUnit
+    unitController.deleteUnit
   );
 
-router.route( "/units/images" )
-  .put( updateUnitImages )
-  .delete( deleteUnitImages );
+router
+  .route("/units/images")
+  .put(unitController.updateUnitImages)
+  .delete(unitController.deleteUnitImages);
 
 router.post(
   "/units/cover/:id",
   [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
   validationMW,
   uploadImage("units/cover").single("cover"),
-  uploadCoverImage
+  unitController.uploadCoverImage
 );
 
 router.post(
@@ -61,16 +49,19 @@ router.post(
   [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
   validationMW,
   uploadImage("units/unitImages").array("unitImages", 5),
-  uploadUnitImages
+  unitController.uploadUnitImages
 );
 
 router.get(
   "/units/reviews/:id",
   [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
   validationMW,
-  getUnitReviews
+  unitController.getUnitReviews
 );
 
-router.route("/reviews").get(getAllReviews).post(addReview);
+router
+  .route("/reviews")
+  .get(unitController.getAllReviews)
+  .post(unitController.addReview);
 
 module.exports = router;
