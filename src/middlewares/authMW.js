@@ -15,3 +15,22 @@ module.exports = (request, response, next) => {
     next(error);
   }
 };
+
+export const adminAndOwner = (request, response, next) => {
+  if (request.role === "admin") next();
+  else if (request.id === request.params.id) next();
+  else {
+    const error = new Error("Not authorized");
+    error.status = 403;
+    next(error);
+  }
+};
+
+export const adminOnly = (request, response, next) => {
+  if (request.role === "admin") next();
+  else {
+    const error = new Error("Not authorized");
+    error.status = 403;
+    next(error);
+  }
+};

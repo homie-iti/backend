@@ -52,8 +52,18 @@ module.exports.getAgentByID = (request, response, next) => {
 // create Agent
 module.exports.createAgent = (request, response, next) => {
   let object = new Agent({
-    ...request.body,
+    _id: request.body.id,
+    fullName: request.body.fullName,
+    age: request.body.age,
+    email: request.body.email,
     password: bcrypt.hashSync(request.body.password, saltRounds),
+    phone: request.body.phone,
+    national_id: request.body.national_id,
+    gender: request.body.gender,
+    address: request.body.address,
+    image: request.body.image,
+    agentUnits: request.body.agentUnits,
+    favoriteUnits: request.body.favoriteUnits,
   });
   object
     .save()
