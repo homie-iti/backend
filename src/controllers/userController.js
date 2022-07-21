@@ -158,5 +158,23 @@ module.exports.removeFavUnit = (request, response, next) => {
     })
     .catch((error) => {
       next(error);
-    });
+    })
+
+
+};
+
+module.exports.uploadUserImage = (request, response, next) => {
+  //response.status(201).json("Cover Image Uploaded");
+  console.log(request.file);
+  console.log(request.file.path);
+
+  Unit.findOne({ _id: request.params.id })
+    .then((data) => {
+      console.log(data);
+      if (data == null) next(new Error("Unit Doesn't Exist"));
+      data.cover = request.file.path;
+      data.save();
+      response.status(201).json("Cover Image Uploaded");
+    })
+    .catch((error) => next(error));
 };
