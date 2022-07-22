@@ -1,7 +1,8 @@
 const express = require('express')
+const { body, param, query } = require('express-validator')
 const validationMW = require('../middlewares/validationMW')
 const agentController = require('../controllers/agentController')
-const { body, param, query } = require('express-validator')
+
 const router = express.Router()
 
 router

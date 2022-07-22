@@ -1,4 +1,5 @@
 const express = require('express')
+
 const router = express.Router()
 const { body, param, query } = require('express-validator')
 const validateMW = require('../middlewares/validationMW.js')
@@ -112,7 +113,7 @@ router
         ],
         validateMW,
         cityController.deleteUnitFromCity
-    ) //adding unit to city
+    ) // adding unit to city
 // 	.delete(
 // 		classValidator.idParamValidator,
 // 		childValidator.idBodyValidator,

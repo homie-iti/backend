@@ -1,4 +1,5 @@
 const express = require('express')
+
 const router = express.Router()
 
 const validationMW = require('../middlewares/validationMW')
@@ -7,7 +8,7 @@ const {
     userUpdateValidation,
     userDeleteValidation,
 } = require('../middlewares/validtion')
-const userController = require('./../controllers/userController')
+const userController = require('../controllers/userController')
 const upload = require('../middlewares/uploadImagesMW')
 
 router

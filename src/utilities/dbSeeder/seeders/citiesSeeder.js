@@ -12,7 +12,7 @@ async function seedCities(numberOfDocuments) {
     const collection = mongoose.model('cities')
     await mongoose.connection.db.dropCollection('cities')
 
-    let data = []
+    const data = []
     const ids = []
     for (let i = 0; i < numberOfDocuments; i++) {
         const _id = mongoose.Types.ObjectId(
@@ -44,9 +44,11 @@ async function addUnitsToCities(unitsIds) {
         const unitsEnd = unitsStart + randomIntFromInterval(0, 100)
 
         let slicedUnits = unitsIds.slice(unitsStart, unitsEnd)
-        slicedUnits = slicedUnits.map((unitId) =>
-            mongoose.Types.ObjectId(unitId)
-        )
+        slicedUnits = slicedUnits.map((unitId) => {
+            {
+                return mongoose.Types.ObjectId(unitId)
+            }
+        })
 
         city.units = slicedUnits
         await city.save()

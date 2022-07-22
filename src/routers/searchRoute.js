@@ -1,8 +1,9 @@
 const express = require('express')
+const { body, param, query } = require('express-validator')
 const search = require('../controllers/searchController')
 
-const { body, param, query } = require('express-validator')
 const validationMW = require('../middlewares/validationMW')
+
 const router = express.Router()
 
 router.route('/search/:name').get(

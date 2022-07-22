@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-//some property lose
+// some property lose
 const schema = new mongoose.Schema(
     {
         _id: {

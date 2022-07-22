@@ -27,7 +27,7 @@ const helpQuestionDeleteValidation = [
 ]
 
 const userPostValidation = [
-    //body("id").isMongoId().withMessage("user id should be a number"),
+    // body("id").isMongoId().withMessage("user id should be a number"),
     body('fullName')
         .isAlpha('en-US', { ignore: ' ' })
         .withMessage('user name should be characters'),
@@ -44,7 +44,7 @@ const userPostValidation = [
         .isString({ min: 8 })
         .isLength({ min: 8 })
         .withMessage('password cannot be less than 8 characters'),
-    //body("national_id ").isNumeric().withMessage("user national_id  is not valid"),
+    // body("national_id ").isNumeric().withMessage("user national_id  is not valid"),
 ]
 
 const userUpdateValidation = [
@@ -73,7 +73,7 @@ const userUpdateValidation = [
         .optional()
         .isAlpha('en-US', { ignore: ' ' })
         .withMessage('city is not valid'),
-    //body("address.street").exists({ checkFalsy: true }).withMessage("street is not valid"),
+    // body("address.street").exists({ checkFalsy: true }).withMessage("street is not valid"),
     // body("address.building").exists({ checkFalsy: true }).withMessage("building is not valid"),
 ]
 

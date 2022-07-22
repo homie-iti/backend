@@ -1,23 +1,24 @@
 const express = require('express')
+
 const router = express.Router()
 const { body, param, query } = require('express-validator')
 
 const unitController = require('../controllers/unitController')
 
-const validationMW = require('./../middlewares/validationMW')
+const validationMW = require('../middlewares/validationMW')
 const {
     addUnitValidations,
     updateUnitValidations,
-} = require('./../middlewares/unitValidations')
+} = require('../middlewares/unitValidations')
 
-const uploadImage = require('./../middlewares/uploadImagesMW')
+const uploadImage = require('../middlewares/uploadImagesMW')
 
 router
     .route('/units')
     .get(unitController.getAllUnits)
     .post(
-        //uploadImage("units/cover").single("cover"),
-        //uploadImage("units/unitsImages").array("unitImages", 5),
+        // uploadImage("units/cover").single("cover"),
+        // uploadImage("units/unitsImages").array("unitImages", 5),
         unitController.createUnit
     )
     .put(updateUnitValidations, validationMW, unitController.updateUnitData)

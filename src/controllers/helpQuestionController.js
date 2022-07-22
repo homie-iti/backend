@@ -1,4 +1,4 @@
-let HelpQuestion = require('./../models/helpQuestionModel')
+const HelpQuestion = require('../models/helpQuestionModel')
 
 module.exports.getAllQuestion = (request, response, next) => {
     HelpQuestion.find({})
@@ -25,7 +25,7 @@ module.exports.getQuestionById = (request, response, next) => {
 }
 
 module.exports.createQuestion = (request, response, next) => {
-    let object = new HelpQuestion(request.body)
+    const object = new HelpQuestion(request.body)
     object
         .save()
         .then((data) => {
@@ -35,16 +35,16 @@ module.exports.createQuestion = (request, response, next) => {
 }
 
 module.exports.updateHelpQuestion = (request, response, next) => {
-    let allowed = ['_id', 'userId', 'adminId', 'question', 'answer']
+    const allowed = [ '_id', 'userId', 'adminId', 'question', 'answer' ]
     console.log(allowed)
-    let requested = Object.keys(request.body)
+    const requested = Object.keys(request.body)
     console.log(requested)
     const isValidUpdates = requested.every((i) => allowed.includes(i))
     console.log(isValidUpdates)
     if (!isValidUpdates) {
         next(new Error('Question not allowed'))
     } else {
-        let newHelpQuestion = request.body
+        const newHelpQuestion = request.body
         HelpQuestion.findOneAndUpdate(
             { _id: request.body._id },
             { $set: newHelpQuestion },

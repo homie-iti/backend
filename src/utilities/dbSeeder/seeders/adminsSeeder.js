@@ -8,7 +8,7 @@ async function seedAdmin(numberOfDocuments) {
     await mongoose.connection.db.dropCollection('admins')
     // collection.drop();
 
-    let data = []
+    const data = [];
     const ids = []
     for (let i = 0; i < numberOfDocuments; i++) {
         const _id = mongoose.Types.ObjectId(
@@ -16,19 +16,14 @@ async function seedAdmin(numberOfDocuments) {
         )
         const firstName = faker.name.firstName()
         const lastName = faker.name.lastName()
-        const fullName =
-            faker.name.firstName() +
-            ' ' +
-            faker.name.middleName() +
-            ' ' +
-            faker.name.lastName()
+        const fullName = `${faker.name.firstName()} ${faker.name.middleName()} ${faker.name.lastName()}`;
 
         if (
             !fullName.match(
                 /^[A-Z][A-Za-z ]{3,}[A-Z][A-Za-z ]{3,}[A-Z][A-Za-z ]{3,}$/
             )
-        )
-            continue
+        ) {
+        { continue }
 
         const age = faker.mersenne.rand(45, 20)
         const email = faker.internet.email(firstName, lastName)
@@ -39,14 +34,14 @@ async function seedAdmin(numberOfDocuments) {
 
         ids.push(_id)
         data.push({
-            _id,
-            fullName,
-            age,
-            email,
-            password,
-            phone,
-            national_id,
-            image,
+            _id: _id,
+            fullName: fullName,
+            age: age,
+            email: email,
+            password: password,
+            phone: phone,
+            national_id: national_id,
+            image: image,
         })
     }
 

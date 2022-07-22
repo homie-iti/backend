@@ -13,7 +13,7 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
     await mongoose.connection.db.dropCollection('units')
     // collection.drop();
 
-    let data = []
+    const data = []
     const ids = []
     for (let i = 0; i < numberOfDocuments; i++) {
         const _id = mongoose.Types.ObjectId(

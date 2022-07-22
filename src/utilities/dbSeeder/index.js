@@ -45,42 +45,42 @@ async function seedDB() {
     console.log('----------------------')
     try {
         console.log('- started admins seeding')
-        collectionsIds.adminsIds = [...(await seedAdmins(10))]
+        collectionsIds.adminsIds = [...await seedAdmins(10)]
         console.log('+ done')
 
         console.log('..')
 
         console.log('- started users seeding')
-        collectionsIds.usersIds = [...(await seedUsers(1000))]
+        collectionsIds.usersIds = [...await seedUsers(1000)]
         console.log('+ done')
 
         console.log('..')
 
         console.log('- started help questions seeding')
         collectionsIds.helpQuestionsIds = [
-            ...(await seedHelpQuestions(
+            ...await seedHelpQuestions(
                 500,
                 collectionsIds.adminsIds,
                 collectionsIds.usersIds
-            )),
+            ),
         ]
         console.log('+ done')
 
         console.log('..')
 
         console.log('- started cities seeding')
-        collectionsIds.citiesIds = [...(await seedCities(50))]
+        collectionsIds.citiesIds = [...await seedCities(50)]
         console.log('+ done')
 
         console.log('..')
 
         console.log('- started units seeding')
         collectionsIds.unitsIds = [
-            ...(await seedUnits(
+            ...await seedUnits(
                 800,
                 collectionsIds.usersIds,
                 collectionsIds.citiesIds
-            )),
+            ),
         ]
         console.log('- started adding units to cities')
         await addUnitsToCities(collectionsIds.unitsIds)
@@ -92,11 +92,11 @@ async function seedDB() {
 
         console.log('- started agents seeding')
         collectionsIds.agentsIds = [
-            ...(await seedAgents(
+            ...await seedAgents(
                 500,
                 collectionsIds.usersIds,
                 collectionsIds.unitsIds
-            )),
+            ),
         ]
         console.log('+ done')
 
@@ -104,11 +104,11 @@ async function seedDB() {
 
         console.log('- started landlords seeding')
         collectionsIds.landlordsIds = [
-            ...(await seedLandlords(
+            ...await seedLandlords(
                 215,
                 collectionsIds.usersIds,
                 collectionsIds.unitsIds
-            )),
+            ),
         ]
         console.log('+ done')
 
@@ -116,11 +116,11 @@ async function seedDB() {
 
         console.log('- started reviews seeding')
         collectionsIds.reviewsIds = [
-            ...(await seedReviews(
+            ...await seedReviews(
                 111,
                 collectionsIds.agentsIds,
                 collectionsIds.unitsIds
-            )),
+            ),
         ]
         console.log('+ done')
 
@@ -128,12 +128,12 @@ async function seedDB() {
 
         console.log('- started contracts seeding')
         collectionsIds.contractsIds = [
-            ...(await seedContracts(
+            ...await seedContracts(
                 700,
                 collectionsIds.landlordsIds,
                 collectionsIds.agentsIds,
                 collectionsIds.unitsIds
-            )),
+            ),
         ]
         console.log('+ done')
 

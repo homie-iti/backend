@@ -1,4 +1,4 @@
-let Cities = require('./../models/cityModel')
+const Cities = require('../models/cityModel')
 
 module.exports.getCityByName = (request, response, next) => {
     Cities.find({ name: request.params.name }, { _id: 1, name: 1 })

@@ -1,7 +1,7 @@
-let City = require('../models/cityModel')
+const City = require('../models/cityModel')
 
 module.exports.getCities = (request, response, next) => {
-    let Number = request.query.citiesNumber
+    const Number = request.query.citiesNumber
     City.find({})
         .limit(Number)
         .select({ name: 1, _id: 1, cover: 1 })

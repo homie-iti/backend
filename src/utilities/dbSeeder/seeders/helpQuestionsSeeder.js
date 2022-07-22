@@ -13,7 +13,7 @@ async function seedHelpQuestion(numberOfDocuments, adminsIds, usersIds) {
     await mongoose.connection.db.dropCollection('helpquestions')
     // collection.drop();
 
-    let data = []
+    const data = []
     const ids = []
 
     for (let i = 0; i < numberOfDocuments; i++) {
@@ -26,11 +26,17 @@ async function seedHelpQuestion(numberOfDocuments, adminsIds, usersIds) {
         const adminId = mongoose.Types.ObjectId(
             adminsIds[randomIntFromInterval(0, adminsIds.length)]
         )
-        const question = faker.lorem.sentence().slice(0, -1) + '?'
+        const question = `${faker.lorem.sentence().slice(0, -1)}?`
         const answer = faker.lorem.paragraph(1)
 
         ids.push(_id)
-        data.push({ _id, userId, adminId, question, answer })
+        data.push({
+            _id,
+            userId,
+            adminId,
+            question,
+            answer,
+        })
     }
 
     await collection.insertMany(data)

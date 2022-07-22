@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 // console.log(mongoose.model())
 
-//some property lose
+// some property lose
 // const addressschema = new mongoose.schema({
 
 const schema = new mongoose.Schema({
@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
         ref: 'users',
     },
 
-    //error===>see again
+    // error===>see again
     agentUnits: {
         type: [
             {

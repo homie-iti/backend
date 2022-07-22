@@ -14,12 +14,17 @@ async function seedAgent(numberOfDocuments, usersIds, unitsIds) {
     await mongoose.connection.db.dropCollection('agents')
     // collection.drop();
 
-    let data = []
+    const data = [];
     const ids = []
     for (let i = 0; i < numberOfDocuments; i++) {
         const _id = usersIds[randomIntFromInterval(0, usersIds.length - 1)]
 
-        if (ids.some((id) => _id === id)) continue
+        if (
+            ids.some((id) => {
+                return _id === id
+            })
+        ) {
+        { continue }
 
         // console.log(_id);
 
@@ -47,8 +52,8 @@ async function seedAgent(numberOfDocuments, usersIds, unitsIds) {
 
         ids.push(_id)
         data.push({
-            _id,
-            agentUnits,
+            _id: _id,
+            agentUnits: agentUnits,
             // favoriteUnits,
         })
     }

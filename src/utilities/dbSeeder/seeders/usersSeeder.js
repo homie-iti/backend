@@ -13,7 +13,7 @@ async function seedUsers(numberOfDocuments) {
     await mongoose.connection.db.dropCollection('users')
     // collection.drop();
 
-    let data = []
+    const data = []
     const ids = []
     for (let i = 0; i < numberOfDocuments; i++) {
         const _id = mongoose.Types.ObjectId(
@@ -21,7 +21,7 @@ async function seedUsers(numberOfDocuments) {
         )
         const firstName = faker.name.firstName()
         const lastName = faker.name.lastName()
-        const fullName = faker.name.firstName() + ' ' + faker.name.lastName()
+        const fullName = `${faker.name.firstName()} ${faker.name.lastName()}`
         const age = faker.mersenne.rand(45, 20)
         const email = faker.internet.email(firstName, lastName)
         const gender = age % 2 === 0 ? 'male' : 'female'

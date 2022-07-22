@@ -1,10 +1,11 @@
 const express = require('express')
+
 const router = express.Router()
 const { body, param, query } = require('express-validator')
 const favouriteController = require('../controllers/favouriteController')
 
 router
-    .route(`/myFavourite/:id`)
+    .route('/myFavourite/:id')
     .get(favouriteController.getAllFavUnits)
     .put(favouriteController.updateFavUnit)
 

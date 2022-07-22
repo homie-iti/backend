@@ -1,4 +1,5 @@
 const express = require('express')
+
 const router = express.Router()
 const { body, param, query } = require('express-validator')
 const sortingController = require('../controllers/sortingController')
@@ -7,7 +8,7 @@ const sortingController = require('../controllers/sortingController')
 // /Homie?sorting=lowToHigh
 // /Homie?sorting=highToLow
 
-router.route(`/Homie`).get(sortingController.sortUnit)
+router.route('/Homie').get(sortingController.sortUnit)
 
 // router.route(`/Homie/mostRecent`)
 //     .get(sortingController.sortUnitByDate)

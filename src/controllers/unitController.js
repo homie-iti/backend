@@ -1,13 +1,14 @@
 const fs = require('fs')
 const { promisify } = require('util')
+
 const unlinkAsync = promisify(fs.unlink)
 
-let Unit = require('../models/unitModel')
-let Review = require('../models/reviewModel')
-let Landlord = require('./../models/landlordModel')
-let City = require('./../models/cityModel')
+const Unit = require('../models/unitModel');
+const Review = require('../models/reviewModel');
+const Landlord = require("../models/landlordModel");
+const City = require("../models/cityModel");
 
-//Get All Units
+// Get All Units
 module.exports.getAllUnits = (request, response, next) => {
     Unit.find(
         {},
@@ -24,8 +25,8 @@ module.exports.getAllUnits = (request, response, next) => {
         })
 }
 
-//Get Specific Unit By Id
-//! check if you can select unitInfo as unitInfo:{...unitInfo,isAvailable, isPetsAllowed ,gender} as one object
+// Get Specific Unit By Id
+// ! check if you can select unitInfo as unitInfo:{...unitInfo,isAvailable, isPetsAllowed ,gender} as one object
 module.exports.getUnitById = (request, response, next) => {
     Unit.findOne(
         { _id: request.params.id },
@@ -43,19 +44,19 @@ module.exports.getUnitById = (request, response, next) => {
         })
 }
 
-//Create/Add New Unit
+// Create/Add New Unit
 module.exports.createUnit = (request, response, next) => {
-    const cityId = request.body.cityId
-    const landlordId = request.body.landlordId
+    const { cityId } = request.body;
+    const { landlordId } = request.body;
     const cover = request.file ? request.file.path : undefined
     const images = request.files ? request.files.path : undefined
     console.log(request.file, request.files)
 
-    let unit = {
-        landlordId,
-        cityId,
-        cover,
-        images,
+    const unit = {
+        landlordId: landlordId,
+        cityId: cityId,
+        cover: cover,
+        images: images,
         estateType: request.body.estateType,
         address: request.body.address,
         dailyPrice: request.body.dailyPrice,
@@ -63,9 +64,9 @@ module.exports.createUnit = (request, response, next) => {
         numberOfResidents: request.body.numberOfResidents,
         unitInfo: request.body.unitInfo,
         allowedGender: request.body.allowedGender,
-    }
-    //if (request.file && request.file.originalname) console.log(request.file) unit.cover=request.file.path;
-    let newUnit = new Unit(unit)
+    };
+    // if (request.file && request.file.originalname) console.log(request.file) unit.cover=request.file.path;
+    const newUnit = new Unit(unit);
 
     Promise.all([
         newUnit.save(),
@@ -85,10 +86,10 @@ module.exports.createUnit = (request, response, next) => {
         .then((data) => {
             response.status(200).json(data)
         })
-        .catch((error) => next(error))
+        .catch((error) => { return next(error) });
 }
 
-//Update Unit Data
+// Update Unit Data
 module.exports.updateUnitData = (request, response, next) => {
     Unit.findOne({ _id: request.body.id })
         .then((data) => {
@@ -97,7 +98,7 @@ module.exports.updateUnitData = (request, response, next) => {
             else {
                 const updates = request.body
                 // console.log(updates);
-                for (let property in updates) {
+                for (const property in updates) {
                     // if (property in data === false) {
                     //   console.log(property);
                     //   console.log(updates[property]);
@@ -121,14 +122,14 @@ module.exports.updateUnitData = (request, response, next) => {
                 })
             }
         })
-        .catch((error) => next(error))
+        .catch((error) => { return next(error) });
 }
 
-//delete specific unit
+// delete specific unit
 module.exports.deleteUnit = (request, response, next) => {
-    const cityId = request.body.cityId
-    const landlordId = request.body.landlordId
-    //!Promise.all needs to be checked (!Important)
+    const { cityId } = request.body;
+    const { landlordId } = request.body;
+    // !Promise.all needs to be checked (!Important)
     Promise.all([
         Unit.deleteOne({ _id: request.params.id }),
         City.findByIdAndUpdate(
@@ -145,18 +146,18 @@ module.exports.deleteUnit = (request, response, next) => {
         ),
     ])
         .then((data) => {
-            if (data.matchedCount == 0)
-                next(
+            if (data.matchedCount == 0) {
+            { next(
                     new Error('Unit Not Found')
-                ) //! doesn't work check it again
+                ) } // ! doesn't work check it again
             else {
                 response.status(200).json('Unit Deleted')
             }
         })
-        .catch((error) => next(error))
+        .catch((error) => { return next(error) });
 }
 
-//Upload Unit Cover //? Think, Do we need this route or not??
+// Upload Unit Cover //? Think, Do we need this route or not??
 module.exports.uploadUnitCover = (request, response, next) => {
     console.log(request.file)
     console.log(request.file.path)
@@ -169,12 +170,12 @@ module.exports.uploadUnitCover = (request, response, next) => {
             data.save()
             response.status(201).json('Cover Image Uploaded')
         })
-        .catch((error) => next(error))
+        .catch((error) => { return next(error) });
 }
 
-//update cover image
+// update cover image
 // TODO Try to update the image without entering new one.
-//*(user want to delete it )
+//* (user want to delete it )
 module.exports.updateUnitCover = (request, response, next) => {
     console.log(request.file)
     console.log(request.file.path)
@@ -187,15 +188,15 @@ module.exports.updateUnitCover = (request, response, next) => {
         .then((data) => {
             // console.log(data);
             // console.log(data.cover);
-            unlinkAsync(data.cover) //! for removing image from uploads file(works well,but check if it is the suitable way)
+            unlinkAsync(data.cover) // ! for removing image from uploads file(works well,but check if it is the suitable way)
             if (data == null) next(new Error("Unit Doesn't Exist"))
-            //data.cover = request.file.path;
+            // data.cover = request.file.path;
             response.status(201).json('Unit Cover Image has been updated')
         })
-        .catch((error) => next(error))
+        .catch((error) => { return next(error) });
 }
 
-//Upload Unit Images
+// Upload Unit Images
 module.exports.uploadUnitImages = (request, response, next) => {
     // console.log(request.files);
     // console.log(request.files.path);
@@ -213,11 +214,11 @@ module.exports.uploadUnitImages = (request, response, next) => {
             data.save()
             response.status(201).json('Unit Images Uploaded')
         })
-        .catch((error) => next(error))
+        .catch((error) => { return next(error) });
 }
 
-//TODO Delete Unit Images (check it again)
-//!
+// TODO Delete Unit Images (check it again)
+// !
 module.exports.deleteUnitImages = (request, response, next) => {
     Unit.updateMany(
         { _id: request.params.id },
@@ -229,7 +230,7 @@ module.exports.deleteUnitImages = (request, response, next) => {
     )
         .then((data) => {
             console.log(request.body.images)
-            let deletedImages = request.body.images
+            const deletedImages = request.body.images;
             deletedImages.forEach((image) => {
                 unlinkAsync(image)
             })
@@ -239,10 +240,10 @@ module.exports.deleteUnitImages = (request, response, next) => {
                 response.status(200).json(data)
             }
         })
-        .catch((error) => next(error))
+        .catch((error) => { return next(error) });
 }
 
-//! Adding reviews as a property to unit schema with rating & remove review model (//TODO Enhancement)
+// ! Adding reviews as a property to unit schema with rating & remove review model (//TODO Enhancement)
 module.exports.getUnitReviews = (request, response, next) => {
     Review.findOne({ unitId: request.params.id }, 'rating comment')
         .populate({ path: 'unitId', select: 'city estateType address cover' })
@@ -263,25 +264,25 @@ module.exports.getAllReviews = (request, response, next) => {
         .then((data) => {
             response.status(200).json(data)
         })
-        .catch((error) => next(error))
+        .catch((error) => { return next(error) });
 }
 
 module.exports.addReview = (request, response, next) => {
-    let newReview = new Review({
+    const newReview = new Review({
         unitId: request.body.unitId,
         agentId: request.body.agentId,
         comment: request.body.comment,
         rating: request.body.rating,
-    })
+    });
     newReview
         .save()
         .then((data) => {
             response.status(200).json(data)
         })
-        .catch((error) => next(error))
+        .catch((error) => { return next(error) });
 }
 
-//! Things to think about it:
-//*Landlord upload new images in addition to the exist one.
+// ! Things to think about it:
+//* Landlord upload new images in addition to the exist one.
 // *landlord delete already exists images
-//TODO Check again if I achieved this in my code.
+// TODO Check again if I achieved this in my code.

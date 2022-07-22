@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
         required: [true, 'city cityName is required'],
     },
     // you need sure
-    //{
+    // {
     units:
         // type:
         [{ type: mongoose.Types.ObjectId, ref: 'units' }],

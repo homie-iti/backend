@@ -1,5 +1,5 @@
-let Agent = require('./../models/agentModel')
 const bcrypt = require('bcrypt')
+const Agent = require('../models/agentModel')
 
 const saltRounds = 10
 // Get All Agents
@@ -51,7 +51,7 @@ module.exports.getAgentByID = (request, response, next) => {
 
 // create Agent
 module.exports.createAgent = (request, response, next) => {
-    let object = new Agent({
+    const object = new Agent({
         _id: request.body.id,
         fullName: request.body.fullName,
         age: request.body.age,

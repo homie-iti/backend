@@ -1,8 +1,8 @@
 const { body, param, query } = require('express-validator')
 
-let addUnitValidations = [
+const addUnitValidations = [
     body('estateType')
-        .isIn(['studio', 'shared-room', 'single-room', 'apartment'])
+        .isIn([ 'studio', 'shared-room', 'single-room', 'apartment' ])
         .withMessage(
             'EstateType Must Be (Studio||Shared-Room||Single-Room||Apartment)'
         ),
@@ -33,9 +33,9 @@ let addUnitValidations = [
         .optional(),
 ]
 
-let updateUnitValidations = [
+const updateUnitValidations = [
     body('estateType')
-        .isIn(['studio', 'shared-room', 'single-room', 'apartment'])
+        .isIn([ 'studio', 'shared-room', 'single-room', 'apartment' ])
         .withMessage(
             'EstateType Must Be (Studio||Shared-Room||Single-Room||Apartment)'
         )

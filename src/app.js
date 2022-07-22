@@ -1,5 +1,5 @@
 const express = require('express')
-var cors = require('cors')
+const cors = require('cors')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 require('dotenv').config()
@@ -9,12 +9,12 @@ const userRoute = require('./routers/userRoute')
 const cityRoute = require('./routers/cityRoute')
 const recommendationsRoute = require('./routers/recommendationsRoute')
 // const agentRoute = require("../src/routers/agentRoute");
-const searchRoute = require('../src/routers/searchRoute')
-const contractRoute = require('./../src/routers/contractRoute')
-const helpRoute = require('../src/routers/helpQuestionRoute')
+const searchRoute = require('./routers/searchRoute')
+const contractRoute = require('./routers/contractRoute')
+const helpRoute = require('./routers/helpQuestionRoute')
 const landlordRoute = require('./routers/landlordRoute')
 // const adminRoute = require("../src/routers/adminRoute");
-const loginRoute = require('../src/routers/loginRoute')
+const loginRoute = require('./routers/loginRoute')
 
 require('./models/addressModel')
 require('./models/adminModel')

@@ -13,7 +13,7 @@ async function seedReview(numberOfDocuments, agentsIds, unitsIds) {
     await mongoose.connection.db.dropCollection('reviews')
     // collection.drop();
 
-    let data = []
+    const data = [];
     const ids = []
 
     for (let i = 0; i < numberOfDocuments; i++) {
@@ -27,17 +27,23 @@ async function seedReview(numberOfDocuments, agentsIds, unitsIds) {
         const unitId = unitsIds[randomIntFromInterval(0, unitsIds.length - 1)]
 
         if (
-            data.some(
-                (obj) => obj.agentId === agentId && obj.agentId === unitId
-            )
-        )
-            continue
+            data.some((obj) => {
+                return obj.agentId === agentId && obj.agentId === unitId
+            })
+        ) {
+        { continue }
 
         const comment = faker.lorem.paragraph(1)
         const rating = randomIntFromInterval(1, 5)
 
         ids.push(_id)
-        data.push({ _id, agentId, unitId, comment, rating })
+        data.push({
+            _id: _id,
+            agentId: agentId,
+            unitId: unitId,
+            comment: comment,
+            rating: rating,
+        })
     }
 
     await collection.insertMany(data)

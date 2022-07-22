@@ -1,13 +1,13 @@
-let Unit = require('./../models/unitModel')
+const Unit = require('../models/unitModel')
 
 module.exports.filteredUnit = (request, response, next) => {
     filterQuery = request.query
 
-    let genderFilter = request.query.gender
-    let estateFilter = request.query.estateType
-    let petAllowedFilter = request.query.petAllowed
-    let minuPrice = request.query.minPrice
-    let maxiPrice = request.query.maxPrice
+    const genderFilter = request.query.gender
+    const estateFilter = request.query.estateType
+    const petAllowedFilter = request.query.petAllowed
+    const minuPrice = request.query.minPrice
+    const maxiPrice = request.query.maxPrice
 
     // *******************Look for a better Solution
     // Route scenario

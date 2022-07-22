@@ -1,6 +1,5 @@
-let Admin = require('./../models/adminModel')
-
 const bcrypt = require('bcrypt')
+const Admin = require('../models/adminModel')
 
 const saltRounds = 10
 
@@ -29,7 +28,7 @@ module.exports.getAdminByID = (request, response, next) => {
 
 // Create Admin
 module.exports.createAdmin = (request, response, next) => {
-    let object = new Admin({
+    const object = new Admin({
         fullName: request.body.fullName,
         age: request.body.age,
         email: request.body.email,

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const addressSchema = require('./addressModel')
-//some property lose
+// some property lose
 const schema = new mongoose.Schema(
     {
         // _id: {

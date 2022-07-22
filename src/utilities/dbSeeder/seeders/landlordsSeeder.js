@@ -14,12 +14,17 @@ async function seedLandlord(numberOfDocuments, usersIds, unitsIds) {
     await mongoose.connection.db.dropCollection('landlords')
     // collection.drop();
 
-    let data = []
+    const data = [];
     const ids = []
     for (let i = 0; i < numberOfDocuments; i++) {
         const _id = usersIds[randomIntFromInterval(0, usersIds.length - 1)]
 
-        if (ids.some((id) => _id === id)) continue
+        if (
+            ids.some((id) => {
+                return _id === id
+            })
+        ) {
+        { continue }
 
         addLandlordOrAgent(_id, 'isLandlord')
 
@@ -33,8 +38,8 @@ async function seedLandlord(numberOfDocuments, usersIds, unitsIds) {
 
         ids.push(_id)
         data.push({
-            _id,
-            landlordUnits,
+            _id: _id,
+            landlordUnits: landlordUnits,
         })
     }
 

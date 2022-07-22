@@ -1,12 +1,14 @@
-let Contract = require('./../models/contractModel')
-//let Unit = require("./../models/unitModel");
+const Contract = require('../models/contractModel')
+// let Unit = require("./../models/unitModel");
 
 module.exports.getLandlordContracts = (request, response, next) => {
     Contract.findOne({ landlordId: request.params.id })
         .then((data) => {
-            if (data == null)
-                next(new Error('No Contracts For Entered Landlord'))
-            else {
+            if (data == null) {
+                {
+                    next(new Error('No Contracts For Entered Landlord'))
+                }
+            } else {
                 response.status(200).json(data)
             }
         })
@@ -31,7 +33,7 @@ module.exports.getUnitContracts = (request, response, next) => {
 }
 
 module.exports.getAllContracts = (request, response, next) => {
-    Contract.find({}) //! discuss with team about data we want to display
+    Contract.find({}) // ! discuss with team about data we want to display
         .populate({
             path: 'unitId',
             select: 'cover estateType unitInfo dailyPrice',
@@ -46,7 +48,7 @@ module.exports.getAllContracts = (request, response, next) => {
 }
 
 module.exports.addContract = (request, response, next) => {
-    let newContract = new Contract(request.body)
+    const newContract = new Contract(request.body)
     newContract
         .save()
         .then((data) => {
@@ -70,12 +72,14 @@ module.exports.updateContractData = (request, response, next) => {
     Contract.findOne({ unitId: request.body.id })
         .then((data) => {
             // console.log(data);
-            if (data == null)
-                next(new Error('There is No Contract For This Unit'))
-            else {
+            if (data == null) {
+                {
+                    next(new Error('There is No Contract For This Unit'))
+                }
+            } else {
                 const updates = request.body
                 // console.log(updates);
-                for (let property in updates) {
+                for (const property in updates) {
                     data[property] = updates[property] || data[property]
                     if (property in data === false) {
                         console.log(property, updates[property])

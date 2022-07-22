@@ -1,7 +1,7 @@
-let Admin = require('./../models/adminModel')
-let User = require('./../models/userModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const Admin = require('../models/adminModel')
+const User = require('../models/userModel')
 
 module.exports.loginUser = (request, response, next) => {
     User.findOne({
@@ -12,14 +12,14 @@ module.exports.loginUser = (request, response, next) => {
         .then((data) => {
             console.log(data)
             if (!data) {
-                let error = new Error('email or password incorrect')
+                const error = new Error('email or password incorrect')
                 error.status = 401
                 throw error
             } else {
                 bcrypt
                     .compare(request.body.password, data.password)
-                    .then(function (result) {
-                        let token = jwt.sign(
+                    .then((result) => {
+                        const token = jwt.sign(
                             {
                                 id: data._id,
                                 role: 'User',
@@ -27,7 +27,9 @@ module.exports.loginUser = (request, response, next) => {
                             process.env.secret,
                             { expiresIn: '1h' }
                         )
-                        response.status(200).json({ token, message: 'login' })
+                        response
+                            .status(200)
+                            .json({ token, message: 'login' })
                     })
             }
         })
@@ -43,14 +45,14 @@ module.exports.loginAdmin = (request, response, next) => {
         .then((data) => {
             console.log(data)
             if (!data) {
-                let error = new Error('email or password incorrect')
+                const error = new Error('email or password incorrect')
                 error.status = 401
                 throw error
             } else {
                 bcrypt
                     .compare(request.body.password, data.password)
-                    .then(function (result) {
-                        let token = jwt.sign(
+                    .then((result) => {
+                        const token = jwt.sign(
                             {
                                 id: data._id,
                                 role: 'Admin',
@@ -58,7 +60,9 @@ module.exports.loginAdmin = (request, response, next) => {
                             process.env.secret,
                             { expiresIn: '1h' }
                         )
-                        response.status(200).json({ token, message: 'login' })
+                        response
+                            .status(200)
+                            .json({ token, message: 'login' })
                     })
             }
         })

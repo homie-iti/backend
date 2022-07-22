@@ -1,7 +1,7 @@
-let Unit = require('./../models/unitModel')
+const Unit = require('../models/unitModel')
 
 module.exports.sortUnit = (request, response, next) => {
-    let sortType = request.query.sorting
+    const sortType = request.query.sorting
 
     if (sortType == 'mostRecent') {
         Unit.find({})

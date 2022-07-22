@@ -1,4 +1,4 @@
-let Landlord = require('./../models/landlordModel')
+const Landlord = require('../models/landlordModel')
 
 // Get All landlords
 module.exports.getAllLandLord = (request, response, next) => {
@@ -27,7 +27,7 @@ module.exports.getLandLordById = (request, response, next) => {
 
 // Add LandLord
 module.exports.CreateLandLord = (request, response, next) => {
-    let object = new Landlord(request.body)
+    const object = new Landlord(request.body)
     object
         .save()
         .then((data) => {

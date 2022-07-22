@@ -1,11 +1,12 @@
 const mongoose = require('mongoose')
 const fs = require('fs')
 const { promisify } = require('util')
+
 const unlinkAsync = promisify(fs.unlink)
 
-let User = require('./../models/userModel')
-let Landlord = require('./../models/landlordModel')
-let Agent = require('./../models/agentModel')
+const User = require('../models/userModel')
+const Landlord = require('../models/landlordModel')
+const Agent = require('../models/agentModel')
 
 const EmailClient = require('../utilities/sendEmail')
 
@@ -61,7 +62,7 @@ module.exports.getUserById = (request, response, next) => {
 }
 
 module.exports.createUser = (request, response, next) => {
-    let object = new User(request.body)
+    const object = new User(request.body)
     object
         .save()
         .then((data) => {
@@ -73,7 +74,7 @@ module.exports.createUser = (request, response, next) => {
 }
 
 module.exports.updateUser = (request, response, next) => {
-    let allowed = [
+    const allowed = [
         '_id',
         'fullName',
         'age',
@@ -86,14 +87,14 @@ module.exports.updateUser = (request, response, next) => {
         'national_id',
     ]
     console.log(allowed)
-    let requested = Object.keys(request.body)
+    const requested = Object.keys(request.body)
     console.log(requested)
     const isValidUpdates = requested.every((i) => allowed.includes(i))
     console.log(isValidUpdates)
     if (!isValidUpdates) {
         next(new Error('User not allowed'))
     } else {
-        let newUser = request.body
+        const newUser = request.body
         User.findOneAndUpdate(
             { _id: request.body._id },
             { $set: newUser },
@@ -183,7 +184,7 @@ module.exports.removeFavUnit = (request, response, next) => {
 }
 
 module.exports.uploadUserImage = (request, response, next) => {
-    //response.status(201).json("Cover Image Uploaded");
+    // response.status(201).json("Cover Image Uploaded");
     console.log(request.file)
     console.log(request.file.path)
 
@@ -198,15 +199,15 @@ module.exports.uploadUserImage = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-//TODO Needs to be enhanced(user can delete his image,user can update it but when choose update he should upload image)
+// TODO Needs to be enhanced(user can delete his image,user can update it but when choose update he should upload image)
 module.exports.updateUserImage = (request, response, next) => {
     console.log(request.file)
 
-    let newUserImage = request.file ? request.file.path : ''
+    const newUserImage = request.file ? request.file.path : ''
     User.findOneAndUpdate({ _id: request.params.id }, { image: newUserImage })
 
         .then((data) => {
-            //unlinkAsync(data.image);
+            // unlinkAsync(data.image);
             if (data == null) next(new Error("User Doesn't Exist"))
             response.status(201).json('User Image has been updated')
         })

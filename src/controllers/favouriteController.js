@@ -1,4 +1,4 @@
-let Agent = require('./../models/agentModel')
+const Agent = require('../models/agentModel')
 
 module.exports.getAllFavUnits = (request, response, next) => {
     Agent.find({ _id: request.params.id })
