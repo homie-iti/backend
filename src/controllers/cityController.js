@@ -82,20 +82,6 @@ exports.deleteCity = async (request, response, next) => {
 		.catch((error) => next(error));
 };
 
-// router.route("/updateHobbies").put(function (req, res) {
-// 	details.updateOne(
-// 		{ name: "Deven" },
-// 		{ $push: { hobbies: ["Writing"] } },
-// 		function (err, result) {
-// 			if (err) {
-// 				res.send(err);
-// 			} else {
-// 				res.send(result);
-// 			}
-// 		}
-// 	);
-// });
-
 exports.addUnitToCity = async (request, response, next) => {
 	const uniqueUnits = [...new Set([...request.body.units])];
 	// userUnits =
@@ -103,10 +89,12 @@ exports.addUnitToCity = async (request, response, next) => {
 	for (let unitId of uniqueUnits) {
 		const isUnitValid = await UnitModel.exists({
 			_id: unitId,
-		}).then((isUnitValid) => {
-			if (!isUnitValid) throw new Error(`unit with id ${unitId} not found`);
-			// break;
-		});
+		})
+			.then((isUnitValid) => {
+				if (!isUnitValid) throw new Error(`unit with id ${unitId} not found`);
+				// break;
+			})
+			.catch((error) => next(error));
 	}
 
 	CityModel.updateOne(
