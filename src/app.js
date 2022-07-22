@@ -8,12 +8,12 @@ const unitRoute = require("./routers/unitRoute");
 // const userRoute = require("./routers/userRoute");
 const cityRoute = require("./routers/cityRoute");
 const recommendationsRoute = require("./routers/recommendationsRoute");
-const agentRoute = require("../src/routers/agentRoute");
+// const agentRoute = require("../src/routers/agentRoute");
 const searchRoute = require("../src/routers/searchRoute");
 const contractRoute = require("./../src/routers/contractRoute");
 const helpRoute = require("../src/routers/helpQuestionRoute");
 const landlordRoute = require("./routers/landlordRoute");
-const adminRoute = require("../src/routers/adminRoute");
+// const adminRoute = require("../src/routers/adminRoute");
 const loginRoute = require("../src/routers/loginRoute");
 
 require("./models/addressModel");
@@ -47,9 +47,9 @@ app.use(morgan(":method :url :status - :response-time ms"));
 app.use(express.json());
 
 app.use(loginRoute);
-app.use(adminRoute);
+// app.use(adminRoute);
 app.use(searchRoute);
-app.use(agentRoute);
+// app.use(agentRoute);
 app.use(unitRoute);
 // app.use(userRoute);
 app.use(cityRoute);
