@@ -2,12 +2,13 @@ const mongoose = require("mongoose");
 require("../models/cityModel");
 
 let CityModel = mongoose.model("cities");
+let UnitsModel = mongoose.model("units");
 
 // let CityModel = require("../models/unit.model");
 
 module.exports.getAllCities = async (request, response, next) => {
 	try {
-		const data = await CityModel.find({});
+		const data = await CityModel.find({}, { __v: 0 });
 		response.status(200).json(data);
 	} catch (error) {
 		next(error);
@@ -17,7 +18,10 @@ module.exports.getAllCities = async (request, response, next) => {
 module.exports.getCityById = async (request, response, next) => {
 	const { id: cityId } = request.params;
 	try {
-		const data = await CityModel.findOne({ _id: cityId }, { _id: 0 }).populate({
+		const data = await CityModel.findOne(
+			{ _id: cityId },
+			{ _id: 0, __v: 0 }
+		).populate({
 			path: "units",
 			select: { dailyPrice: 1, estateType: 1, images: 1 },
 		});
@@ -55,7 +59,7 @@ exports.getCityProperty = async (request, response, next) => {
 exports.createCity = async (request, response, next) => {
 	try {
 		const cityObject = new CityModel({
-			// _id: request.body.id, it auto-increments
+			// _id: mongoose.Types.ObjectId("2bd1deeb363b3bbed3f342da"),
 			name: request.body.name,
 			cover: request.body.cover,
 			units: [],
@@ -98,10 +102,22 @@ exports.deleteCity = async (request, response, next) => {
 // });
 
 exports.addUnitToCity = async (request, response, next) => {
-	const uniqueUnits = [...new Set([...request.body.units])];
-	// userUnits =
-
 	try {
+		const uniqueUnits = [...new Set([...request.body.units])];
+
+		for (let unitId of uniqueUnits) {
+			const isUnitValid = await UnitsModel.exists({
+				_id: unitId,
+			});
+			// eslint-disable-next-line quotes
+			if (isUnitValid) continue;
+
+			throw new Error(`unit with id ${unitId} not found`);
+			break;
+		}
+
+		// userUnits =
+
 		const data = await CityModel.updateOne(
 			{ _id: request.params.id },
 			{
