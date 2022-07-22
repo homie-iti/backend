@@ -15,7 +15,11 @@ const uploadImage = require("./../middlewares/uploadImagesMW");
 router
   .route("/units")
   .get(unitController.getAllUnits)
-  .post(unitController.createUnit)
+  .post(
+    //uploadImage("units/cover").single("cover"),
+    //uploadImage("units/unitsImages").array("unitImages", 5),
+    unitController.createUnit
+  )
   .put(updateUnitValidations, validationMW, unitController.updateUnitData);
 
 router
@@ -32,25 +36,33 @@ router
   );
 
 router
-  .route("/units/images")
-  .put(unitController.updateUnitImages)
-  .delete(unitController.deleteUnitImages);
+  .route("/units/cover/:id")
+  .post(
+    [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
+    validationMW,
+    uploadImage("units/cover").single("cover"),
+    unitController.uploadUnitCover
+  )
+  .put(
+    [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
+    validationMW,
+    uploadImage("units/cover").single("cover"),
+    unitController.updateUnitCover
+  );
 
-router.post(
-  "/units/cover/:id",
-  [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
-  validationMW,
-  uploadImage("units/cover").single("cover"),
-  unitController.uploadCoverImage
-);
-
-router.post(
-  "/units/images/:id",
-  [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
-  validationMW,
-  uploadImage("units/unitsImages").array("unitImages", 5),
-  unitController.uploadUnitImages
-);
+router
+  .route("/units/images/:id")
+  .post(
+    [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
+    validationMW,
+    uploadImage("units/unitsImages").array("unitImages", 5),
+    unitController.uploadUnitImages
+  )
+  .delete(
+    [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
+    validationMW,
+    unitController.deleteUnitImages
+  );
 
 router.get(
   "/units/reviews/:id",
