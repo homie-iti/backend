@@ -26,7 +26,8 @@ router
   .post(
     upload("users/profileImage").single("profile"),
     userController.uploadUserImage
-  );
+  )
+  .put(userController.updateUserImage);
 
 router
   .route("/users/:id")
