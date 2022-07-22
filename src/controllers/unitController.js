@@ -1,6 +1,11 @@
+const fs = require("fs");
+const { promisify } = require("util");
+const unlinkAsync = promisify(fs.unlink);
+
 let Unit = require("../models/unitModel");
 let Review = require("../models/reviewModel");
 let Landlord = require("./../models/landlordModel");
+let City = require("./../models/cityModel");
 
 //Get All Units
 module.exports.getAllUnits = (request, response, next) => {
@@ -42,8 +47,25 @@ module.exports.getUnitById = (request, response, next) => {
 module.exports.createUnit = (request, response, next) => {
   const cityId = request.body.cityId;
   const landlordId = request.body.landlordId;
+  const cover = request.file ? request.file.path : undefined;
+  const images = request.files ? request.files.path : undefined;
+  console.log(request.file, request.files);
 
-  let newUnit = new Unit(request.body);
+  let unit = {
+    landlordId,
+    cityId,
+    cover,
+    images,
+    estateType: request.body.estateType,
+    address: request.body.address,
+    dailyPrice: request.body.dailyPrice,
+    isAvailable: request.body.isAvailable,
+    numberOfResidents: request.body.numberOfResidents,
+    unitInfo: request.body.unitInfo,
+    allowedGender: request.body.allowedGender,
+  };
+  //if (request.file && request.file.originalname) console.log(request.file) unit.cover=request.file.path;
+  let newUnit = new Unit(unit);
 
   Promise.all([
     newUnit.save(),
@@ -132,8 +154,8 @@ module.exports.deleteUnit = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-//Upload Unit Cover(//!Check if this route needs something else(adding landlord-delete the old cover when updated))
-module.exports.uploadCoverImage = (request, response, next) => {
+//Upload Unit Cover //? Think, Do we need this route or not??
+module.exports.uploadUnitCover = (request, response, next) => {
   console.log(request.file);
   console.log(request.file.path);
 
@@ -148,7 +170,30 @@ module.exports.uploadCoverImage = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-//Upload Unit Images (//!Check if we delete old images of the unit when landlord update them & check if we need to add the landrordId(relations) )
+//update cover image
+// TODO Try to update the image without entering new one.
+//*(user want to delete it )
+module.exports.updateUnitCover = (request, response, next) => {
+  console.log(request.file);
+  console.log(request.file.path);
+
+  Unit.findOneAndUpdate(
+    { _id: request.params.id },
+    { cover: request.file.path }
+  )
+
+    .then((data) => {
+      // console.log(data);
+      // console.log(data.cover);
+      unlinkAsync(data.cover); //! for removing image from uploads file(works well,but check if it is the suitable way)
+      if (data == null) next(new Error("Unit Doesn't Exist"));
+      //data.cover = request.file.path;
+      response.status(201).json("Unit Cover Image has been updated");
+    })
+    .catch((error) => next(error));
+};
+
+//Upload Unit Images
 module.exports.uploadUnitImages = (request, response, next) => {
   // console.log(request.files);
   // console.log(request.files.path);
@@ -169,36 +214,24 @@ module.exports.uploadUnitImages = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-//Update Unit Images
-module.exports.updateUnitImages = (request, response, next) => {
-  Unit.updateOne(
-    { _id: request.body.id },
-    {
-      $addToSet: {
-        images: { $each: request.body.images },
-      },
-    }
-  )
-    .then((data) => {
-      if (data.matchedCount == 0) next(new Error("Unit Not Found"));
-      else {
-        response.status(200).json("Unit Images Has Updated");
-      }
-    })
-    .catch((error) => next(error));
-};
-
 //TODO Delete Unit Images (check it again)
+//!
 module.exports.deleteUnitImages = (request, response, next) => {
-  Unit.updateOne(
-    { _id: request.body.id },
+  Unit.updateMany(
+    { _id: request.params.id },
     {
-      $pull: {
+      $pullAll: {
         images: request.body.images,
       },
     }
   )
     .then((data) => {
+      console.log(request.body.images);
+      let deletedImages = request.body.images;
+      deletedImages.forEach((image) => {
+        unlinkAsync(image);
+      });
+
       if (data.matchedCount == 0) next(new Error("Unit Not Found"));
       else {
         response.status(200).json(data);
@@ -207,7 +240,7 @@ module.exports.deleteUnitImages = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-//!Thought we need to make reviews alone as controller & router (may need to get units with high review also)
+//! Adding reviews as a property to unit schema with rating & remove review model (//TODO Enhancement)
 module.exports.getUnitReviews = (request, response, next) => {
   Review.findOne({ unitId: request.params.id }, "rating comment")
     .populate({ path: "unitId", select: "city estateType address cover" })
@@ -245,3 +278,10 @@ module.exports.addReview = (request, response, next) => {
     })
     .catch((error) => next(error));
 };
+
+
+
+//! Things to think about it:
+//*Landlord upload new images in addition to the exist one.
+// *landlord delete already exists images
+//TODO Check again if I achieved this in my code.
