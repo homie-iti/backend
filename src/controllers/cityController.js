@@ -1,5 +1,5 @@
-const CityModel = require("../models/cityModel");
-const UnitModel = require("../models/unitModel");
+const CityModel = require('../models/cityModel')
+const UnitModel = require('../models/unitModel')
 
 // let CityModel = mongoose.model("cities");
 // let UnitModel = mongoose.model("units");
@@ -11,7 +11,7 @@ module.exports.getAllCities = (request, response, next) => {
         .then((data) => {
             response.status(200).json(data)
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 module.exports.getCityById = (request, response, next) => {
@@ -27,7 +27,7 @@ module.exports.getCityById = (request, response, next) => {
             response.status(200).json(data)
         })
         // console.log(data);
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 exports.getCityProperty = async (request, response, next) => {
@@ -49,7 +49,7 @@ exports.getCityProperty = async (request, response, next) => {
             if (data == null) next(new Error('City not found'))
         })
 
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 exports.createCity = async (request, response, next) => {
@@ -81,39 +81,49 @@ exports.deleteCity = async (request, response, next) => {
             response.status(200).json({ message: 'deleted city' })
         })
 
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
-exports.addUnitToCity = async (request, response, next) => {
+exports.addUnitToCity = (request, response, next) => {
     const uniqueUnits = [...new Set([...request.body.units])]
-    // userUnits =
 
-    for (const unitId of uniqueUnits) {
-        const isUnitValid = await UnitModel.exists({
-            _id: unitId,
+    UnitModel.find({
+        _id: { $in: uniqueUnits },
+    })
+        .select({
+            _id: 1,
         })
-            .then((isUnitValid) => {
-                if (!isUnitValid) {
-                { throw new Error(`unit with id ${unitId} not found`) }
-                // break;
-            })
-            .catch((error) => { return next(error) });
-    }
-
-    CityModel.updateOne(
-        { _id: request.params.id },
-        {
-            $push: {
-                units: uniqueUnits,
-            },
-        }
-    )
+        .then((realIdsObjs) => {
+            console.log(realIdsObjs)
+            const realIds = [...realIdsObjs].map((obj) => obj._id.toString())
+            console.log(realIds)
+            const notRealIds = uniqueUnits.filter(
+                (id) => !realIds.includes(id.toString())
+            )
+            console.log(notRealIds)
+            if (notRealIds.length > 0)
+                throw new Error(
+                    `unit with ${
+                        notRealIds.length === 1 ? 'id' : 'ids'
+                    } (${notRealIds.join('-')}) not found`
+                )
+        })
+        .then(() =>
+            CityModel.updateOne(
+                { _id: request.params.id },
+                {
+                    $push: {
+                        units: uniqueUnits,
+                    },
+                }
+            )
+        )
         .then((data) => {
-            console.log(data)
+            // console.log(data)
 
             if (data.matchedCount < 1) throw new Error('city  not found')
-            if (data.modifiedCount < 1) {
-            { throw new Error('units couldn\'t be added to city') }
+            if (data.modifiedCount < 1)
+                throw new Error("units couldn't be added to city")
 
             response.status(200).json({
                 data: `unit is added to city${
@@ -123,7 +133,7 @@ exports.addUnitToCity = async (request, response, next) => {
                 }`,
             })
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 exports.deleteUnitFromCity = async (request, response, next) => {
@@ -140,8 +150,8 @@ exports.deleteUnitFromCity = async (request, response, next) => {
         .then((data) => {
             // console.log(data);
             if (data.matchedCount < 1) throw new Error('city  not found')
-            if (data.modifiedCount < 1) {
-            { throw new Error('all of the entered units isn\'t in city') }
+            if (data.modifiedCount < 1)
+                throw new Error("all of the entered units isn't in city")
 
             response.status(200).json({
                 data: `units are deleted from city${
@@ -151,31 +161,31 @@ exports.deleteUnitFromCity = async (request, response, next) => {
                 }`,
             })
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 exports.updateCityProperties = async (request, response, next) => {
     const modificationsObject = request.body.reduce((acc, curr) => {
-        acc[curr.prop] = curr.value;
-        return acc;
-    }, {});
+        acc[curr.prop] = curr.value
+        return acc
+    }, {})
 
     // console.log(modificationsObject);
 
-    if (modificationsObject.units) {
-    { modificationsObject.units = [ ...new Set([ ...modificationsObject.units ]) ] }
+    if (modificationsObject.units)
+        modificationsObject.units = [...new Set([...modificationsObject.units])]
 
     CityModel.updateOne({ _id: request.params.id }, modificationsObject)
         .then((data) => {
             // console.log(data);
             if (data.matchedCount < 1) throw new Error('city  not found')
-            if (data.modifiedCount < 1) {
-            { throw new Error('props couldn\'t be modified') }
+            if (data.modifiedCount < 1)
+                throw new Error("props couldn't be modified")
 
             response.status(200).json({
                 data: `props are modified ${Object.keys(modificationsObject)}`,
             })
         })
 
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
