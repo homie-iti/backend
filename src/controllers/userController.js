@@ -1,4 +1,8 @@
 const mongoose = require("mongoose");
+const fs = require("fs");
+const { promisify } = require("util");
+const unlinkAsync = promisify(fs.unlink);
+
 let User = require("./../models/userModel");
 let Landlord = require("./../models/landlordModel");
 let Agent = require("./../models/agentModel");
@@ -166,13 +170,28 @@ module.exports.uploadUserImage = (request, response, next) => {
   console.log(request.file);
   console.log(request.file.path);
 
-  Unit.findOne({ _id: request.params.id })
+  User.findOne({ _id: request.params.id })
     .then((data) => {
       console.log(data);
       if (data == null) next(new Error("User Doesn't Exist"));
-      data.cover = request.file.path;
+      data.image = request.file.path;
       data.save();
-      response.status(201).json("Cover Image Uploaded");
+      response.status(201).json("Image has been uploaded");
+    })
+    .catch((error) => next(error));
+};
+
+//TODO Needs to be enhanced(user can delete his image,user can update it but when choose update he should upload image)
+module.exports.updateUserImage = (request, response, next) => {
+  console.log(request.file);
+
+  let newUserImage = request.file ? request.file.path : "";
+  User.findOneAndUpdate({ _id: request.params.id }, { image: newUserImage })
+
+    .then((data) => {
+      //unlinkAsync(data.image);
+      if (data == null) next(new Error("User Doesn't Exist"));
+      response.status(201).json("User Image has been updated");
     })
     .catch((error) => next(error));
 };
