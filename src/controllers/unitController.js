@@ -3,10 +3,10 @@ const { promisify } = require('util')
 
 const unlinkAsync = promisify(fs.unlink)
 
-const Unit = require('../models/unitModel');
-const Review = require('../models/reviewModel');
-const Landlord = require("../models/landlordModel");
-const City = require("../models/cityModel");
+const Unit = require('../models/unitModel')
+const Review = require('../models/reviewModel')
+const Landlord = require('../models/landlordModel')
+const City = require('../models/cityModel')
 
 // Get All Units
 module.exports.getAllUnits = (request, response, next) => {
@@ -46,17 +46,17 @@ module.exports.getUnitById = (request, response, next) => {
 
 // Create/Add New Unit
 module.exports.createUnit = (request, response, next) => {
-    const { cityId } = request.body;
-    const { landlordId } = request.body;
+    const { cityId } = request.body
+    const { landlordId } = request.body
     const cover = request.file ? request.file.path : undefined
     const images = request.files ? request.files.path : undefined
     console.log(request.file, request.files)
 
     const unit = {
-        landlordId: landlordId,
-        cityId: cityId,
-        cover: cover,
-        images: images,
+        landlordId,
+        cityId,
+        cover,
+        images,
         estateType: request.body.estateType,
         address: request.body.address,
         dailyPrice: request.body.dailyPrice,
@@ -64,9 +64,9 @@ module.exports.createUnit = (request, response, next) => {
         numberOfResidents: request.body.numberOfResidents,
         unitInfo: request.body.unitInfo,
         allowedGender: request.body.allowedGender,
-    };
+    }
     // if (request.file && request.file.originalname) console.log(request.file) unit.cover=request.file.path;
-    const newUnit = new Unit(unit);
+    const newUnit = new Unit(unit)
 
     Promise.all([
         newUnit.save(),
@@ -86,7 +86,7 @@ module.exports.createUnit = (request, response, next) => {
         .then((data) => {
             response.status(200).json(data)
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 // Update Unit Data
@@ -112,7 +112,7 @@ module.exports.updateUnitData = (request, response, next) => {
                     //   //data.property = updates[property];
                     // }
                     data[property] = updates[property] || data[property]
-                    if (typeof updates[property] == 'object') {
+                    if (typeof updates[property] === 'object') {
                         console.log('updateObject')
                     }
                 }
@@ -122,13 +122,13 @@ module.exports.updateUnitData = (request, response, next) => {
                 })
             }
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 // delete specific unit
 module.exports.deleteUnit = (request, response, next) => {
-    const { cityId } = request.body;
-    const { landlordId } = request.body;
+    const { cityId } = request.body
+    const { landlordId } = request.body
     // !Promise.all needs to be checked (!Important)
     Promise.all([
         Unit.deleteOne({ _id: request.params.id }),
@@ -147,14 +147,14 @@ module.exports.deleteUnit = (request, response, next) => {
     ])
         .then((data) => {
             if (data.matchedCount == 0) {
-            { next(
-                    new Error('Unit Not Found')
-                ) } // ! doesn't work check it again
-            else {
+                {
+                    next(new Error('Unit Not Found'))
+                } // ! doesn't work check it again
+            } else {
                 response.status(200).json('Unit Deleted')
             }
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 // Upload Unit Cover //? Think, Do we need this route or not??
@@ -170,7 +170,7 @@ module.exports.uploadUnitCover = (request, response, next) => {
             data.save()
             response.status(201).json('Cover Image Uploaded')
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 // update cover image
@@ -193,7 +193,7 @@ module.exports.updateUnitCover = (request, response, next) => {
             // data.cover = request.file.path;
             response.status(201).json('Unit Cover Image has been updated')
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 // Upload Unit Images
@@ -214,7 +214,7 @@ module.exports.uploadUnitImages = (request, response, next) => {
             data.save()
             response.status(201).json('Unit Images Uploaded')
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 // TODO Delete Unit Images (check it again)
@@ -230,7 +230,7 @@ module.exports.deleteUnitImages = (request, response, next) => {
     )
         .then((data) => {
             console.log(request.body.images)
-            const deletedImages = request.body.images;
+            const deletedImages = request.body.images
             deletedImages.forEach((image) => {
                 unlinkAsync(image)
             })
@@ -240,7 +240,7 @@ module.exports.deleteUnitImages = (request, response, next) => {
                 response.status(200).json(data)
             }
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 // ! Adding reviews as a property to unit schema with rating & remove review model (//TODO Enhancement)
@@ -264,7 +264,7 @@ module.exports.getAllReviews = (request, response, next) => {
         .then((data) => {
             response.status(200).json(data)
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 module.exports.addReview = (request, response, next) => {
@@ -273,13 +273,13 @@ module.exports.addReview = (request, response, next) => {
         agentId: request.body.agentId,
         comment: request.body.comment,
         rating: request.body.rating,
-    });
+    })
     newReview
         .save()
         .then((data) => {
             response.status(200).json(data)
         })
-        .catch((error) => { return next(error) });
+        .catch((error) => next(error))
 }
 
 // ! Things to think about it:

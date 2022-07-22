@@ -32,7 +32,10 @@ module.exports = {
         'no-unresolved': 'off',
         'prefer-const': 'error',
         'no-extra-parens': 'error',
-        'no-unexpected-multiline': 'error',
+        'no-unexpected-multiline': 'off',
+        'arrow-body-style': 'warn',
+        'no-underscore-dangle': 'off',
+
         // // All JSDoc comments must be valid
         // 'valid-jsdoc': [
         //     'error',
