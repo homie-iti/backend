@@ -1,48 +1,46 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const validationMW = require("../middlewares/validationMW");
+const validationMW = require('../middlewares/validationMW')
 const {
-  userPostValidation,
-  userUpdateValidation,
-  userDeleteValidation,
-} = require("../middlewares/validtion");
-const userController = require("./../controllers/userController");
-const upload = require("../middlewares/uploadImagesMW");
+    userPostValidation,
+    userUpdateValidation,
+    userDeleteValidation,
+} = require('../middlewares/validtion')
+const userController = require('./../controllers/userController')
+const upload = require('../middlewares/uploadImagesMW')
 
 router
-  .route("/users")
+    .route('/users')
 
-  .get(userController.getAllUsers)
+    .get(userController.getAllUsers)
 
-  .post(userPostValidation, validationMW, userController.createUser)
+    .post(userPostValidation, validationMW, userController.createUser)
 
-  .put(userUpdateValidation, validationMW, userController.updateUser)
+    .put(userUpdateValidation, validationMW, userController.updateUser)
 
-  .delete(userController.deleteManyUser);
-
-router
-  .route("/users/profileImage/:id")
-  .post(
-    upload("users/profileImage").single("profile"),
-    userController.uploadUserImage
-  )
-  .put(userController.updateUserImage);
+    .delete(userController.deleteManyUser)
 
 router
-  .route("/users/:id")
-
-  .get(userController.getUserById)
-
-  .delete(userDeleteValidation, validationMW, userController.deleteUser);
-
-router
-  .route("/users/myFavourite/:id")
-  .get(userController.getAllFavUnits)
-  .put(userController.updateFavUnit);
+    .route('/users/profileImage/:id')
+    .post(
+        upload('users/profileImage').single('profile'),
+        userController.uploadUserImage
+    )
+    .put(userController.updateUserImage)
 
 router
-  .route("/users/myFavourite/:id/unit")
-  .delete(userController.removeFavUnit);
+    .route('/users/:id')
 
-module.exports = router;
+    .get(userController.getUserById)
+
+    .delete(userDeleteValidation, validationMW, userController.deleteUser)
+
+router
+    .route('/users/myFavourite/:id')
+    .get(userController.getAllFavUnits)
+    .put(userController.updateFavUnit)
+
+router.route('/users/myFavourite/:id/unit').delete(userController.removeFavUnit)
+
+module.exports = router

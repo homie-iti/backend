@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 // console.log(mongoose.model())
 
@@ -6,30 +6,30 @@ const mongoose = require("mongoose");
 // const addressschema = new mongoose.schema({
 
 const schema = new mongoose.Schema({
-	// const schema = new mongoose.schema({
-	_id: {
-		type: mongoose.Types.ObjectId,
-		ref: "users",
-	},
+    // const schema = new mongoose.schema({
+    _id: {
+        type: mongoose.Types.ObjectId,
+        ref: 'users',
+    },
 
-	//error===>see again
-	agentUnits: {
-		type: [
-			{
-				unitId: { type: mongoose.Types.ObjectId, ref: "units" },
-				numberOfRenting: { type: Number },
-			},
-		],
-		_id: false,
-		required: [true, "agent units is required"],
-	},
+    //error===>see again
+    agentUnits: {
+        type: [
+            {
+                unitId: { type: mongoose.Types.ObjectId, ref: 'units' },
+                numberOfRenting: { type: Number },
+            },
+        ],
+        _id: false,
+        required: [true, 'agent units is required'],
+    },
 
-	favoriteUnits: [
-		{
-			type: mongoose.Types.ObjectId,
-			ref: "units",
-		},
-	],
-});
+    favoriteUnits: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'units',
+        },
+    ],
+})
 
-module.exports = mongoose.model("agents", schema);
+module.exports = mongoose.model('agents', schema)
