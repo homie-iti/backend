@@ -94,15 +94,15 @@ module.exports.updateUser = (request, response, next) => {
 };
 
 module.exports.deleteUser = (request, response, next) => {
-  User.deleteOne({ _id: request.body._id })
-    .then((data) => {
-      if (data.deletedCount == 0) {
-        next(new Error("userID not found"));
-      } else {
-        response.status(200).json({ data: "deleted" });
-      }
-    })
-    .catch((error) => next(error));
+	User.deleteOne({ _id: request.params.id })
+		.then((data) => {
+			if (data.deletedCount == 0) {
+				next(new Error("userID not found"));
+			} else {
+				response.status(200).json({ data: "deleted" });
+			}
+		})
+		.catch((error) => next(error));
 };
 
 module.exports.deleteManyUser = (request, response, next) => {
