@@ -30,10 +30,10 @@ const schema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "admin password is required"],
-    // match: [
-    // 	/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/,
-    // 	"password must be than 8 characters , contains at least one lowercase  one uppercase  at least one digit and special character",
-    // ],
+    match: [
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/,
+      "password must be than 8 characters , contains at least one lowercase  one uppercase  at least one digit and special character",
+    ],
   },
   phone: {
     type: String,
@@ -44,13 +44,6 @@ const schema = new mongoose.Schema({
     type: Number,
     unique: true,
     required: [true, "admin national id number is required"],
-  },
-  image: {
-    type: String,
-    match: [
-      /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)$/,
-      "Please fill a valid url address image",
-    ],
   },
 });
 

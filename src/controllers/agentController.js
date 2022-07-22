@@ -1,8 +1,7 @@
-const mongoose = require("mongoose");
-require("../models/agentModel");
+let Agent = require("./../models/agentModel");
+const bcrypt = require("bcrypt");
 
-let Agent = mongoose.model("agents");
-
+const saltRounds = 10;
 // Get All Agents
 module.exports.getAllAgents = (request, response, next) => {
   Agent.find({})
@@ -57,12 +56,14 @@ module.exports.createAgent = (request, response, next) => {
     fullName: request.body.fullName,
     age: request.body.age,
     email: request.body.email,
-    password: request.body.password,
-    gender: request.body.gender,
+    password: bcrypt.hashSync(request.body.password, saltRounds),
     phone: request.body.phone,
     national_id: request.body.national_id,
-    image: request.body.image,
+    gender: request.body.gender,
     address: request.body.address,
+    image: request.body.image,
+    agentUnits: request.body.agentUnits,
+    favoriteUnits: request.body.favoriteUnits,
   });
   object
     .save()

@@ -1,7 +1,8 @@
-const mongoose = require("mongoose");
-require("../models/adminModel");
+let Admin = require("./../models/adminModel");
 
-let Admin = mongoose.model("admins");
+const bcrypt = require("bcrypt");
+
+const saltRounds = 10;
 
 // Get All Admins
 module.exports.getAllAdmins = (request, response, next) => {
@@ -32,10 +33,9 @@ module.exports.createAdmin = (request, response, next) => {
     fullName: request.body.fullName,
     age: request.body.age,
     email: request.body.email,
-    password: request.body.password,
+    password: bcrypt.hashSync(request.body.password, saltRounds),
     phone: request.body.phone,
     national_id: request.body.national_id,
-    image: request.body.image,
   });
   object
     .save()

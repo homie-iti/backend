@@ -37,19 +37,19 @@ async function seedAgent(numberOfDocuments, usersIds, unitsIds) {
 			});
 		}
 
-		const favoriteUnitsRandomNumber = randomIntFromInterval(0, 20);
-		const favoriteUnits = [];
-		for (let i = 0; i <= favoriteUnitsRandomNumber; i++) {
-			const selectedUnit =
-				unitsIds[randomIntFromInterval(0, unitsIds.length - 1)];
-			favoriteUnits.push(selectedUnit);
-		}
+		// const favoriteUnitsRandomNumber = randomIntFromInterval(0, 20);
+		// const favoriteUnits = [];
+		// for (let i = 0; i <= favoriteUnitsRandomNumber; i++) {
+		// 	const selectedUnit =
+		// 		unitsIds[randomIntFromInterval(0, unitsIds.length - 1)];
+		// 	favoriteUnits.push(selectedUnit);
+		// }
 
 		ids.push(_id);
 		data.push({
 			_id,
 			agentUnits,
-			favoriteUnits,
+			// favoriteUnits,
 		});
 	}
 

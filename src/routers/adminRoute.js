@@ -6,8 +6,9 @@ const router = express.Router();
 
 router
   .route("/admin")
-  .get(adminController.getAllAdmins)
+  .get(adminOnly, adminController.getAllAdmins)
   .post(
+    adminOnly,
     [
       body("age").isNumeric().withMessage("age should be number"),
       body("password")
@@ -24,6 +25,7 @@ router
     adminController.createAdmin
   )
   .put(
+    adminOnly,
     [
       body("id").isMongoId().withMessage("admin id should be MongoId"),
       body("age").isNumeric().withMessage("age should be number"),
@@ -41,11 +43,13 @@ router
 router
   .route("/admin/:id")
   .get(
+    adminOnly,
     [param("id").isMongoId().withMessage("admin id should be objectID")],
     validationMW,
     adminController.getAdminByID
   )
   .delete(
+    adminOnly,
     [param("id").isMongoId().withMessage("admin id should be objectID")],
     validationMW,
     adminController.deleteAdmin

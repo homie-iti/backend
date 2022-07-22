@@ -1,28 +1,48 @@
-// const express = require("express");
-// const router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-// const validationMW = require("../middlewares/validationMW");
-// const { userPostValidtion, userUpdateValidation,userDeleteValidtion } = require("../middlewares/validtion")
-// const userController = require("./../controllers/userController");
+const validationMW = require("../middlewares/validationMW");
+const {
+  userPostValidation,
+  userUpdateValidation,
+  userDeleteValidation,
+} = require("../middlewares/validtion");
+const userController = require("./../controllers/userController");
+const upload = require("../middlewares/uploadImagesMW");
 
-// router.route("/users")
+router
+  .route("/users")
 
-// .get(userController.getAllUsers)
+  .get(userController.getAllUsers)
 
+  .post(userPostValidation, validationMW, userController.createUser)
 
-// .post(userPostValidtion,validationMW,userController.createUser)
+  .put(userUpdateValidation, validationMW, userController.updateUser)
 
-// .put( userUpdateValidation, validationMW,userController.updateUser)
+  .delete(userController.deleteManyUser);
 
-// .delete(userController.deleteManyUser)
+router
+  .route("/users/profileImage/:id")
+  .post(
+    upload("users/profileImage").single("profile"),
+    userController.uploadUserImage
+  )
+  .put(userController.updateUserImage);
 
+router
+  .route("/users/:id")
 
-// router.route("/users/:id")
-//   .get(userController.getUserById)
+  .get(userController.getUserById)
 
-//   .delete( userDeleteValidtion,validationMW,userController.deleteUser)
+  .delete(userDeleteValidation, validationMW, userController.deleteUser);
 
-    
+router
+  .route("/users/myFavourite/:id")
+  .get(userController.getAllFavUnits)
+  .put(userController.updateFavUnit);
 
+router
+  .route("/users/myFavourite/:id/unit")
+  .delete(userController.removeFavUnit);
 
-// module.exports = router;
+module.exports = router;

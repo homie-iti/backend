@@ -1,7 +1,4 @@
-const mongoose = require("mongoose");
-require("../models/landlordModel");
-
-let Landlord = mongoose.model("landlords");
+let Landlord = require("./../models/landlordModel");
 
 // Get All landlords
 module.exports.getAllLandLord = (request, response, next) => {
@@ -30,10 +27,7 @@ module.exports.getLandLordById = (request, response, next) => {
 
 // Add LandLord
 module.exports.CreateLandLord = (request, response, next) => {
-  let object = new Landlord({
-    _id: request.body.id,
-    landlordUnits: request.body.landlordUnits,
-  });
+  let object = new Landlord(request.body);
   object
     .save()
     .then((data) => {
