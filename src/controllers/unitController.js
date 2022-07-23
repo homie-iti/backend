@@ -48,8 +48,16 @@ module.exports.getUnitById = (request, response, next) => {
 module.exports.createUnit = (request, response, next) => {
     const { cityId } = request.body
     const { landlordId } = request.body
-    const cover = request.file ? request.file.path : undefined
-    const images = request.files ? request.files.path : undefined
+    console.log(request.files)
+    console.log(request.files.unitCover)
+    console.log(request.files.unitImages)
+    // TODO gives error when there is no images entered in unit images or unit cover(solve it later|try if condition)
+    const cover = request.files ? request.files.unitCover[0].path : ''
+    const unitImagesArray = request.files.unitImages
+    const UnitImagesPaths = unitImagesArray.map((image) => image.path)
+    console.log(UnitImagesPaths)
+
+    const images = request.files ? UnitImagesPaths : []
     console.log(request.file, request.files)
 
     const unit = {
