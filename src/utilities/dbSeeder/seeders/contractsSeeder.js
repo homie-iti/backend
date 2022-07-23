@@ -18,7 +18,7 @@ async function seedContract(
     await mongoose.connection.db.dropCollection('contracts')
     // collection.drop();
 
-    const data = [];
+    const data = []
     const ids = []
 
     for (let i = 0; i < numberOfDocuments; i++) {
@@ -35,14 +35,14 @@ async function seedContract(
         const unitId = unitsIds[randomIntFromInterval(0, unitsIds.length - 1)]
 
         if (
-            data.some((obj) => {
-                return (
-                { return obj.landlordId === landlordId &&
+            data.some(
+                (obj) =>
+                    obj.landlordId === landlordId &&
                     obj.agentId === agentId &&
-                    obj.agentId === unitId }
-            })
-        ) {
-        { continue }
+                    obj.agentId === unitId
+            )
+        )
+            continue
 
         const randNum = randomIntFromInterval(0, 2)
         let rentalStart
@@ -69,16 +69,16 @@ async function seedContract(
 
         ids.push(_id)
         data.push({
-            _id: _id,
-            landlordId: landlordId,
-            agentId: agentId,
-            unitId: unitId,
-            rentalStart: rentalStart,
-            rentalEnd: rentalEnd,
-            paymentMethod: paymentMethod,
-            totalAmount: totalAmount,
-            offerPercentage: offerPercentage,
-            paymentAmount: paymentAmount,
+            _id,
+            landlordId,
+            agentId,
+            unitId,
+            rentalStart,
+            rentalEnd,
+            paymentMethod,
+            totalAmount,
+            offerPercentage,
+            paymentAmount,
         })
     }
 

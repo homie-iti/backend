@@ -25,7 +25,7 @@ async function seedUsers(numberOfDocuments) {
         const age = faker.mersenne.rand(45, 20)
         const email = faker.internet.email(firstName, lastName)
         const gender = age % 2 === 0 ? 'male' : 'female'
-        const password = faker.internet.password()
+        const password = '1234@aBcD'
         const phone = faker.phone.number('01#########')
         const national_id = faker.phone.number('##############')
         const image = faker.internet.avatar()

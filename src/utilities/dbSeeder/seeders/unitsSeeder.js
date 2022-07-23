@@ -56,7 +56,7 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
             floor: randomIntFromInterval(1, 15),
         }
 
-        geoLocation = {
+        const geoLocation = {
             type: 'Point',
             coordinates: [faker.address.latitude(), faker.address.longitude()],
         }
