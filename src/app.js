@@ -46,18 +46,6 @@ app.use(cors())
 app.use(morgan(':method :url :status - :response-time ms'))
 app.use(express.json())
 
-<<<<<<< HEAD
-// app.use(adminRoute);
-app.use(searchRoute);
-app.use(agentRoute);
-app.use(unitRoute);
-app.use(userRoute);
-app.use(cityRoute);
-app.use(recommendationsRoute);
-// app.use(contractRoute);
-app.use(landlordRoute);
-app.use(helpRoute);
-=======
 app.use(loginRoute)
 // app.use(adminRoute);
 app.use(searchRoute)
@@ -69,7 +57,6 @@ app.use(recommendationsRoute)
 app.use(contractRoute)
 app.use(landlordRoute)
 app.use(helpRoute)
->>>>>>> origin/main
 
 // not-found middleware
 app.use((request, response, next) => {
