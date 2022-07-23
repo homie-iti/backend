@@ -1,38 +1,44 @@
-const express = require("express");
-const router = express.Router();
-const { body, param, query } = require("express-validator");
-const validateMW = require("../middlewares/validationMW.js");
+const express = require('express')
 
-const cityController = require("../controllers/cityController.js");
+const router = express.Router()
+const { body, param, query } = require('express-validator')
+const validateMW = require('../middlewares/validationMW.js')
+
+const cityController = require('../controllers/cityController.js')
 
 router
-	.route("/cities")
-	.get(cityController.getAllCities)
-	.post(
-		[
-			body("name")
-				.exists()
-				.withMessage("city name is required")
-				.isAlphanumeric()
-				.withMessage("city name can only contain characters and number"),
-			body("cover").optional().isURL().withMessage("city cover must be a url"),
-		],
-		// classValidator.creationValidator,
-		validateMW,
-		cityController.createCity
-	)
-	.delete(
-		[
-			body("id")
-				.exists()
-				.withMessage("city id is required")
-				.isMongoId()
-				.withMessage("city id must be a mongo id"),
-		],
-		// classValidator.idBodyValidator,
-		validateMW,
-		cityController.deleteCity
-	);
+    .route('/cities')
+    .get(cityController.getAllCities)
+    .post(
+        [
+            body('name')
+                .exists()
+                .withMessage('city name is required')
+                .isAlphanumeric()
+                .withMessage(
+                    'city name can only contain characters and number'
+                ),
+            body('cover')
+                .optional()
+                .isURL()
+                .withMessage('city cover must be a url'),
+        ],
+        // classValidator.creationValidator,
+        validateMW,
+        cityController.createCity
+    )
+    .delete(
+        [
+            body('id')
+                .exists()
+                .withMessage('city id is required')
+                .isMongoId()
+                .withMessage('city id must be a mongo id'),
+        ],
+        // classValidator.idBodyValidator,
+        validateMW,
+        cityController.deleteCity
+    )
 // .put(
 // 	classValidator.updatingValidator,
 // 	validateMW,
@@ -40,74 +46,74 @@ router
 // )
 
 router
-	.route("/cities/:id")
-	.get(validateMW, cityController.getCityById)
-	.put(
-		[
-			param("id")
-				.exists()
-				.withMessage("city id is required")
-				.isMongoId()
-				.withMessage("city id must be a mongo id"),
-			// TODO fix updating city attrs and add validations
-			// body("*.cover")
-			// 	.optional()
-			// 	.isURL()
-			// 	.withMessage("city cover must be a url"),
-		],
-		// classValidator.idParamValidator,
-		// classValidator.propParamValidator,
-		validateMW,
-		cityController.updateCityProperties
-	);
+    .route('/cities/:id')
+    .get(validateMW, cityController.getCityById)
+    .put(
+        [
+            param('id')
+                .exists()
+                .withMessage('city id is required')
+                .isMongoId()
+                .withMessage('city id must be a mongo id'),
+            // TODO fix updating city attrs and add validations
+            // body("*.cover")
+            // 	.optional()
+            // 	.isURL()
+            // 	.withMessage("city cover must be a url"),
+        ],
+        // classValidator.idParamValidator,
+        // classValidator.propParamValidator,
+        validateMW,
+        cityController.updateCityProperties
+    )
 
 router
-	.route("/cities/:id/units")
-	.post(
-		[
-			param("id")
-				.exists()
-				.withMessage("city id is required")
-				.isMongoId()
-				.withMessage("city id must be a mongo id"),
-			body("units")
-				.exists()
-				.withMessage("units are required")
-				.isArray()
-				.withMessage("units must be an array")
-				.not()
-				.isEmpty()
-				.withMessage("units array can't be empty"),
-			body("units.*")
-				.isMongoId()
-				.withMessage("unit id in units field must be a mongo id"),
-		],
-		validateMW,
-		cityController.addUnitToCity
-	)
-	// .put(cityController.updateUnitsOfCity) // replace existing units
-	.delete(
-		[
-			param("id")
-				.exists()
-				.withMessage("city id is required")
-				.isMongoId()
-				.withMessage("city id must be a mongo id"),
-			body("units")
-				.exists()
-				.withMessage("units are required")
-				.isArray()
-				.withMessage("units must be an array")
-				.not()
-				.isEmpty()
-				.withMessage("units array can't be empty"),
-			body("units.*")
-				.isMongoId()
-				.withMessage("unit id in units field must be a mongo id"),
-		],
-		validateMW,
-		cityController.deleteUnitFromCity
-	); //adding unit to city
+    .route('/cities/:id/units')
+    .post(
+        [
+            param('id')
+                .exists()
+                .withMessage('city id is required')
+                .isMongoId()
+                .withMessage('city id must be a mongo id'),
+            body('units')
+                .exists()
+                .withMessage('units are required')
+                .isArray()
+                .withMessage('units must be an array')
+                .not()
+                .isEmpty()
+                .withMessage("units array can't be empty"),
+            body('units.*')
+                .isMongoId()
+                .withMessage('unit id in units field must be a mongo id'),
+        ],
+        validateMW,
+        cityController.addUnitToCity
+    )
+    // .put(cityController.updateUnitsOfCity) // replace existing units
+    .delete(
+        [
+            param('id')
+                .exists()
+                .withMessage('city id is required')
+                .isMongoId()
+                .withMessage('city id must be a mongo id'),
+            body('units')
+                .exists()
+                .withMessage('units are required')
+                .isArray()
+                .withMessage('units must be an array')
+                .not()
+                .isEmpty()
+                .withMessage("units array can't be empty"),
+            body('units.*')
+                .isMongoId()
+                .withMessage('unit id in units field must be a mongo id'),
+        ],
+        validateMW,
+        cityController.deleteUnitFromCity
+    ) // adding unit to city
 // 	.delete(
 // 		classValidator.idParamValidator,
 // 		childValidator.idBodyValidator,
@@ -116,7 +122,7 @@ router
 // 	);
 
 router
-	.route("/cities/:id/:prop")
-	.get(validateMW, cityController.getCityProperty);
+    .route('/cities/:id/:prop')
+    .get(validateMW, cityController.getCityProperty)
 
-module.exports = router;
+module.exports = router

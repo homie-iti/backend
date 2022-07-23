@@ -1,58 +1,49 @@
-const mongoose = require("mongoose");
-require("../models/unitModel");
-let Unit = mongoose.model("units")
+const Unit = require('../models/unitModel')
 
+module.exports.sortUnit = (request, response, next) => {
+    const sortType = request.query.sorting
 
-
-
-
-
-module.exports.sortUnit = ((request, response, next) => {
-    let sortType = request.query.sorting
-
-    if (sortType == "mostRecent") {
-        Unit.find({}).sort({ createdAt: -1 })
-            .then(data => {
-                if (data == null) { next(new Error("unit mostRecent is not defined")) }
-                else {
+    if (sortType == 'mostRecent') {
+        Unit.find({})
+            .sort({ createdAt: -1 })
+            .then((data) => {
+                if (data == null) {
+                    next(new Error('unit mostRecent is not defined'))
+                } else {
                     response.status(200).json(data)
                 }
             })
-            .catch(error => {
-                next(error);
+            .catch((error) => {
+                next(error)
             })
-
-    } else if (sortType == "lowToHigh") {
-        Unit.find({}).sort({ dailyPrice: 'asc' })
-            .then(data => {
-                if (data == null) { next(new Error("unit priceLowToHigh is not defined")) }
-                else {
+    } else if (sortType == 'lowToHigh') {
+        Unit.find({})
+            .sort({ dailyPrice: 'asc' })
+            .then((data) => {
+                if (data == null) {
+                    next(new Error('unit priceLowToHigh is not defined'))
+                } else {
                     response.status(200).json(data)
                 }
             })
-            .catch(error => {
-                next(error);
+            .catch((error) => {
+                next(error)
             })
-
-    } else if (sortType == "highToLow") {
-        Unit.find({}).sort({ dailyPrice: -1 })
-            .then(data => {
-                if (data == null) { next(new Error("unit priceHighToLow is not defined")) }
-                else {
+    } else if (sortType == 'highToLow') {
+        Unit.find({})
+            .sort({ dailyPrice: -1 })
+            .then((data) => {
+                if (data == null) {
+                    next(new Error('unit priceHighToLow is not defined'))
+                } else {
                     response.status(200).json(data)
                 }
             })
-            .catch(error => {
-                next(error);
+            .catch((error) => {
+                next(error)
             })
-
     }
-
-
-
-});
-
-
+}
 
 // module.exports.sortUnitByDate = ((request, response, next) => {
 //     Unit.find({}).sort({ createdAt: -1 })
@@ -68,8 +59,6 @@ module.exports.sortUnit = ((request, response, next) => {
 
 // });
 
-
-
 // module.exports.sortFromlowToHigh = ((request, response, next) => {
 //     Unit.find({}).sort({ price: 'asc' })
 //         .then(data => {
@@ -83,9 +72,6 @@ module.exports.sortUnit = ((request, response, next) => {
 //         })
 
 // });
-
-
-
 
 // module.exports.sortFromHighToLow = ((request, response, next) => {
 //     Unit.find({}).sort({ price: -1 })

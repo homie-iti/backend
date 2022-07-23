@@ -1,45 +1,48 @@
-// const express = require("express");
-// const router = express.Router();
-// const { body, param, query } = require("express-validator");
+const express = require('express')
 
-// const contractController = require("./../controllers/contractController");
-// const validationMW = require("./../middlewares/validationMW");
-// const {
-//   createContractValidations,
-//   updateContractValidations,
-// } = require("./../middlewares/contractValidations");
+const router = express.Router()
+const { body, param, query } = require('express-validator')
 
-// router.get(
-//   "/contracts/unit/:id",
-//   [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
-//   validationMW,
-//   contractController.getUnitContracts
-// );
+const contractController = require('../controllers/contractController')
+const validationMW = require('../middlewares/validationMW')
+const {
+    createContractValidations,
+    updateContractValidations,
+} = require('../middlewares/contractValidations')
 
-// router.get(
-//   "/contracts/landlord/:id",
-//   [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
-//   validationMW,
-//   contractController.getLandlordContracts
-// );
+router.get(
+    '/contracts/unit/:id',
+    [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
+    validationMW,
+    contractController.getUnitContracts
+)
 
-// router.get("/landlords", contractController.getAllLandlords);
+router.get(
+    '/contracts/landlord/:id',
+    [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
+    validationMW,
+    contractController.getLandlordContracts
+)
 
-// router
-//   .route("/contracts")
-//   .get(contractController.getAllContracts)
-//   .post(createContractValidations, validationMW, contractController.addContract)
-//   .put(
-//     updateContractValidations,
-//     validationMW,
-//     contractController.updateContractData
-//   );
+router
+    .route('/contracts')
+    .get(contractController.getAllContracts)
+    .post(
+        createContractValidations,
+        validationMW,
+        contractController.addContract
+    )
+    .put(
+        updateContractValidations,
+        validationMW,
+        contractController.updateContractData
+    )
 
-// router.delete(
-//   "/unit/contract/:id",
-//   [param("id").isMongoId().withMessage("Unit Id Must Be ObjectId")],
-//   validationMW,
-//   contractController.deleteUnitContract
-// );
+router.delete(
+    '/unit/contract/:id',
+    [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
+    validationMW,
+    contractController.deleteUnitContract
+)
 
-// module.exports = router;
+module.exports = router

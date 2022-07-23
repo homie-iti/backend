@@ -1,15 +1,15 @@
-const mongoose = require("mongoose");
-const addressSchema = require("./addressModel");
-//some property lose
+const mongoose = require('mongoose')
+const addressSchema = require('./addressModel')
+// some property lose
 const schema = new mongoose.Schema(
-  {
-    // _id: {
-    //   type: mongoose.Types.ObjectId,
-    // },
-    isLandlord: {
-			type: Boolean,
-			default: false,
-		},
+    {
+        // _id: {
+        //   type: mongoose.Types.ObjectId,
+        // },
+        isLandlord: {
+            type: Boolean,
+            default: false,
+        },
 
 		isAgent: {
 			type: Boolean,
@@ -50,15 +50,15 @@ const schema = new mongoose.Schema(
       default:"\\uploads\\users\\user.jpg"
     },
 
-    address: addressSchema,
+        address: addressSchema,
 
-    favoriteUnits: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "units",
-      },
-    ],
-  },
-  { timestamps: true }
-);
-mongoose.model("users", schema);
+        favoriteUnits: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: 'units',
+            },
+        ],
+    },
+    { timestamps: true }
+)
+module.exports = mongoose.model('users', schema)

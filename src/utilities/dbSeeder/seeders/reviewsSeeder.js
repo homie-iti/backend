@@ -1,42 +1,53 @@
-const { faker } = require("@faker-js/faker");
-const mongoose = require("mongoose");
+const { faker } = require('@faker-js/faker')
+const mongoose = require('mongoose')
 
-require("../../../models/reviewModel");
+require('../../../models/reviewModel')
 
 function randomIntFromInterval(min, max) {
-	// min and max included
-	return Math.floor(Math.random() * (max - min + 1) + min);
+    // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 async function seedReview(numberOfDocuments, agentsIds, unitsIds) {
-	const collection = mongoose.model("reviews");
-	await mongoose.connection.db.dropCollection("reviews");
-	// collection.drop();
+    const collection = mongoose.model('reviews')
+    await mongoose.connection.db.dropCollection('reviews')
+    // collection.drop();
 
-	let data = [];
-	const ids = [];
+    const data = [];
+    const ids = []
 
-	for (let i = 0; i < numberOfDocuments; i++) {
-		const _id = mongoose.Types.ObjectId(
-			faker.unique(faker.database.mongodbObjectId)
-		);
+    for (let i = 0; i < numberOfDocuments; i++) {
+        const _id = mongoose.Types.ObjectId(
+            faker.unique(faker.database.mongodbObjectId)
+        )
 
-		const agentId = agentsIds[randomIntFromInterval(0, agentsIds.length - 1)];
+        const agentId =
+            agentsIds[randomIntFromInterval(0, agentsIds.length - 1)]
 
-		const unitId = unitsIds[randomIntFromInterval(0, unitsIds.length - 1)];
+        const unitId = unitsIds[randomIntFromInterval(0, unitsIds.length - 1)]
 
-		if (data.some((obj) => obj.agentId === agentId && obj.agentId === unitId))
-			continue;
+        if (
+            data.some((obj) => {
+                return obj.agentId === agentId && obj.agentId === unitId
+            })
+        ) {
+        { continue }
 
-		const comment = faker.lorem.paragraph(1);
-		const rating = randomIntFromInterval(1, 5);
+        const comment = faker.lorem.paragraph(1)
+        const rating = randomIntFromInterval(1, 5)
 
-		ids.push(_id);
-		data.push({ _id, agentId, unitId, comment, rating });
-	}
+        ids.push(_id)
+        data.push({
+            _id: _id,
+            agentId: agentId,
+            unitId: unitId,
+            comment: comment,
+            rating: rating,
+        })
+    }
 
-	await collection.insertMany(data);
-	return ids;
+    await collection.insertMany(data)
+    return ids
 }
 
-module.exports = seedReview;
+module.exports = seedReview
