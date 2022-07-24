@@ -1,13 +1,12 @@
 const jwt = require('jsonwebtoken')
 
-module.exports = (request, response, next) => {
-    let decodedToekn = null
+const adminOnly = (request, response, next) => {
+    let decodedToken = null
     try {
         const token = request.get('Authorization').split(' ')[1]
-        decodedToekn = jwt.verify(token, process.env.secret)
-        console.log(decodedToekn)
-        request.role = decodedToekn.role
-        request.id = decodedToekn.id
+        decodedToken = jwt.verify(token, process.env.secret)
+        console.log(decodedToken)
+        if (request.role = 'admin')
         next()
     } catch (error) {
         error.message = 'Not Authorized'
@@ -16,21 +15,58 @@ module.exports = (request, response, next) => {
     }
 }
 
-export const adminAndOwner = (request, response, next) => {
-    if (request.role === 'admin') next()
-    else if (request.id === request.params.id) next()
-    else {
-        const error = new Error('Not authorized')
+
+const adminAndUser = (request, response, next) => {
+    let decodedToken = null
+    try {
+        const token = request.get('Authorization').split(' ')[1]
+        decodedToken = jwt.verify(token, process.env.secret)
+        console.log(decodedToken)
+        if (request.role = 'admin') next()
+        else if(request.role = 'user') next()
+    } catch (error) {
+        error.message = 'Not Authorized'
         error.status = 403
         next(error)
     }
 }
 
-export const adminOnly = (request, response, next) => {
-    if (request.role === 'admin') next()
-    else {
-        const error = new Error('Not authorized')
-        error.status = 403
-        next(error)
-    }
-}
+
+
+
+
+
+
+
+
+
+
+// const adminOnly = (request, response, next) => {
+//     if (request.role === 'admin') next()
+//          else {
+//             console.log(request.role)
+//             const error = new Error('No')
+//         error.status = 403
+//         next(error)
+//     }
+// }
+
+
+
+
+
+
+
+
+
+// const adminAndOwner = (request, response, next) => {
+//     if (request.role === 'admin') next()
+//     else if (request.role === 'user') next()
+//     else {
+//         const error = new Error('Not authorized')
+//         error.status = 403
+//         next(error)
+//     }
+// }
+
+module.exports = { adminAndUser, adminOnly }
