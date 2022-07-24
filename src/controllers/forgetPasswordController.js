@@ -34,7 +34,7 @@ module.exports.forgetPassword = (request, response, next) => {
 }
 
 module.exports.resetPassword = (request, response, next) => {
-    const { resetLink, newPassword } = request.body
+    const { resetLink, newPassword } = request.body // TODO hashing password before saving
     if (resetLink) {
         jwt.verify(resetLink, 'forgetPassword', (error, decodedToken) => {
             if (error) {
@@ -42,13 +42,16 @@ module.exports.resetPassword = (request, response, next) => {
                     .status(401)
                     .json({ error: 'Incorrect or expired link' })
             }
-            User.findOneAndUpdate(
-                { resetLink },
-                { password: newPassword, restLink: '' }
-            ).then((user) => {
+            User.findOne({ resetLink }).then((user) => {
+                console.log(user)
                 if (user == null) next(new Error("User doesn't found"))
-                response.status(201).json('Your password has been changed')
-                // TODO Send email says that the password has been changed successfully
+                else {
+                    user.password = newPassword
+                    user.resetLink = ''
+                    user.save()
+                    response.status(201).json('Your password has been changed')
+                    // TODO Send email says that the password has been changed successfully
+                }
             })
         })
     } else {
