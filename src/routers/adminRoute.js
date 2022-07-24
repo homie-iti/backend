@@ -2,14 +2,15 @@ const express = require('express')
 const { body, param, query } = require('express-validator')
 const validationMW = require('../middlewares/validationMW')
 const adminController = require('../controllers/adminController')
-const { adminOnly } = require('../middlewares/authMW')
+const {authMW, adminOnly } = require('../middlewares/authMW')
 
 const router = express.Router()
 
 router
     .route('/admin')
-    .get(adminOnly, adminController.getAllAdmins)
+    .get( adminController.getAllAdmins)
     .post(
+        authMW,
         adminOnly,
         [
             body('id').isMongoId().withMessage('id should be isMongoId '),
@@ -34,6 +35,7 @@ router
         adminController.createAdmin
     )
     .put(
+        authMW,
         adminOnly,
         [
             body('id').isMongoId().withMessage('id should be isMongoId '),
@@ -61,12 +63,14 @@ router
 router
     .route('/admin/:id')
     .get(
+        authMW,
         adminOnly,
         [param('id').isMongoId().withMessage('admin id should be objectID')],
         validationMW,
         adminController.getAdminByID
     )
     .delete(
+        authMW,
         adminOnly,
         [param('id').isMongoId().withMessage('admin id should be objectID')],
         validationMW,
