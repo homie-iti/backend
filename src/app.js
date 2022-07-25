@@ -8,14 +8,14 @@ const unitRoute = require('./routers/unitRoute')
 const userRoute = require('./routers/userRoute')
 const cityRoute = require('./routers/cityRoute')
 const recommendationsRoute = require('./routers/recommendationsRoute')
-// const agentRoute = require("../src/routers/agentRoute");
+const agentRoute = require('./routers/agentRoute')
 const searchRoute = require('./routers/searchRoute')
 const contractRoute = require('./routers/contractRoute')
 const helpRoute = require('./routers/helpQuestionRoute')
 const landlordRoute = require('./routers/landlordRoute')
-// const adminRoute = require("../src/routers/adminRoute");
+const adminRoute = require('./routers/adminRoute')
 const loginRoute = require('./routers/loginRoute')
-const registrationRoute = require('./routers/signupRoute')
+const signupRoute = require('./routers/signupRoute')
 
 require('./models/addressModel')
 require('./models/adminModel')
@@ -48,10 +48,10 @@ app.use(morgan(':method :url :status - :response-time ms'))
 app.use(express.json())
 
 app.use(loginRoute)
-app.use(registrationRoute)
-// app.use(adminRoute);
+app.use(signupRoute)
+app.use(adminRoute)
 app.use(searchRoute)
-// app.use(agentRoute);
+app.use(agentRoute)
 app.use(unitRoute)
 app.use(userRoute)
 app.use(cityRoute)
