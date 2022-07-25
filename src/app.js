@@ -15,6 +15,7 @@ const helpRoute = require('./routers/helpQuestionRoute')
 const landlordRoute = require('./routers/landlordRoute')
 // const adminRoute = require("../src/routers/adminRoute");
 const loginRoute = require('./routers/loginRoute')
+const registrationRoute = require('./routers/signupRoute')
 
 require('./models/addressModel')
 require('./models/adminModel')
@@ -47,6 +48,7 @@ app.use(morgan(':method :url :status - :response-time ms'))
 app.use(express.json())
 
 app.use(loginRoute)
+app.use(registrationRoute)
 // app.use(adminRoute);
 app.use(searchRoute)
 // app.use(agentRoute);
