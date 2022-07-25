@@ -3,6 +3,7 @@ const { body, param, query } = require('express-validator')
 
 const signupController = require('../controllers/signupController')
 const validationMW = require('../middlewares/validationMW')
+const { accountCreationLimiter } = require('../middlewares/rateLimitMW')
 
 const router = express.Router()
 
@@ -108,6 +109,7 @@ router.route('/signup').post(
             .withMessage("nationalId value isn't valid"),
     ],
     validationMW,
+    accountCreationLimiter,
     signupController.signup
 )
 

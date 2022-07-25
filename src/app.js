@@ -4,6 +4,8 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 require('dotenv').config()
 
+const { apiLimiter } = require('./middlewares/rateLimitMW')
+
 const unitRoute = require('./routers/unitRoute')
 const userRoute = require('./routers/userRoute')
 const cityRoute = require('./routers/cityRoute')
@@ -45,6 +47,8 @@ mongoose
 
 app.use(cors())
 app.use(morgan(':method :url :status - :response-time ms'))
+app.use(apiLimiter)
+
 app.use(express.json())
 
 app.use(loginRoute)
