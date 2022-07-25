@@ -8,36 +8,24 @@ const router = express.Router()
 
 router.route('/signup/check-availability').post(
     [
-        body()
-            // .isJSON()
-            // .withMessage("You didn't enter fields to check.")
-            .custom((value, { req, loc, path }) => {
-                console.log(value)
+        body().custom((value, { req, loc, path }) => {
+            console.log(value)
 
-                const bodyKeysArr = Object.keys(value)
-                console.log(bodyKeysArr)
-                let errMessage
+            const bodyKeysArr = Object.keys(value)
+            console.log(bodyKeysArr)
+            let errMessage
 
-                if (bodyKeysArr.length === 0)
-                    errMessage = "You didn't enter fields to check"
-                else if (bodyKeysArr.length !== 1)
-                    errMessage = 'Enter one field to check'
-                else if (
-                    !['nationalId', 'phone', 'email'].includes(bodyKeysArr[0])
-                )
-                    errMessage =
-                        'You can only validate  nationalId, phone or email'
-                else errMessage = ''
+            if (bodyKeysArr.length === 0)
+                errMessage = "You didn't enter fields to check"
+            else if (bodyKeysArr.length !== 1)
+                errMessage = 'Enter one field to check'
+            else if (!['nationalId', 'phone', 'email'].includes(bodyKeysArr[0]))
+                errMessage = 'You can only validate  nationalId, phone or email'
+            else errMessage = ''
 
-                if (errMessage) throw new Error(errMessage)
-                else return value
-                // if (value !== req.body.confirmPassword) {
-                //     // trow error if passwords do not match
-                //     throw new Error("Passwords don't match")
-                // } else {
-                //     return value
-                // }
-            }),
+            if (errMessage) throw new Error(errMessage)
+            else return value
+        }),
         body('email')
             .optional()
             .isEmail()
