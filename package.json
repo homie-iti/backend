@@ -36,7 +36,8 @@
         "jasmine": "^4.2.1",
         "jasmine-spec-reporter": "^7.0.0",
         "nodemon": "^2.0.18",
-        "prettier": "^2.7.1"
+        "prettier": "^2.7.1",
+        "supertest": "^6.2.4"
     },
     "repository": {
         "type": "git",
