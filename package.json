@@ -12,7 +12,8 @@
         "test:dev": "set ENV=test&& jasmine",
         "format": "npx prettier --write  src/**/*.js",
         "lint:fix": "eslint src/**/*.js --fix",
-        "clean": "rd /q /s build",
+        "clean:cmd": "rmdir /q /s build",
+        "clean:bash": "rm -rf build",
         "build": "@powershell copy -r ./src/ ./build/ && @powershell remove-item -r ./build/uploads && @powershell copy ./package.json ./build/package.json && @powershell remove-item ./build/app.js && @powershell copy ./src/app.js ./build/index.js && @powershell copy -r ./.deta ./build/",
         "deploy": "cd ./build && deta deploy"
     },
