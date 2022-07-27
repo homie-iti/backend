@@ -65,6 +65,10 @@ app.use(apiLimiter)
 
 app.use(express.json())
 
+app.get('/', (req, res) => {
+    res.send('Done CI/CD')
+})
+
 app.use(loginRoute)
 app.use(signupRoute)
 app.use(adminRoute)
