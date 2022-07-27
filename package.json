@@ -14,7 +14,8 @@
         "lint:fix": "eslint src/**/*.js --fix",
         "clean:cmd": "rmdir /q /s build",
         "clean:bash": "rm -rf build",
-        "build": "@powershell copy -r ./src/ ./build/ && @powershell remove-item -r ./build/uploads && @powershell copy ./package.json ./build/package.json && @powershell remove-item ./build/app.js && @powershell copy ./src/app.js ./build/index.js && @powershell copy -r ./.deta ./build/",
+        "build:cmd": "@powershell copy -r ./src/ ./build/ && @powershell remove-item -r ./build/uploads && @powershell copy ./package.json ./build/package.json && @powershell remove-item ./build/app.js && @powershell copy ./src/app.js ./build/index.js && @powershell copy -r ./.deta ./build/",
+        "build:bash": "cp -r ./src/ ./build/ && rm -r ./build/uploads && cp ./package.json ./build/package.json && rm ./build/app.js && cp ./src/app.js ./build/index.js && cp -r ./.deta ./build/",
         "deploy": "cd ./build && deta deploy"
     },
     "author": "",
