@@ -34,9 +34,17 @@ const signupRoute = require('./routers/signupRoute')
 const app = express()
 const port = process.env.PORT || 8080
 
-const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+let dbURL
+if (process.env.ENV === 'prod' || process.env.ENV === 'testProd')
+    dbURL = `mongodb+srv://${process.env.ATLAS_DB_USER}:${process.env.ATLAS_DB_PASSWORD}@cluster0.7du11.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
+else
+    dbURL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+
 mongoose
-    .connect(homieDB_URL)
+    .connect(dbURL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
     .then(() => {
         app.listen(port, () => {
             console.log('App listens on port', port)

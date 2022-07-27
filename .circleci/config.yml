@@ -18,7 +18,7 @@ jobs:
             - run:
                   name: Testing Back-End
                   command: |
-                      npm run test
+                      npm run test:prod
     # deploy:
     # executor: vercel/default
     # steps:
