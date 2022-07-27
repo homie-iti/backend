@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
+
 const mongoose = require('mongoose')
 require('dotenv').config()
 
@@ -19,16 +20,16 @@ const adminRoute = require('./routers/adminRoute')
 const loginRoute = require('./routers/loginRoute')
 const signupRoute = require('./routers/signupRoute')
 
-require('./models/addressModel')
-require('./models/adminModel')
-require('./models/agentModel')
-require('./models/cityModel')
-require('./models/contractModel')
-require('./models/helpQuestionModel')
-require('./models/landlordModel')
-require('./models/reviewModel')
-require('./models/unitModel')
-require('./models/userModel')
+// require('./models/addressModel')
+// require('./models/adminModel')
+// require('./models/agentModel')
+// require('./models/cityModel')
+// require('./models/contractModel')
+// require('./models/helpQuestionModel')
+// require('./models/landlordModel')
+// require('./models/reviewModel')
+// require('./models/unitModel')
+// require('./models/userModel')
 
 const app = express()
 const port = process.env.PORT || 8080
@@ -45,8 +46,10 @@ mongoose
         console.log('DB Connection Error', error)
     })
 
+if (process.env.ENV !== 'test')
+    app.use(morgan(':method :url :status - :response-time ms'))
+
 app.use(cors())
-app.use(morgan(':method :url :status - :response-time ms'))
 app.use(apiLimiter)
 
 app.use(express.json())
@@ -76,3 +79,5 @@ app.use((error, request, response, next) => {
         .status(error.status || 500)
         .json({ message: 'Internal Error', details: error.message })
 })
+
+module.exports = app

@@ -2,13 +2,13 @@ const express = require('express')
 const { body, param, query } = require('express-validator')
 const validationMW = require('../middlewares/validationMW')
 const agentController = require('../controllers/agentController')
-const  {authMW, adminOnly, adminAndUser } = require('../middlewares/authMW')
+const { authMW, adminOnly, adminAndUser } = require('../middlewares/authMW')
 
 const router = express.Router()
-console.log(authMW);
+// console.log(authMW);
 router
     .route('/agent')
-    .get( authMW,adminOnly, agentController.getAllAgents)
+    .get(authMW, adminOnly, agentController.getAllAgents)
     .post(
         authMW,
         adminOnly,

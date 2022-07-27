@@ -43,11 +43,9 @@ module.exports.getAllUsers = (request, response, next) => {
             // }
             response.status(200).json(data)
         })
-        .catch(
-            console.error((error) => {
-                next(error)
-            })
-        )
+        .catch((error) => {
+            next(error)
+        })
 }
 
 module.exports.getUserById = (request, response, next) => {

@@ -150,13 +150,10 @@ async function connectToLocalDB() {
 }
 
 async function connectToCloudDB() {
-    const credentials = process.env.ATLAS_CERT_FILE_PATH
-    const atlasDB_URL = `mongodb+srv://${process.env.ATLAS_DB_HOST}/${process.env.DB_NAME}?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority`
+    const atlasDB_URL = `mongodb+srv://${process.env.ATLAS_DB_USER}:${process.env.ATLAS_DB_PASSWORD}@cluster0.7du11.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
     return mongoose.connect(atlasDB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        sslKey: credentials,
-        sslCert: credentials,
     })
 }
 
