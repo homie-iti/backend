@@ -1,0 +1,24 @@
+version: 2.1
+orbs:
+    node: circleci/node@5.0.0
+    # aws-cli: circleci/aws-cli@2.0.6
+    # eb: circleci/aws-elastic-beanstalk@2.0.1
+jobs:
+    build:
+        docker:
+            - image: cimg/base:stable
+        steps:
+            - node/install
+            - checkout
+            - run:
+                  name: Testing Back-End
+                  command: |
+                      npm run test
+workflows:
+    build-deploy:
+        jobs:
+            - build:
+                  filters:
+                      branches:
+                          only:
+                              - main

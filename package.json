@@ -9,7 +9,8 @@
         "start:db-seeder": "set ENV=dev&& node ./src/utilities/dbSeeder/index.js",
         "test": "set ENV=test&& jasmine",
         "format": "npx prettier --write  src/**/*.js",
-        "lint:fix": "eslint src/**/*.js --fix"
+        "lint:fix": "eslint src/**/*.js --fix",
+        "deploy": "deta deploy"
     },
     "author": "",
     "license": "ISC",
