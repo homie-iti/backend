@@ -1,12 +1,6 @@
 const mongoose = require('mongoose')
 
-// console.log(mongoose.model())
-
-// some property lose
-// const addressschema = new mongoose.schema({
-
 const schema = new mongoose.Schema({
-    // const schema = new mongoose.schema({
     _id: {
         type: mongoose.Types.ObjectId,
         ref: 'users',
@@ -23,13 +17,6 @@ const schema = new mongoose.Schema({
         _id: false,
         required: [true, 'agent units is required'],
     },
-
-    favoriteUnits: [
-        {
-            type: mongoose.Types.ObjectId,
-            ref: 'units',
-        },
-    ],
 })
 
 module.exports = mongoose.model('agents', schema)

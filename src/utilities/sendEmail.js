@@ -20,7 +20,7 @@ module.exports = class EmailClient {
     constructor() {
         // console.log(process.env)
 
-        const orgName = 'ITI Eyes Clinic 👁👃👁'
+        const orgName = 'Homie 🏠'
         const orgEmail = process.env.ORG_EMAIL || ''
         const orgPass = process.env.ORG_EMAIL_PASSWORD || ''
 
@@ -40,18 +40,39 @@ module.exports = class EmailClient {
         }
     }
 
-    #defineMessage(type, userName) {
-        switch (type) {
-            case 'user_creation':
+    #defineMessage(event, configs) {
+        switch (event) {
+            case 'user_signup':
+                const activationLink =
+                    'http://localhost:8080/activate-account/' + configs.slug
                 this.#message = {
                     subject: `Hola ${
-                        userName.split(' ')[0]
+                        configs.name.split(' ')[0]
                     }, your account is created ^^`,
                     body: `
                     <p>It's a message from Homie and we would like to thank you for creating an account 🎉.</p>
+                    <p>Your account activation link is
+                    <a href=${activationLink}>${activationLink}</a>
+                    </p>
                     <p dir="rtl">تسلم يسطا و الله ربنا يكرمك ❤</p>
                     <p dir="rtl">إدارة هومي الموقّرة</p>
                     `,
+                }
+                break
+
+            case 'account_activated':
+                this.#message = {
+                    subject: `Hola ${
+                        configs.name.split(' ')[0]
+                    }, your account is activated ^^`,
+                    body: `
+                        <p>Yaaay, Your account is activated 🎉.</p>
+                        <p>Now you can login and start your journey
+                    <a href="https://homie-iti.vercel.app">https://homie-iti.vercel.app</a>
+                    </p>
+                        <p dir="rtl">تسلم يسطا و الله ربنا يكرمك ❤</p>
+                        <p dir="rtl">إدارة هومي الموقّرة</p>
+                        `,
                 }
                 break
 
@@ -60,12 +81,14 @@ module.exports = class EmailClient {
         }
     }
 
-    async sendMessage(type, userName, userEmail) {
-        console.log(type, userName, userEmail)
-        this.#defineMessage(type, userName)
+    async sendMessage(event, configs) {
+        // const userName = userInfo.fullName
+        console.log(event)
+        console.log(configs)
+        this.#defineMessage(event, configs)
         const sendingInfo = await this.#transporter.sendMail({
             from: `${this.#account.name} < ${this.#account.email} >`,
-            to: `${userName} < ${userEmail} >`,
+            to: `${configs.name} < ${configs.email} >`,
             subject: this.#message.subject,
             html: this.#message.body,
         })
@@ -74,7 +97,7 @@ module.exports = class EmailClient {
 
         return (
             sendingInfo.accepted.length === 1 &&
-            sendingInfo.accepted[0] === userEmail
+            sendingInfo.accepted[0] === configs.email
         )
     }
 }

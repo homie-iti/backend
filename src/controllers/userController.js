@@ -8,20 +8,20 @@ const User = require('../models/userModel')
 const Landlord = require('../models/landlordModel')
 const Agent = require('../models/agentModel')
 
-const EmailClient = require('../utilities/sendEmail')
+// const EmailClient = require('../utilities/sendEmail')
 
-const emailNotifier = new EmailClient()
-async function notifyUser(userInfo) {
-    const msgState = await emailNotifier.sendMessage(
-        'user_creation',
-        userInfo.name,
-        userInfo.email
-    )
+// const emailNotifier = new EmailClient()
+// async function notifyUser(userInfo) {
+//     const msgState = await emailNotifier.sendMessage(
+//         'user_creation',
+//         userInfo.name,
+//         userInfo.email
+//     )
 
-    console.log(msgState)
+//     console.log(msgState)
 
-    return msgState
-}
+//     return msgState
+// }
 
 // module.exports.getAllUsers = (request, response, next) => {
 //   response.status(200).json();
@@ -43,11 +43,9 @@ module.exports.getAllUsers = (request, response, next) => {
             // }
             response.status(200).json(data)
         })
-        .catch(
-            console.error((error) => {
-                next(error)
-            })
-        )
+        .catch((error) => {
+            next(error)
+        })
 }
 
 module.exports.getUserById = (request, response, next) => {
@@ -67,9 +65,9 @@ module.exports.createUser = (request, response, next) => {
         .save()
         .then((data) => {
             response.status(201).json({ data })
-            return { name: data.fullName, email: data.email }
+            // return { name: data.fullName, email: data.email }
         })
-        .then(notifyUser)
+        // .then(notifyUser)
         .catch((error) => next(error))
 }
 

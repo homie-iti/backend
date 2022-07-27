@@ -11,6 +11,12 @@ const schema = new mongoose.Schema(
             default: false,
         },
 
+        isAccountActivated: {
+            // for registration process
+            type: Boolean,
+            default: false,
+        },
+
         isAgent: {
             type: Boolean,
             default: false,
