@@ -85,6 +85,18 @@ const schema = new mongoose.Schema(
                 // required: [true, "unit coordinates is required"],
             },
         },
+        reviews: {
+            ratingAverage: [
+                {
+                    type: Number,
+                    min: 1,
+                    max: 5,
+                    //ref: 'reviews'
+                },
+            ],
+
+            totalReviews: [{ type: mongoose.Types.ObjectId, ref: 'reviews' }],
+        },
     },
     { timestamps: true }
 )
