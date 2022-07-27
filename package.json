@@ -5,6 +5,7 @@
     "main": "./src/app.js",
     "scripts": {
         "start": "set ENV=dev&& nodemon ./src/app.js",
+        "start:prod": "node ./src/app.js",
         "start:db": "mongod --dbpath \"./db\"",
         "start:db-seeder": "set ENV=dev&& node ./src/utilities/dbSeeder/index.js",
         "test:prod": "set ENV=testProd&& jasmine",
