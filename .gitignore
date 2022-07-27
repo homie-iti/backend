@@ -4,6 +4,7 @@ package-lock.json
 
 # project-related files
 db
+build
 .env
 
 # certifications

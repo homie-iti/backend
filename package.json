@@ -4,15 +4,17 @@
     "description": "Homie is an online rental accommodation platform for young professionals and international students who came to Egypt looking for apartment.  \r We allow users to rent a unit as agents and they are also allowed to rent their units as landlords.",
     "main": "./src/app.js",
     "scripts": {
-        "start": "set ENV=dev&& nodemon ./src/app.js",
-        "start:prod": "node ./src/app.js",
+        "start": "node ./index.js",
+        "start:dev": "set ENV=dev&& nodemon ./src/app.js",
         "start:db": "mongod --dbpath \"./db\"",
         "start:db-seeder": "set ENV=dev&& node ./src/utilities/dbSeeder/index.js",
         "test:prod": "set ENV=testProd&& jasmine",
         "test:dev": "set ENV=test&& jasmine",
         "format": "npx prettier --write  src/**/*.js",
         "lint:fix": "eslint src/**/*.js --fix",
-        "deploy": "deta deploy"
+        "clean": "rmdir /Q /S build",
+        "build": "@powershell copy -r ./src/ ./build/ && @powershell remove-item -r ./build/uploads && @powershell copy ./package.json ./build/package.json && @powershell remove-item ./build/app.js && @powershell copy ./src/app.js ./build/index.js && @powershell copy -r ./.deta ./build/",
+        "deploy": "cd ./build && deta deploy"
     },
     "author": "",
     "license": "ISC",
