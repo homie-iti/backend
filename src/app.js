@@ -5,6 +5,9 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 require('dotenv').config()
 
+const appConfig = require('./config/app.config')
+const dbConfig = require('./config/database.config')
+
 const { apiLimiter } = require('./middlewares/rateLimitMW')
 
 const unitRoute = require('./routers/unitRoute')
@@ -32,9 +35,9 @@ const signupRoute = require('./routers/signupRoute')
 // require('./models/userModel')
 
 const app = express()
-const port = process.env.PORT || 8080
+const { port } = appConfig
 
-const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+const homieDB_URL = `mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`
 mongoose
     .connect(homieDB_URL)
     .then(() => {
@@ -46,7 +49,7 @@ mongoose
         console.log('DB Connection Error', error)
     })
 
-if (process.env.ENV !== 'test')
+if (appConfig.environment !== 'test')
     app.use(morgan(':method :url :status - :response-time ms'))
 
 app.use(cors())
