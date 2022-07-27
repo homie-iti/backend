@@ -79,4 +79,5 @@ router
     .get(unitController.getAllReviews)
     .post(unitController.addReview)
 
+router.get('/agents', unitController.getAllAgents)
 module.exports = router
