@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
     node: circleci/node@5.0.0
+    # vercel-orb: i-am-jeetu/vercel-orb@1.0.0
     # aws-cli: circleci/aws-cli@2.0.6
     # eb: circleci/aws-elastic-beanstalk@2.0.1
 jobs:
@@ -11,9 +12,24 @@ jobs:
             - node/install
             - checkout
             - run:
+                  name: Installing Modules
+                  command: |
+                      npm i
+            - run:
                   name: Testing Back-End
                   command: |
                       npm run test
+    # deploy:
+    # executor: vercel/default
+    # steps:
+    #     - checkout
+    #     - vercel/install
+    #     - vercel/check-authentication
+    #     - run:
+    #           command: >
+    #               echo "The command above installs Vercel, the command below deploys.
+    #               What you do inbetween is up to you!"
+    #     - vercel/deploy
 workflows:
     build-deploy:
         jobs:
@@ -22,3 +38,4 @@ workflows:
                       branches:
                           only:
                               - appDeployment
+            # - deploy
