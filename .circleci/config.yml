@@ -5,20 +5,36 @@ orbs:
     # aws-cli: circleci/aws-cli@2.0.6
     # eb: circleci/aws-elastic-beanstalk@2.0.1
 jobs:
-    build:
+    Build & Deploy:
         docker:
             - image: cimg/base:stable
         steps:
             - node/install
             - checkout
             - run:
+                  name: Installing Deta CLI
+                  command: |
+                      curl -fsSL https://get.deta.dev/cli.sh | sh
+            - run:
                   name: Installing Modules
                   command: |
                       npm i
             - run:
-                  name: Testing Back-End
+                  name: Testing
                   command: |
                       npm run test:prod
+            - run:
+                  name: Cleaning
+                  command: |
+                      npm run clean
+            - run:
+                  name: Building
+                  command: |
+                      npm run build
+            - run:
+                  name: Deployment
+                  command: |
+                      npm run deploy
     # deploy:
     # executor: vercel/default
     # steps:
@@ -33,7 +49,7 @@ jobs:
 workflows:
     build-deploy:
         jobs:
-            - build:
+            - Build & Deploy:
                   filters:
                       branches:
                           only:
