@@ -40,6 +40,7 @@ if (process.env.ENV === 'prod' || process.env.ENV === 'testProd')
 else
     dbURL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
 
+console.log(process.env.ENV)
 console.log(dbURL)
 
 mongoose
