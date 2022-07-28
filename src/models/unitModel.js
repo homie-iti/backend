@@ -42,7 +42,10 @@ const schema = new mongoose.Schema(
         // images: [{ type: String, required: [true, "unit images are required"] }],
         images: [String],
 
-        isPetsAllowed: Boolean,
+        isPetsAllowed: {
+            type: Boolean,
+            default: false,
+        },
 
         numberOfResidents: {
             type: Number,
@@ -86,15 +89,13 @@ const schema = new mongoose.Schema(
             },
         },
         reviews: {
-            ratingAverage: [
+            ratings: [
                 {
                     type: Number,
                     min: 1,
                     max: 5,
-                    //ref: 'reviews'
                 },
             ],
-
             totalReviews: [{ type: mongoose.Types.ObjectId, ref: 'reviews' }],
         },
     },
