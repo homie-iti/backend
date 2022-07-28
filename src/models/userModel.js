@@ -65,7 +65,7 @@ const schema = new mongoose.Schema(
             },
         ],
         resetLink: {
-            data: String,
+            type: String,
             default: '',
         },
     },
