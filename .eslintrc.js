@@ -10,7 +10,7 @@ module.exports = {
     //     modules: true,
     // },
     extends: ['airbnb-base', 'eslint:recommended', 'prettier'],
-    // parser: '@typescript-eslint/parser',
+    parser: '@babel/eslint-parser',
     // parserOptions: {
     //     ecmaVersion: 'latest',
     //     sourceType: 'module',
