@@ -1,6 +1,7 @@
 const express = require('express')
 const { body, param, query } = require('express-validator')
 const search = require('../controllers/searchController')
+const router = express.Router()
 
 const validationMW = require('../middlewares/validationMW')
 
