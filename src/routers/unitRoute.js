@@ -17,8 +17,10 @@ router
     .route('/units')
     .get(unitController.getAllUnits)
     .post(
-        // uploadImage("units/cover").single("cover"),
-        // uploadImage("units/unitsImages").array("unitImages", 5),
+        uploadImage('units/unitsImages').fields([
+            { name: 'unitCover', maxCount: 1 },
+            { name: 'unitImages', maxCount: 8 },
+        ]),
         unitController.createUnit
     )
     .put(updateUnitValidations, validationMW, unitController.updateUnitData)

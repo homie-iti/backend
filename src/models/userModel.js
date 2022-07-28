@@ -51,7 +51,10 @@ const schema = new mongoose.Schema(
             required: [true, 'user national_id is required'],
             unique: true,
         },
-        image: { type: String },
+        image: {
+            type: String,
+            default: '\\uploads\\users\\user.jpg',
+        },
 
         address: addressSchema,
 
@@ -61,6 +64,10 @@ const schema = new mongoose.Schema(
                 ref: 'units',
             },
         ],
+        resetLink: {
+            type: String,
+            default: '',
+        },
     },
     { timestamps: true }
 )

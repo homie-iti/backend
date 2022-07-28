@@ -4,24 +4,26 @@ const fs = require('fs')
 
 const uploadImage = (folderName) => {
     const storageEngine = multer.diskStorage({
-        destination: (req, file, cb) => {
-            const location = path.join(
-                `./src/uploads/${folderName}/`,
-                req.params.id.toString()
-            )
-            fs.mkdir(location, { recursive: true }, (err) => {
-                if (err) {
-                    return console.error(err)
-                }
-                console.log('Directory created successfully!')
-            })
-            cb(null, location)
-        },
-        // destination: `./src/uploads/${folderName}/`,
+        // destination: (req, file, cb) => {
+        //     const location = path.join(
+        //         `./src/uploads/${folderName}/`,
+        //         req.params.id.toString()
+        //     )
+        //     fs.mkdir(location, { recursive: true }, (err) => {
+        //         if (err) {
+        //             return console.error(err)
+        //         }
+        //         console.log('Directory created successfully!')
+        //     })
+        //     cb(null, location)
+        // },
+        destination: `./src/uploads/${folderName}/`,
         filename: (req, file, cb) => {
             cb(
                 null,
-                `file.fieldname_${Date.now()}${path.extname(file.originalname)}`
+                `${file.fieldname}_${Date.now()}${path.extname(
+                    file.originalname
+                )}`
             )
         },
     })
@@ -33,7 +35,7 @@ const uploadImage = (folderName) => {
         },
         fileFilter: (req, file, cb) => {
             const fileName = file.originalname.toLowerCase()
-            if (!fileName.match(/\.(jpg|jpeg|png|gif|jfif)$/)) {
+            if (!fileName.match(/\.(jpg|jpeg|png|gif|jfif|avif|pjpeg|pjp)$/)) {
                 return cb(new Error('Please Upload Image'))
             }
             cb(null, true)
