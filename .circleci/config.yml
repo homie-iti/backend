@@ -6,7 +6,7 @@ orbs:
     # aws-cli: circleci/aws-cli@2.0.6
     # eb: circleci/aws-elastic-beanstalk@2.0.1
 jobs:
-    test:
+    build:
         docker:
             - image: cimg/base:stable
         steps:
@@ -81,7 +81,7 @@ jobs:
     #               What you do inbetween is up to you!"
     #     - vercel/deploy
 workflows:
-    build-deploy:
+    build-test-deploy:
         jobs:
             - build:
                   filters:
