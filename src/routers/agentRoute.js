@@ -7,7 +7,7 @@ const { authMW, adminOnly, adminAndUser } = require('../middlewares/authMW')
 const router = express.Router()
 // console.log(authMW);
 router
-    .route('/agent')
+    .route('/agents')
     .get(authMW, adminOnly, agentController.getAllAgents)
     .post(
         authMW,
