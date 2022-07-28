@@ -284,55 +284,99 @@ module.exports.getAllAgents = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-// module.exports.addReview = (request, response, next) => {
-//     // const { unitId } = request.body.unitId
-//     const newReview = new Review({
-//         unitId: request.body.unitId,
-//         agentId: request.body.agentId,
-//         comment: request.body.comment,
-//         rating: request.body.rating,
-//     })
-//     newReview
-//         .save()
-//         .then((data) => {
-//             console.log(data)
-//             Unit.findByIdAndUpdate(data.unitId, {
-//                 $push: { 'reviews.$.totalReviews': data._id },
-//             })
-//             // Unit.save()
-//             response.status(200).json(data)
-//         })
-//         // .then((data) => {
-//         //     Unit.findByIdAndUpdate(data.unitId, {
-//         //         $push: { 'reviews.totalReviews': data._id },
-//         //     })
-//         //     Unit.save()
-//         // })
-//         .catch((error) => next(error))
-// }
-
-module.exports.addReview = async (request, response, next) => {
-    const { unitId } = request.body.unitId
-    const newReview = new Review({
-        unitId: request.body.unitId,
-        agentId: request.body.agentId,
-        comment: request.body.comment,
-        rating: request.body.rating,
-    })
-    try {
-        const savedReview = await newReview.save()
-        try {
-            await Unit.findByIdAndUpdate(unitId, {
-                $push: { 'reviews.$.totalReviews': savedReview._id },
-            })
-        } catch (error) {
+module.exports.getAgentById = (request, response, next) => {
+    Agent.findOne({ _id: request.params.id })
+        .then((data) => {
+            if (data == null) next(new Error("Agent Doesn't Exist"))
+            else {
+                response.status(200).json(data)
+            }
+        })
+        .catch((error) => {
             next(error)
-        }
-        response.status(200).json(savedReview)
-    } catch (error) {
-        next(error)
-    }
+        })
 }
+
+// TODO needs enhancement (try,catch to avoid callback hells)
+module.exports.addReview = (request, response, next) => {
+    Unit.findOne({ _id: request.body.unitId })
+        .then((unit) => {
+            if (unit == null) next(new Error("Unit Doesn't Found."))
+            else {
+                Agent.findOne({
+                    _id: request.body.agentId,
+                    'agentUnits.unitId': request.body.unitId,
+                }).then((agent) => {
+                    console.log(`"agent" ${agent}`)
+                    if (agent == null)
+                        next(new Error("Agent has this unit doesn't found."))
+                    // console.log('this agent has this unit')
+                    const newReview = new Review({
+                        unitId: request.body.unitId,
+                        agentId: request.body.agentId,
+                        comment: request.body.comment,
+                        rating: request.body.rating,
+                    })
+                    newReview.save().then((review) => {
+                        console.log(review)
+                        Unit.updateOne(
+                            { _id: request.body.unitId },
+                            {
+                                $push: { 'reviews.ratings': review.rating },
+                                $addToSet: {
+                                    'reviews.totalReviews': review._id,
+                                },
+                            }
+                        )
+                            .then((data) => {
+                                console.log(data)
+                                if (
+                                    data.modifiedCount === 0 ||
+                                    data.matchedCount === 0
+                                )
+                                    next(new Error("Can't modified unit data."))
+                                response.status(200).json(data)
+                            })
+                            .catch((error) => next(error))
+                    })
+                })
+            }
+        })
+
+        .catch((error) => next(error))
+}
+
+// get unit average ratings (output:ratingsAverage,numberOfReviews,[reviews])
+module.exports.getUnitAverageRatings = (request, response, next) => {
+    Unit.findOne(
+        { _id: request.params.id },
+        { 'reviews.ratings': 1, 'reviews.totalReviews': 1 }
+    )
+        .populate({
+            path: 'reviews.totalReviews',
+            select: { agentId: 1, comment: 1 },
+        })
+        .then((data) => {
+            console.log(data)
+            console.log(data.reviews.ratings)
+            if (data == null) next(new Error("Unit Doesn't Found"))
+            else {
+                const totalRatings = data.reviews.ratings
+                const ratingAverage =
+                    totalRatings.reduce((a, b) => a + b, 0) /
+                    totalRatings.length
+                response.status(200).json({
+                    RatingAverage: ratingAverage,
+                    reviewsCount: data.reviews.totalReviews.length,
+                    reviews: data.reviews.totalReviews,
+                })
+            }
+        })
+        .catch((error) => {
+            next(error)
+        })
+}
+
 // ! Things to think about it:
 //* Landlord upload new images in addition to the exist one.
 // *landlord delete already exists images
