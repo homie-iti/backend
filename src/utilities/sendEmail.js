@@ -76,6 +76,37 @@ module.exports = class EmailClient {
                 }
                 break
 
+            case 'reset_password':
+                const resetPasswordLink =
+                    'http://localhost:8080/reset-password/' + configs.resetLink
+                this.#message = {
+                    subject: `Reset your forgotten password `,
+                    body: `
+                        <h2>Reset your forgotten password</h2>
+                        <p>You are receiving this e-mail because you have requested a password reset.</p>
+                        <p>Please click the link below to reset your password:<br>
+                        <button>
+                        <a href=${resetPasswordLink}>${resetPasswordLink}</a>
+                        </button>         
+                        </p>
+                        <p>If you did not request this password reset, then please ignore this email.</p>
+                        <p dir="rtl">إدارة هومي الموقّرة</p>
+                        `,
+                }
+                break
+
+            case 'password_changed':
+                this.#message = {
+                    subject: `Hola ${
+                        configs.name.split(' ')[0]
+                    }, Password has been changed successfully`,
+                    body: `
+                    <h2>Password changed successfully</h2>
+                    <p>Your password has been changed successfully... you can now try to login again.</p>
+                    <p dir="rtl">إدارة هومي الموقّرة</p>
+                            `,
+                }
+                break
             default:
                 break
         }
