@@ -1,7 +1,4 @@
-const mongoose = require("mongoose");
-require("../models/cityModel");
-
-let Cities = mongoose.model("cities");
+const Cities = require('../models/cityModel')
 
 
 // If city name starts with

@@ -7,6 +7,7 @@ let Agent = mongoose.model("agents");
 let User = mongoose.model("users");
 let Unit = mongoose.model("units");
 
+const saltRounds = 10
 // Get All Agents
 module.exports.getAllAgents = (request, response, next) => {
   Agent.find({})

@@ -1,39 +1,47 @@
- const express = require("express");
- const router = express.Router();
+const express = require('express')
 
-const validationMW = require("../middlewares/validationMW");
-const { userPostValidtion, userUpdateValidation, userDeleteValidtion } = require("../middlewares/validtion")
-const userController = require("./../controllers/userController");
+const router = express.Router()
 
-router.route("/users")
+const validationMW = require('../middlewares/validationMW')
+const {
+    userPostValidation,
+    userUpdateValidation,
+    userDeleteValidation,
+} = require('../middlewares/validtion')
+const userController = require('../controllers/userController')
+const upload = require('../middlewares/uploadImagesMW')
 
-  .get(userController.getAllUsers)
+router
+    .route('/users')
 
+    .get(userController.getAllUsers)
 
-  .post(userPostValidtion, validationMW, userController.createUser)
+    .post(userPostValidation, validationMW, userController.createUser)
 
-  .put(userUpdateValidation, validationMW, userController.updateUser)
+    .put(userUpdateValidation, validationMW, userController.updateUser)
 
-  .delete(userController.deleteManyUser)
+    .delete(userController.deleteManyUser)
 
+router
+    .route('/users/profileImage/:id')
+    .post(
+        upload('users/profileImage').single('profile'),
+        userController.uploadUserImage
+    )
+    .put(userController.updateUserImage)
 
- router.route("/users/:id") 
- 
- .get(userController.getUserById)
+router
+    .route('/users/:id')
 
-  .delete(userDeleteValidtion, validationMW, userController.deleteUser)
+    .get(userController.getUserById)
 
+    .delete(userDeleteValidation, validationMW, userController.deleteUser)
 
-router.route("/users/myFavourite/:id")
+router
+    .route('/users/myFavourite/:id')
     .get(userController.getAllFavUnits)
     .put(userController.updateFavUnit)
 
+router.route('/users/myFavourite/:id/unit').delete(userController.removeFavUnit)
 
-
-router.route("/users/myFavourite/:id/unit")
-    .delete(userController.removeFavUnit)
-
-
-
-
- module.exports = router;
+module.exports = router
