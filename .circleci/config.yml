@@ -2,9 +2,6 @@ version: 2.1
 orbs:
     node: circleci/node@5.0.0
     heroku: circleci/heroku@1.2.6
-    # vercel-orb: i-am-jeetu/vercel-orb@1.0.0
-    # aws-cli: circleci/aws-cli@2.0.6
-    # eb: circleci/aws-elastic-beanstalk@2.0.1
 jobs:
     build:
         docker:
@@ -12,14 +9,6 @@ jobs:
         steps:
             - node/install
             - checkout
-            # - run:
-            #       name: Installing Modules
-            #       command: |
-            #           npm i
-            # - run:
-            #       name: Testing
-            #       command: |
-            #           npm run test:prod
             - run:
                   name: Cleaning
                   command: |
@@ -43,44 +32,16 @@ jobs:
                   name: Testing
                   command: |
                       npm run test:prod
-            # - run:
-            #       name: Cleaning
-            #       command: |
-            #           npm run clean:bash
-            # - run:
-            #       name: Building
-            #       command: |
-            #           npm run build:bash
 
     deploy:
         docker:
             - image: cimg/base:stable
         steps:
-            # - node/install
             - checkout
             - run:
                   name: Deploy Branch to Heroku
                   command: |
                       git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git
-            # - run:
-            #       name: Installing Deta CLI
-            #       command: |
-            #           curl -fsSL https://get.deta.dev/cli.sh | sh
-            # - run:
-            #       name: Deploy Build To Deta (temp-server)
-            #       command: |
-            #           npm run deploy
-    # deploy:
-    # executor: vercel/default
-    # steps:
-    #     - checkout
-    #     - vercel/install
-    #     - vercel/check-authentication
-    #     - run:
-    #           command: >
-    #               echo "The command above installs Vercel, the command below deploys.
-    #               What you do inbetween is up to you!"
-    #     - vercel/deploy
 workflows:
     build-test-deploy:
         jobs:
@@ -91,14 +52,13 @@ workflows:
                               - appDeployment
             - test:
                   requires:
-                      - build # only run deploy-via-git job if the build job has completed
+                      - build
                   filters:
                       branches:
-                          only: appDeployment # only run deploy-via-git job on main branch
+                          only: appDeployment
             - deploy:
                   requires:
-                      - test # only run deploy-via-git job if the build job has completed
+                      - test
                   filters:
                       branches:
-                          only: appDeployment # only run deploy-via-git job on main branch
-            # - deploy
+                          only: appDeployment

@@ -15,11 +15,7 @@
         "clean:cmd": "rmdir /q /s build",
         "clean:bash": "rm -rf build",
         "build:cmd": "@powershell copy -r ./src/ ./build/ && @powershell remove-item -r ./build/uploads && @powershell copy ./package.json ./build/package.json && @powershell remove-item ./build/app.js && @powershell copy ./src/app.js ./build/index.js && @powershell copy -r ./.deta ./build/",
-        "build:bash": "cp -r ./src/ ./build/ && rm -r ./build/uploads && cp ./package.json ./build/package.json && rm ./build/app.js && cp ./src/app.js ./build/index.js && cp -r ./.deta ./build/",
-        "deploy": "export PATH=\"/home/circleci/.deta/bin:$PATH\" && cd ./build && deta deploy"
-    },
-    "engines": {
-        "node": "14.x"
+        "build:bash": "cp -r ./src/ ./build/ && rm -r ./build/uploads && cp ./package.json ./build/package.json && rm ./build/app.js && cp ./src/app.js ./build/index.js && cp -r ./.deta ./build/"
     },
     "author": "",
     "license": "ISC",
