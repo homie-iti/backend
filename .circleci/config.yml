@@ -33,7 +33,7 @@ jobs:
         docker:
             - image: cimg/base:stable
         steps:
-            # - node/install
+            - node/install
             - checkout
             - run:
                   name: Installing Modules
@@ -56,19 +56,20 @@ jobs:
         docker:
             - image: cimg/base:stable
         steps:
+            # - node/install
             - checkout
             - run:
                   name: Deploy Branch to Heroku
                   command: |
                       git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git
-            - run:
-                  name: Installing Deta CLI
-                  command: |
-                      curl -fsSL https://get.deta.dev/cli.sh | sh
-            - run:
-                  name: Deploy Build To Deta (temp-server)
-                  command: |
-                      npm run deploy
+            # - run:
+            #       name: Installing Deta CLI
+            #       command: |
+            #           curl -fsSL https://get.deta.dev/cli.sh | sh
+            # - run:
+            #       name: Deploy Build To Deta (temp-server)
+            #       command: |
+            #           npm run deploy
     # deploy:
     # executor: vercel/default
     # steps:
