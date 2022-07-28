@@ -5,6 +5,9 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 require('dotenv').config()
 
+const appConfig = require('./config/app.config')
+const dbConfig = require('./config/database.config')
+
 const { apiLimiter } = require('./middlewares/rateLimitMW')
 
 const unitRoute = require('./routers/unitRoute')
@@ -32,16 +35,14 @@ const signupRoute = require('./routers/signupRoute')
 // require('./models/userModel')
 
 const app = express()
-const port = process.env.PORT || 8080
+const { port } = appConfig
 
 let dbURL
-if (process.env.ENV === 'prod' || process.env.ENV === 'testProd')
-    dbURL = `mongodb+srv://${process.env.ATLAS_DB_USER}:${process.env.ATLAS_DB_PASSWORD}@cluster0.7du11.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
-else
-    dbURL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+if (appConfig.environment === 'prod' || appConfig.environment === 'testProd')
+    dbURL = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@cluster0.7du11.mongodb.net/${dbConfig.name}?retryWrites=true&w=majority`
+else dbURL = `mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`
 
-console.log(process.env.ENV)
-console.log(dbURL)
+console.log(`NODE_ENV: ${appConfig.environment}`)
 
 mongoose
     .connect(dbURL, {
@@ -57,7 +58,7 @@ mongoose
         console.log('DB Connection Error', error)
     })
 
-if (process.env.ENV !== 'test')
+if (appConfig.environment !== 'test')
     app.use(morgan(':method :url :status - :response-time ms'))
 
 app.use(cors())
