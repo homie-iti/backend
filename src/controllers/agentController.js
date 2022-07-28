@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 require("../models/agentModel");
+require("../models/userModel");
+require("../models/unitModel");
 
 let Agent = mongoose.model("agents");
+let User = mongoose.model("users");
+let Unit = mongoose.model("units");
 
 // Get All Agents
 module.exports.getAllAgents = (request, response, next) => {
@@ -11,13 +15,13 @@ module.exports.getAllAgents = (request, response, next) => {
       select: {},
     })
     .populate({
-      path: "agentUnits",
+      path: "agentUnits.unitId",
       select: {},
     })
-    .populate({
-      path: "favoriteUnits",
-      select: {},
-    })
+    // .populate({
+    //   path: "favoriteUnits",
+    //   select: {},
+    // })
     .then((data) => {
       response.status(200).json(data);
     })
@@ -34,13 +38,13 @@ module.exports.getAgentByID = (request, response, next) => {
       select: {},
     })
     .populate({
-      path: "agentUnits",
+      path: "agentUnits.unitId",
       select: {},
     })
-    .populate({
-      path: "favoriteUnits",
-      select: {},
-    })
+    // .populate({
+    //   path: "favoriteUnits",
+    //   select: {},
+    // })
     .then((data) => {
       if (data == null) next(new Error(" Agent not found"));
       response.status(200).json(data);
@@ -50,82 +54,111 @@ module.exports.getAgentByID = (request, response, next) => {
     });
 };
 
-// create Agent
-module.exports.createAgent = (request, response, next) => {
-  let object = new Agent({
-    _id: request.body.id,
-    fullName: request.body.fullName,
-    age: request.body.age,
-    email: request.body.email,
-    password: request.body.password,
-    gender: request.body.gender,
-    phone: request.body.phone,
-    national_id: request.body.national_id,
-    image: request.body.image,
-    address: request.body.address,
-  });
-  object
-    .save()
-    .then((data) => {
-      response.status(201).json({ data: "added" });
-    })
-    .catch((error) => next(error));
+exports.createAgent = async (request, response, next) => {
+  try {
+    for (let value of request.body.agentUnits) {
+      let filterUnit = value.unitId;
+
+      const unitExist = await Unit.findById(filterUnit);
+      if (!unitExist) throw new Error(`unitId isn't valid`);
+    }
+
+    const filteruUser = request.body._id;
+    const update = { isAgent: "true" };
+
+    const UserExist = await User.findByIdAndUpdate(filteruUser, update);
+    if (!UserExist) throw new Error(`userId isn't valid`);
+
+    const agentObject = new Agent({ ...request.body });
+    const data = await agentObject.save();
+
+    response.status(201).json({ data: "agent added" });
+  } catch (error) {
+    next(error);
+  }
 };
 
-// Update Agent By ID
-module.exports.updateAgent = (request, response, next) => {
-  Agent.findById(request.body.id)
-    .then((data) => {
-      for (const key in request.body) {
-        data[key] = request.body[key];
+exports.updateAgentUnits = async (request, response, next) => {
+  try {
+    let unitIds = [];
+    let filterduplicated = [];
+
+    const data1 = await Agent.findById(request.body._id);
+    for (let value of data1.agentUnits) {
+      unitIds.push(value.unitId.toString());
+    }
+
+    for (let value of request.body.agentUnits) {
+      let filterUnit = value.unitId;
+      filterduplicated.push(value.unitId);
+
+      const unitExist = await Unit.findById(filterUnit);
+      if (!unitExist) throw new Error(`unitId isn't valid`);
+    }
+
+    console.log(filterduplicated);
+    for (i = 0; i <= filterduplicated.length; i++) {
+      if (unitIds.includes(filterduplicated[i]))
+        throw new Error(`duplicated unitID isn't valid`);
+    }
+
+    const filterAgent = request.body._id;
+    const update = { $addToSet: { agentUnits: request.body.agentUnits } };
+
+    const data = await Agent.findByIdAndUpdate(filterAgent, update);
+
+    response.status(200).json({
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteAgent = async (request, response, next) => {
+  try {
+    const data = await Agent.deleteOne({
+      _id: request.body._id,
+    });
+
+    if (data.deletedCount < 1) throw new Error("Agent  not found");
+
+    const filteruUser = request.body._id;
+    const update = { isAgent: "false" };
+
+    const userupdate = await User.findByIdAndUpdate(filteruUser, update);
+    if (!userupdate) throw new Error(`userId isn't valid`);
+
+    response.status(200).json({ message: "deleted Agent" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.RemoveAgentUnits = async (request, response, next) => {
+  try {
+    let deletedArr = [];
+
+    for (let value of request.body.agentUnits) {
+      deletedArr.push(value.unitId);
+    }
+
+    console.log(deletedArr);
+    const data = await Agent.updateOne(
+      { _id: request.body._id },
+      {
+        $pull: {
+          agentUnits: { unitId: { $in: deletedArr } },
+        },
       }
-      data.save();
-      response.status(200).json({ data: "updated" });
-    })
-    .catch((error) => {
-      next(error);
-    });
-};
+    );
 
-// Delete Agent By ID
-module.exports.deleteAgent = (request, response, next) => {
-  Agent.deleteOne({ _id: request.params.id })
-    .then((data) => {
-      if (!data) {
-        next(new Error(" Agent not found"));
-      } else {
-        response.status(200).json({ data: "deleted" });
-      }
-    })
-    .catch((error) => {
-      next(error);
-    });
-};
+    if (data.matchedCount < 1) throw new Error("Agent  not found");
+    if (data.modifiedCount < 1)
+      throw new Error("Agent units couldn't be modified");
 
-// Update Agent Units
-module.exports.updateAgentUnits = (request, response, next) => {
-  Agent.findByIdAndUpdate(
-    { _id: request.body.id },
-    { $addToSet: { agentUnits: request.body.agentUnits } }
-  )
-    .then((data) => {
-      response.status(200).json(data);
-    })
-    .catch((error) => {
-      next(error);
-    });
-};
-
-// Remove From Agent Units
-module.exports.RemoveAgentUnits = (request, response, next) => {
-  Agent.updateOne(
-    { _id: request.params.id },
-    { $pull: { agentUnits: request.body.agentUnits } }
-  )
-    .then((data) => {
-      response.status(200).json(data);
-    })
-    .catch((error) => {
-      next(error);
-    });
+    response.status(200).json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
