@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 const appConfig = {
-    environment: process.env.ENV || 'dev',
+    environment: process.env.ENV.trim() || 'dev',
     port: Number(process.env.PORT) || 8080,
     // jwtSecret: process.env.JWT_TOKEN,
     // bcryptSalt: Number(process.env.SALT_ROUNDS) || 10,

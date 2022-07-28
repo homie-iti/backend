@@ -43,6 +43,7 @@ if (appConfig.environment === 'prod' || appConfig.environment === 'testProd')
 else dbURL = `mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`
 
 console.log(`NODE_ENV: ${appConfig.environment}`)
+// console.log(dbURL)
 
 mongoose
     .connect(dbURL, {
@@ -58,7 +59,7 @@ mongoose
         console.log('DB Connection Error', error)
     })
 
-if (appConfig.environment !== 'test')
+if (!appConfig.environment.includes('test'))
     app.use(morgan(':method :url :status - :response-time ms'))
 
 app.use(cors())

@@ -5,15 +5,25 @@ dotenv.config()
 const APP_ENV = appConfig.environment || 'dev'
 
 const databaseName =
-    process.env[APP_ENV === 'test' ? 'TEST_DB_NAME' : 'DB_NAME']
+    process.env[APP_ENV.includes('test') ? 'TEST_DB_NAME' : 'DB_NAME']
 const databaseHost =
-    process.env[APP_ENV === 'prod' ? 'ATLAS_DB_HOST' : 'DB_HOST']
+    process.env[
+        ['prod', 'testProd'].includes(APP_ENV) ? 'ATLAS_DB_HOST' : 'DB_HOST'
+    ]
 const databasePort =
-    process.env[APP_ENV === 'prod' ? 'ATLAS_DB_PORT' : 'DB_PORT'] || null
+    process.env[
+        ['prod', 'testProd'].includes(APP_ENV) ? 'ATLAS_DB_PORT' : 'DB_PORT'
+    ] || null
 const databaseUsername =
-    process.env[APP_ENV === 'prod' ? 'ATLAS_DB_USER' : 'DB_USER'] || ''
+    process.env[
+        ['prod', 'testProd'].includes(APP_ENV) ? 'ATLAS_DB_USER' : 'DB_USER'
+    ] || ''
 const databasePassword =
-    process.env[APP_ENV === 'prod' ? 'ATLAS_DB_PASSWORD' : 'DB_PASSWORD'] || ''
+    process.env[
+        ['prod', 'testProd'].includes(APP_ENV)
+            ? 'ATLAS_DB_PASSWORD'
+            : 'DB_PASSWORD'
+    ] || ''
 
 const databaseConfig = {
     name: databaseName,
