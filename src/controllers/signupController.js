@@ -57,13 +57,12 @@ module.exports.signup = (request, response, next) => {
         age: request.body.age,
         gender: request.body.gender,
         email: request.body.email,
-        password: request.body.password,
         phone: request.body.phone,
         national_id: request.body.nationalId,
     }
 
     bcrypt
-        .hash(myPlaintextPassword, saltRounds)
+        .hash(request.body.password, saltRounds)
         .then((hash) => {
             user.password = hash
         })

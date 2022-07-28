@@ -4,7 +4,5 @@ package-lock.json
 
 # project-related files
 db
+build
 .env
-
-# certifications
-X509-cert-6581623958867953238.pem

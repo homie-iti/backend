@@ -5,6 +5,9 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 require('dotenv').config()
 
+const appConfig = require('./config/app.config')
+const dbConfig = require('./config/database.config')
+
 const { apiLimiter } = require('./middlewares/rateLimitMW')
 
 const unitRoute = require('./routers/unitRoute')
@@ -33,11 +36,21 @@ const signupRoute = require('./routers/signupRoute')
 // require('./models/userModel')
 
 const app = express()
-const port = process.env.PORT || 8080
+const { port } = appConfig
 
-const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+let dbURL
+if (appConfig.environment === 'prod' || appConfig.environment === 'testProd')
+    dbURL = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@cluster0.7du11.mongodb.net/${dbConfig.name}?retryWrites=true&w=majority`
+else dbURL = `mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`
+
+console.log(`NODE_ENV: ${appConfig.environment}`)
+// console.log(dbURL)
+
 mongoose
-    .connect(homieDB_URL)
+    .connect(dbURL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
     .then(() => {
         app.listen(port, () => {
             console.log('App listens on port', port)
@@ -47,13 +60,17 @@ mongoose
         console.log('DB Connection Error', error)
     })
 
-if (process.env.ENV !== 'test')
+if (!appConfig.environment.includes('test'))
     app.use(morgan(':method :url :status - :response-time ms'))
 
 app.use(cors())
 app.use(apiLimiter)
 
 app.use(express.json())
+
+app.get('/', (req, res) => {
+    res.send('Done CI/CD')
+})
 
 app.use(loginRoute)
 app.use(signupRoute)
