@@ -21,6 +21,8 @@ router
             { name: 'unitCover', maxCount: 1 },
             { name: 'unitImages', maxCount: 8 },
         ]),
+        addUnitValidations,
+        validationMW,
         unitController.createUnit
     )
     .put(updateUnitValidations, validationMW, unitController.updateUnitData)
@@ -79,5 +81,9 @@ router
     .get(unitController.getAllReviews)
     .post(unitController.addReview)
 
+router.get('/units/ratings/:id', unitController.getUnitAverageRatings)
+
 router.get('/agents', unitController.getAllAgents)
+router.get('/agents/:id', unitController.getAgentById)
+
 module.exports = router
