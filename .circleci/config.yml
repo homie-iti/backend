@@ -49,16 +49,16 @@ workflows:
                   filters:
                       branches:
                           only:
-                              - appDeployment
+                              - main
             - test:
                   requires:
                       - build
                   filters:
                       branches:
-                          only: appDeployment
+                          only: main
             - deploy:
                   requires:
                       - test
                   filters:
                       branches:
-                          only: appDeployment
+                          only: main
