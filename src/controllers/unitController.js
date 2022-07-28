@@ -9,22 +9,25 @@ const Landlord = require('../models/landlordModel')
 const City = require('../models/cityModel')
 
 // Get All Units
+// module.exports.getAllUnits = (request, response, next) => {
+//     Unit.find(
+//         {},
+//         'estateType images unitInfo isAvailable isPetsAllowed gender dailyPrice address'
+//     )
+//         .populate({ path: 'landlordId', select: 'fullName phone image' })
+//         // .populate({ path: "agentId" })
+//         .then((data) => {
+//             // console.log(data)
+//             response.status(200).json(data)
+//         })
+//         .catch((error) => {
+//             next(error)
+//         })
+// }
+
 module.exports.getAllUnits = (request, response, next) => {
-    Unit.find(
-        {},
-        'estateType images unitInfo isAvailable isPetsAllowed gender dailyPrice address'
-    )
-        .populate({ path: 'landlordId', select: 'fullName phone image' })
-        // .populate({ path: "agentId" })
-
-        .then((data) => {
-            response.status(200).json(data)
-        })
-        .catch((error) => {
-            next(error)
-        })
+    response.status(200).json(response.data)
 }
-
 // Get Specific Unit By Id
 // ! check if you can select unitInfo as unitInfo:{...unitInfo,isAvailable, isPetsAllowed ,gender} as one object
 module.exports.getUnitById = (request, response, next) => {
@@ -154,10 +157,9 @@ module.exports.deleteUnit = (request, response, next) => {
         ),
     ])
         .then((data) => {
-            if (data.matchedCount == 0) {
-                {
-                    next(new Error('Unit Not Found'))
-                } // ! doesn't work check it again
+            if (data.matchedCount === 0) {
+                next(new Error('Unit Not Found'))
+                // ! doesn't work check it again
             } else {
                 response.status(200).json('Unit Deleted')
             }
