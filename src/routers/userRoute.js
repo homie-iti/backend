@@ -10,13 +10,20 @@ const {
 } = require('../middlewares/validtion')
 const userController = require('../controllers/userController')
 const upload = require('../middlewares/uploadImagesMW')
-
+// const paginationResult = require('../middlewares/paginationMW')
+// const usersModel = require('../models/userModel')
 router
     .route('/users')
 
     .get(userController.getAllUsers)
+    // .get(paginationResult(usersModel), userController.getAllUsers)
 
-    .post(userPostValidation, validationMW, userController.createUser)
+    .post(
+        userPostValidation,
+        validationMW,
+        upload('users/profileImage').single('profile'),
+        userController.createUser
+    )
 
     .put(userUpdateValidation, validationMW, userController.updateUser)
 

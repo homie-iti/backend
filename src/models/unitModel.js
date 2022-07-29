@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2')
+
 const addressSchema = require('./addressModel')
 
 const schema = new mongoose.Schema(
@@ -42,7 +44,10 @@ const schema = new mongoose.Schema(
         // images: [{ type: String, required: [true, "unit images are required"] }],
         images: [String],
 
-        isPetsAllowed: Boolean,
+        isPetsAllowed: {
+            type: Boolean,
+            default: false,
+        },
 
         numberOfResidents: {
             type: Number,
@@ -85,8 +90,19 @@ const schema = new mongoose.Schema(
                 // required: [true, "unit coordinates is required"],
             },
         },
+        reviews: {
+            ratings: [
+                {
+                    type: Number,
+                    min: 1,
+                    max: 5,
+                },
+            ],
+            totalReviews: [{ type: mongoose.Types.ObjectId, ref: 'reviews' }],
+        },
     },
     { timestamps: true }
 )
 
+schema.plugin(mongoosePaginate)
 module.exports = mongoose.model('units', schema)

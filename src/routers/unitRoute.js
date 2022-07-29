@@ -1,7 +1,7 @@
 const express = require('express')
 
 const router = express.Router()
-const { body, param, query } = require('express-validator')
+const { param, query } = require('express-validator')
 
 const unitController = require('../controllers/unitController')
 
@@ -12,15 +12,21 @@ const {
 } = require('../middlewares/unitValidations')
 
 const uploadImage = require('../middlewares/uploadImagesMW')
+const paginationResult = require('../middlewares/paginationMW')
+const unitsModel = require('../models/unitModel')
 
 router
     .route('/units')
+    // .get( paginationResult( unitsModel ), unitController.getAllUnits )
     .get(unitController.getAllUnits)
+
     .post(
         uploadImage('units/unitsImages').fields([
             { name: 'unitCover', maxCount: 1 },
             { name: 'unitImages', maxCount: 8 },
         ]),
+        addUnitValidations,
+        validationMW,
         unitController.createUnit
     )
     .put(updateUnitValidations, validationMW, unitController.updateUnitData)
@@ -78,5 +84,10 @@ router
     .route('/reviews')
     .get(unitController.getAllReviews)
     .post(unitController.addReview)
+
+router.get('/units/ratings/:id', unitController.getUnitAverageRatings)
+
+// router.get('/agents', unitController.getAllAgents)
+// router.get('/agents/:id', unitController.getAgentById)
 
 module.exports = router

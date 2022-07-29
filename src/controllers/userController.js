@@ -48,6 +48,11 @@ module.exports.getAllUsers = (request, response, next) => {
         })
 }
 
+// module.exports.getAllUsers = (request, response, next) => {
+//     console.log(response.dataResulted)
+//     response.status(200).json(response.dataResulted)
+// }
+
 module.exports.getUserById = (request, response, next) => {
     User.findOne({ _id: request.params.id })
         .then((data) => {
@@ -60,7 +65,19 @@ module.exports.getUserById = (request, response, next) => {
 }
 
 module.exports.createUser = (request, response, next) => {
-    const object = new User(request.body)
+    // console.log(request.file)
+    // const image = request.file ? request.file.profile.path : ''
+
+    const object = new User({
+        fullName: request.body.fullName,
+        age: request.body.age,
+        email: request.body.email,
+        gender: request.body.gender,
+        password: request.body.password,
+        phone: request.body.phone,
+        national_id: request.body.nationalId,
+        // image,
+    })
     object
         .save()
         .then((data) => {
