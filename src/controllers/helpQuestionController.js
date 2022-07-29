@@ -75,11 +75,9 @@ module.exports.deleteManyQuestion = (request, response, next) => {
         .then((data) => {
             response.status(200).json({ data: 'deleted' })
         })
-        .catch(
-            console.error((error) => {
-                next(error)
-            })
-        )
+        .catch((error) => {
+            next(error)
+        })
 }
 
 // module.exports.deleteAllQuestion=(request,response,next)=>{

@@ -56,7 +56,7 @@ module.exports.getAllUsers = (request, response, next) => {
 module.exports.getUserById = (request, response, next) => {
     User.findOne({ _id: request.params.id })
         .then((data) => {
-            if (data == null) next(new Error(' teacher not found'))
+            if (data == null) next(new Error('user not found'))
             response.status(200).json(data)
         })
         .catch((error) => {
@@ -148,11 +148,9 @@ module.exports.deleteManyUser = (request, response, next) => {
                 response.status(200).json({ data: 'deleted' })
             }
         })
-        .catch(
-            console.error((error) => {
-                next(error)
-            })
-        )
+        .catch((error) => {
+            next(error)
+        })
 }
 
 module.exports.getAllFavUnits = (request, response, next) => {
