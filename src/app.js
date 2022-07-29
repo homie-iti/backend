@@ -5,6 +5,9 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 require('dotenv').config()
 
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = require('../swagger.json')
+
 const appConfig = require('./config/app.config')
 const dbConfig = require('./config/database.config')
 
@@ -46,6 +49,7 @@ else dbURL = `mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`
 console.log(`NODE_ENV: ${appConfig.environment}`)
 // console.log(dbURL)
 
+app.use('/homie-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 mongoose
     .connect(dbURL, {
         useNewUrlParser: true,
