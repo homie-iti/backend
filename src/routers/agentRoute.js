@@ -8,10 +8,8 @@ const router = express.Router()
 // console.log(authMW);
 router
     .route('/agents')
-    .get(authMW, adminOnly, agentController.getAllAgents)
+    .get(agentController.getAllAgents)
     .post(
-        authMW,
-        adminOnly,
         [
             body('id').isMongoId().withMessage('id should be isMongoId '),
             body('unitID')
@@ -22,8 +20,6 @@ router
         agentController.createAgent
     )
     .put(
-        authMW,
-        adminOnly,
         [
             body('id').isMongoId().withMessage('id should be isMongoId '),
             body('unitID')
@@ -35,34 +31,26 @@ router
     )
 
 router
-    .route('/agent/:id')
+    .route('/agents/:id')
     .get(
-        authMW,
-        adminAndUser,
         [param('id').isMongoId().withMessage('agent id should be objectID')],
         validationMW,
         agentController.getAgentByID
     )
     .delete(
-        authMW,
-        adminAndUser,
         [param('id').isMongoId().withMessage('agent id should be objectID')],
         validationMW,
         agentController.deleteAgent
     )
 
 router
-    .route('/agent/agentUnits')
+    .route('/agents/agentUnits')
     .get(
-        authMW,
-        adminOnly,
         [param('id').isMongoId().withMessage('favorite id should be objectID')],
         validationMW,
         agentController.updateAgentUnits
     )
     .put(
-        authMW,
-        adminOnly,
         [
             body('id').isMongoId().withMessage('agent id should be MongoId'),
             // body('agentUnits')
@@ -74,18 +62,14 @@ router
     )
 
 router
-    .route('/agent/agentUnits/:id')
+    .route('/agents/agentUnits/:id')
     .get(
-        authMW,
-        adminAndUser,
         [param('id').isMongoId().withMessage('favorite id should be objectID')],
         validationMW,
         agentController.updateAgentUnits
     )
 
     .delete(
-        authMW,
-        adminAndUser,
         [param('id').isMongoId().withMessage('favorite id should be objectID')],
         validationMW,
         agentController.RemoveAgentUnits
