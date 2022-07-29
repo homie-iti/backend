@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2')
+
 // some property lose
 const schema = new mongoose.Schema(
     {
@@ -27,4 +29,5 @@ const schema = new mongoose.Schema(
     { timestamps: true }
 )
 
+schema.plugin(mongoosePaginate)
 module.exports = mongoose.model('helpQuestions', schema)

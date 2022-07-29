@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2')
+
 // some property lose
 const schema = new mongoose.Schema({
     _id: {
@@ -50,4 +52,5 @@ const schema = new mongoose.Schema({
     },
 })
 
+schema.plugin(mongoosePaginate)
 module.exports = mongoose.model('admins', schema)
