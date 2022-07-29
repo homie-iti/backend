@@ -17,7 +17,7 @@ module.exports.getLandlordsByPage = (request, response, next) => {
     Landlord.paginate(
         {},
         {
-            page: request.query.page,
+            page: request.query.page || 1,
             // select: '',
             populate: { path: 'landlordUnits _id' },
         }
@@ -30,7 +30,7 @@ module.exports.getLandlordsByPage = (request, response, next) => {
                 nextPage: data.nextPage,
                 totalPages: data.totalPages,
                 totalLandlords: data.totalDocs,
-                LandlordsDisplayed: data.docs.length,
+                landlordsDisplayed: data.docs.length,
                 remained: data.totalDocs - data.docs.length,
                 results: data.docs,
             })

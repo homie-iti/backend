@@ -45,7 +45,7 @@ module.exports.getUsersByPage = (request, response, next) => {
     User.paginate(
         {},
         {
-            page: request.query.page,
+            page: request.query.page || 1,
             // select: '',
             // populate: {},
         }

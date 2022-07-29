@@ -18,7 +18,7 @@ module.exports.getAdminsByPage = (request, response, next) => {
     Admin.paginate(
         {},
         {
-            page: request.query.page,
+            page: request.query.page || 1,
             // select: '',
         }
     )
@@ -30,7 +30,7 @@ module.exports.getAdminsByPage = (request, response, next) => {
                 nextPage: data.nextPage,
                 totalPages: data.totalPages,
                 totalAdmins: data.totalDocs,
-                AdminsDisplayed: data.docs.length,
+                adminsDisplayed: data.docs.length,
                 remained: data.totalDocs - data.docs.length,
                 results: data.docs,
             })

@@ -25,7 +25,7 @@ module.exports.getAgentsByPage = (request, response, next) => {
     Agent.paginate(
         {},
         {
-            page: request.query.page,
+            page: request.query.page || 1,
             // select: '',
             populate: { path: 'agentUnits _id' },
         }
@@ -38,7 +38,7 @@ module.exports.getAgentsByPage = (request, response, next) => {
                 nextPage: data.nextPage,
                 totalPages: data.totalPages,
                 totalAgents: data.totalDocs,
-                AgentsDisplayed: data.docs.length,
+                agentsDisplayed: data.docs.length,
                 remained: data.totalDocs - data.docs.length,
                 results: data.docs,
             })

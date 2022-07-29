@@ -10,7 +10,7 @@ module.exports.getCitiesByPage = (request, response, next) => {
     CityModel.paginate(
         {},
         {
-            page: request.query.page,
+            page: request.query.page || 1,
             // select: '',
             // populate: {},
         }

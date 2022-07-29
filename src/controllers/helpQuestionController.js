@@ -4,7 +4,7 @@ module.exports.getHelpQuestionsByPage = (request, response, next) => {
     HelpQuestion.paginate(
         {},
         {
-            page: request.query.page,
+            page: request.query.page || 1,
             // select: '',
         }
     )

@@ -34,7 +34,7 @@ module.exports.getContractsByPage = (request, response, next) => {
     Contract.paginate(
         {},
         {
-            page: request.query.page,
+            page: request.query.page || 1,
             // select: '',
             populate: { path: 'landlordId agentId unitId' },
         }
@@ -47,7 +47,7 @@ module.exports.getContractsByPage = (request, response, next) => {
                 nextPage: data.nextPage,
                 totalPages: data.totalPages,
                 totalContracts: data.totalDocs,
-                ContractsDisplayed: data.docs.length,
+                contractsDisplayed: data.docs.length,
                 remained: data.totalDocs - data.docs.length,
                 results: data.docs,
             })

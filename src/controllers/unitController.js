@@ -14,7 +14,7 @@ module.exports.getUnitsByPage = (request, response, next) => {
     Unit.paginate(
         {},
         {
-            page: request.query.page,
+            page: request.query.page || 1,
             select: 'estateType images unitInfo isAvailable gender dailyPrice address',
             populate: { path: 'landlordId', select: 'fullName phone image' },
         }
@@ -307,7 +307,6 @@ module.exports.getAllReviews = (request, response, next) => {
         })
         .catch((error) => next(error))
 }
-
 
 // TODO needs enhancement (try,catch to avoid callback hells)
 module.exports.addReview = (request, response, next) => {
