@@ -18,7 +18,12 @@ router
     .get(userController.getAllUsers)
     // .get(paginationResult(usersModel), userController.getAllUsers)
 
-    .post(userPostValidation, validationMW, userController.createUser)
+    .post(
+        userPostValidation,
+        validationMW,
+        upload('users/profileImage').single('profile'),
+        userController.createUser
+    )
 
     .put(userUpdateValidation, validationMW, userController.updateUser)
 
