@@ -8,12 +8,7 @@ const router = express.Router()
 router
     .route('/landlords')
     .get(
-        [
-            query('page')
-                .optional()
-                .isNumeric()
-                .withMessage('Page number should number'),
-        ],
+        [query('page').isNumeric().withMessage('Page number should number')],
         validationMW,
         landlordController.getLandlordsByPage
     )

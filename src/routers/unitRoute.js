@@ -16,12 +16,7 @@ const uploadImage = require('../middlewares/uploadImagesMW')
 router
     .route('/units')
     .get(
-        [
-            query('page')
-                .optional()
-                .isNumeric()
-                .withMessage('Page number should number'),
-        ],
+        [query('page').isNumeric().withMessage('Page number should number')],
         validationMW,
         unitController.getUnitsByPage
     )

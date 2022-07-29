@@ -20,12 +20,7 @@ router
     // .get(paginationResult(usersModel), userController.getAllUsers)
 
     .get(
-        [
-            query('page')
-                .optional()
-                .isNumeric()
-                .withMessage('Page number should number'),
-        ],
+        [query('page').isNumeric().withMessage('Page number should number')],
         validationMW,
         userController.getUsersByPage
     )
