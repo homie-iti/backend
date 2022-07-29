@@ -87,7 +87,7 @@ router
 
 router.get('/units/ratings/:id', unitController.getUnitAverageRatings)
 
-router.get('/agents', unitController.getAllAgents)
-router.get('/agents/:id', unitController.getAgentById)
+// router.get('/agents', unitController.getAllAgents)
+// router.get('/agents/:id', unitController.getAgentById)
 
 module.exports = router
