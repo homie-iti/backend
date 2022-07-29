@@ -7,6 +7,16 @@ const unlinkAsync = promisify(fs.unlink)
 const User = require('../models/userModel')
 const Landlord = require('../models/landlordModel')
 const Agent = require('../models/agentModel')
+const HelpQuestion = require('../models/helpQuestionModel')
+const Contract = require('../models/contractModel')
+// const Contract = require('../models/')
+const Review = require('../models/reviewModel')
+const Unit = require('../models/unitModel')
+
+const helperFunctions = require('./_HelperFunctions')
+
+// const agentController = require('./ControlingFunctions')
+// const landlordController = require('../controllers/landlordController')
 
 // const EmailClient = require('../utilities/sendEmail')
 
@@ -129,11 +139,77 @@ module.exports.updateUser = (request, response, next) => {
 module.exports.deleteUser = (request, response, next) => {
     User.deleteOne({ _id: request.params.id })
         .then((data) => {
-            if (data.deletedCount == 0) {
-                next(new Error('userID not found'))
-            } else {
-                response.status(200).json({ data: 'deleted' })
-            }
+            // console.log(data)
+            if (data.deletedCount === 0) throw new Error('userID not found')
+
+            return data
+        })
+        .then((data) =>
+            helperFunctions.deleteOneDocument(
+                Agent,
+                '_id',
+                request.params.id,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteOneDocument(
+                Landlord,
+                '_id',
+                request.params.id,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByOneValue(
+                HelpQuestion,
+                'userId',
+                request.params.id,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByOneValue(
+                Review,
+                'agentId',
+                request.params.id,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByOneValue(
+                Contract,
+                'agentId',
+                request.params.id,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByOneValue(
+                Contract,
+                'landlordId',
+                request.params.id,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByOneValue(
+                Unit,
+                'agentId',
+                request.params.id,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByOneValue(
+                Unit,
+                'landlordId',
+                request.params.id,
+                data
+            )
+        )
+        .then((data) => {
+            response.status(200).json({ data: 'deleted user' })
         })
         .catch((error) => next(error))
 }
@@ -142,11 +218,75 @@ module.exports.deleteManyUser = (request, response, next) => {
     const { ids } = request.body
     User.deleteMany({ _id: { $in: ids } })
         .then((data) => {
-            if (data.deletedCount == 0) {
-                next(new Error('userID not found'))
-            } else {
-                response.status(200).json({ data: 'deleted' })
-            }
+            if (data.deletedCount === 0) throw new Error('users ids not found')
+            return data
+        })
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                Agent,
+                '_id',
+                ids,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                Landlord,
+                '_id',
+                ids,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                HelpQuestion,
+                'userId',
+                ids,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                Review,
+                'agentId',
+                ids,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                Contract,
+                'agentId',
+                ids,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                Contract,
+                'landlordId',
+                ids,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                Unit,
+                'agentId',
+                ids,
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                Unit,
+                'landlordId',
+                ids,
+                data
+            )
+        )
+        .then((data) => {
+            response.status(200).json({ data: 'deleted users' })
         })
         .catch((error) => {
             next(error)
