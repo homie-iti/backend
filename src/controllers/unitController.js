@@ -9,39 +9,12 @@ const Landlord = require('../models/landlordModel')
 const City = require('../models/cityModel')
 const Agent = require('../models/agentModel')
 
-// Get All Units
-// module.exports.getAllUnits = (request, response, next) => {
-//     Unit.find(
-//         {},
-//         'estateType images unitInfo isAvailable isPetsAllowed gender dailyPrice address'
-//     )
-//         .populate({ path: 'landlordId', select: 'fullName phone image' })
-//         // .populate({ path: "agentId" })
-//         .then((data) => {
-//             // console.log(data)
-//             response.status(200).json(data)
-//         })
-//         .catch((error) => {
-//             next(error)
-//         })
-// }
-
-// module.exports.getAllUnits = (request, response, next) => {
-//     // response.dataResulted.populate({
-//     //     path: 'landlordId',
-//     //     select: 'fullName phone image',
-//     // })
-//     console.log(response.dataResulted)
-//     response.status(200).json(response.dataResulted)
-// }
-
-module.exports.getAllUnits = (request, response, next) => {
-    //! first parameter accept any query and find elements achieve this query{ 'address.city': 'Damietta' }
+// Get Units using page number
+module.exports.getUnitsByPage = (request, response, next) => {
     Unit.paginate(
         {},
         {
             page: request.query.page,
-            limit: request.query.limit || 15,
             select: 'estateType images unitInfo isAvailable gender dailyPrice address',
             populate: { path: 'landlordId', select: 'fullName phone image' },
         }
@@ -54,6 +27,8 @@ module.exports.getAllUnits = (request, response, next) => {
                 nextPage: data.nextPage,
                 totalPages: data.totalPages,
                 totalUnits: data.totalDocs,
+                unitsDisplayed: data.docs.length,
+                remained: data.totalDocs - data.docs.length,
                 results: data.docs,
             })
         })
@@ -63,11 +38,10 @@ module.exports.getAllUnits = (request, response, next) => {
 }
 
 // Get Specific Unit By Id
-// ! check if you can select unitInfo as unitInfo:{...unitInfo,isAvailable, isPetsAllowed ,gender} as one object
 module.exports.getUnitById = (request, response, next) => {
     Unit.findOne(
-        { _id: request.params.id }
-        // 'estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice cover images geoLocation'
+        { _id: request.params.id },
+        'estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice cover geoLocation'
     )
         .populate({ path: 'landlordId', select: 'fullName phone image' })
         .then((data) => {
@@ -129,7 +103,6 @@ module.exports.createUnit = (request, response, next) => {
         })
         .catch((error) => next(error))
 }
-
 
 // Update Unit Data
 module.exports.updateUnitData = (request, response, next) => {
@@ -284,17 +257,43 @@ module.exports.deleteUnitImages = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-// ! Adding reviews as a property to unit schema with rating (//TODO Enhancement)
-module.exports.getUnitReviews = (request, response, next) => {
-    Review.find({ unitId: request.params.id }, 'rating comment')
-        .populate({ path: 'unitId', select: 'city estateType address cover' })
-        .populate({ path: 'agentId', select: 'fullName image' })
+// module.exports.getUnitReviews = (request, response, next) => {
+//     Review.find({ unitId: request.params.id }, 'rating comment')
+//         .populate({ path: 'unitId', select: 'city estateType address cover' })
+//         .populate({ path: 'agentId', select: 'fullName image' })
+//         .then((data) => {
+//             console.log(data)
+//             if (data == null) next(new Error("This Unit Haven't Reviews Yet."))
+//             else {
+//                 response.status(200).json(data)
+//             }
+//         })
+//         .catch((error) => {
+//             next(error)
+//         })
+// }
+
+module.exports.getUnitReviewsByPage = (request, response, next) => {
+    Review.paginate(
+        {},
+        {
+            page: request.query.page,
+            // select: '',
+            // populate: {  },
+        }
+    )
         .then((data) => {
             console.log(data)
-            if (data == null) next(new Error("This Unit Haven't Reviews Yet."))
-            else {
-                response.status(200).json(data)
-            }
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalUnitReviews: data.totalDocs,
+                UnitReviewsDisplayed: data.docs.length,
+                remained: data.totalDocs - data.docs.length,
+                results: data.docs,
+            })
         })
         .catch((error) => {
             next(error)
@@ -309,26 +308,6 @@ module.exports.getAllReviews = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-// module.exports.getAllAgents = (request, response, next) => {
-//     Agent.find({})
-//         .then((data) => {
-//             response.status(200).json(data)
-//         })
-//         .catch((error) => next(error))
-// }
-
-// module.exports.getAgentById = (request, response, next) => {
-//     Agent.findOne({ _id: request.params.id })
-//         .then((data) => {
-//             if (data == null) next(new Error("Agent Doesn't Exist"))
-//             else {
-//                 response.status(200).json(data)
-//             }
-//         })
-//         .catch((error) => {
-//             next(error)
-//         })
-// }
 
 // TODO needs enhancement (try,catch to avoid callback hells)
 module.exports.addReview = (request, response, next) => {
