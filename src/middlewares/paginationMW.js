@@ -3,8 +3,7 @@ const paginationResult = (model) => async (request, response, next) => {
     if (!request.query.page && !request.query.limit) {
         try {
             const dataResulted = await model.find()
-
-            response.data = { dataResulted }
+            response.dataResulted = { dataResulted }
             next()
         } catch (error) {
             next(error)
@@ -17,20 +16,18 @@ const paginationResult = (model) => async (request, response, next) => {
         const endIndex = page * limit
         // console.log(`start:${startIndex} end:${endIndex}`)
 
-        const resultingData = {}
+        const dataResulted = {}
         if (endIndex < (await model.countDocuments())) {
-            resultingData.nextPage = parseInt(page) + 1
+            dataResulted.nextPage = parseInt(page) + 1
         }
         if (startIndex > 0) {
-            resultingData.previousPage = page - 1
+            dataResulted.previousPage = page - 1
         }
         try {
-            resultingData.dataResulted = await model
-                .find()
-                .limit(limit)
-                .skip(startIndex)
+            dataResulted.data = await model.find().limit(limit).skip(startIndex)
 
-            response.status(200).json(resultingData)
+            response.dataResulted = { dataResulted }
+
             next()
         } catch (error) {
             next(error)
