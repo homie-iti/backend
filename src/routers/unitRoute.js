@@ -12,18 +12,24 @@ const {
 } = require('../middlewares/unitValidations')
 
 const uploadImage = require('../middlewares/uploadImagesMW')
-const paginationResult = require('../middlewares/paginationMW')
-const unitsModel = require('../models/unitModel')
 
 router
     .route('/units')
-    // .get( paginationResult( unitsModel ), unitController.getAllUnits )
-    .get(unitController.getAllUnits)
+    .get(
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
+        validationMW,
+        unitController.getUnitsByPage
+    )
 
     .post(
         uploadImage('units/unitsImages').fields([
             { name: 'unitCover', maxCount: 1 },
-            { name: 'unitImages', maxCount: 8 },
+            { name: 'unitImages', maxCount: 4 },
         ]),
         addUnitValidations,
         validationMW,
@@ -64,7 +70,7 @@ router
     .post(
         [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
         validationMW,
-        uploadImage('units/unitsImages').array('unitImages', 5),
+        uploadImage('units/unitsImages').array('unitImages', 4),
         unitController.uploadUnitImages
     )
     .delete(
@@ -75,9 +81,16 @@ router
 
 router.get(
     '/units/reviews/:id',
-    [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
+
+    [
+        query('page')
+            .optional()
+            .isNumeric()
+            .withMessage('Page number should number'),
+        param('id').isMongoId().withMessage('Unit Id Must Be ObjectId'),
+    ],
     validationMW,
-    unitController.getUnitReviews
+    unitController.getUnitReviewsByPage
 )
 
 router

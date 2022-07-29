@@ -2,13 +2,22 @@ const express = require('express')
 
 const router = express.Router()
 const { body, param, query } = require('express-validator')
-const validateMW = require('../middlewares/validationMW.js')
+const validateMW = require('../middlewares/validationMW')
 
-const cityController = require('../controllers/cityController.js')
+const cityController = require('../controllers/cityController')
 
 router
     .route('/cities')
-    .get(cityController.getAllCities)
+    .get(
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
+        validateMW,
+        cityController.getCitiesByPage
+    )
     .post(
         [
             body('name')

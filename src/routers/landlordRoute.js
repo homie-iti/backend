@@ -7,7 +7,16 @@ const router = express.Router()
 
 router
     .route('/landlords')
-    .get(landlordController.getAllLandLord)
+    .get(
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
+        validationMW,
+        landlordController.getLandlordsByPage
+    )
     .post(
         [
             body('_id')
