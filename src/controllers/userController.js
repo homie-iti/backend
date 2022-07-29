@@ -48,6 +48,11 @@ module.exports.getAllUsers = (request, response, next) => {
         })
 }
 
+// module.exports.getAllUsers = (request, response, next) => {
+//     console.log(response.dataResulted)
+//     response.status(200).json(response.dataResulted)
+// }
+
 module.exports.getUserById = (request, response, next) => {
     User.findOne({ _id: request.params.id })
         .then((data) => {
