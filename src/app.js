@@ -40,7 +40,7 @@ const { port } = appConfig
 
 let dbURL
 if (appConfig.environment === 'prod' || appConfig.environment === 'testProd')
-    dbURL = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@cluster0.7du11.mongodb.net/${dbConfig.name}?retryWrites=true&w=majority`
+    dbURL = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@${dbConfig.host}/${dbConfig.name}?retryWrites=true&w=majority`
 else dbURL = `mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`
 
 console.log(`NODE_ENV: ${appConfig.environment}`)
