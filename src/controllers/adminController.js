@@ -4,10 +4,36 @@ const Admin = require('../models/adminModel')
 const saltRounds = 10
 
 // Get All Admins
-module.exports.getAllAdmins = (request, response, next) => {
-    Admin.find({})
+// module.exports.getAllAdmins = (request, response, next) => {
+//     Admin.find({})
+//         .then((data) => {
+//             response.status(200).json(data)
+//         })
+//         .catch((error) => {
+//             next(error)
+//         })
+// }
+
+module.exports.getAdminsByPage = (request, response, next) => {
+    Admin.paginate(
+        {},
+        {
+            page: request.query.page,
+            // select: '',
+        }
+    )
         .then((data) => {
-            response.status(200).json(data)
+            console.log(data)
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalAdmins: data.totalDocs,
+                AdminsDisplayed: data.docs.length,
+                remained: data.totalDocs - data.docs.length,
+                results: data.docs,
+            })
         })
         .catch((error) => {
             next(error)
