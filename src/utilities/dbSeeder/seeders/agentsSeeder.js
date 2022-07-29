@@ -16,6 +16,7 @@ async function seedAgent(numberOfDocuments, usersIds, unitsIds) {
 
     const data = []
     const ids = []
+
     for (let i = 0; i < numberOfDocuments; i++) {
         const _id = usersIds[randomIntFromInterval(0, usersIds.length - 1)]
 
@@ -27,7 +28,7 @@ async function seedAgent(numberOfDocuments, usersIds, unitsIds) {
 
         const agentUnitsRandomNumber = randomIntFromInterval(1, 10)
         const agentUnits = []
-        for (let j = 0; i <= agentUnitsRandomNumber; j++) {
+        for (let j = 0; j <= agentUnitsRandomNumber; j++) {
             const selectedUnit =
                 unitsIds[randomIntFromInterval(0, unitsIds.length - 1)]
             const rentingCounter = randomIntFromInterval(1, 5)
