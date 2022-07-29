@@ -1,4 +1,5 @@
 const dotenv = require('dotenv')
+const mongoosePaginate = require('mongoose-paginate-v2')
 
 dotenv.config()
 
@@ -12,4 +13,8 @@ const appConfig = {
     emailPassword: process.env.ORG_EMAIL_PASSWORD,
 }
 
+mongoosePaginate.paginate.options = {
+    lean: false,
+    limit: 15,
+}
 module.exports = appConfig
