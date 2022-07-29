@@ -28,7 +28,12 @@ router
     .route('/contracts')
     //  .get(contractController.getAllContracts)
     .get(
-        [query('page').isNumeric().withMessage('Page number should number')],
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
         validationMW,
         contractController.getContractsByPage
     )

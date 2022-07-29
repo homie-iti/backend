@@ -12,6 +12,7 @@ router
     .get(
         [
             query('page')
+                .optional()
                 .isNumeric()
                 .withMessage('Page number should number'),
         ],

@@ -9,7 +9,12 @@ const cityController = require('../controllers/cityController')
 router
     .route('/cities')
     .get(
-        [query('page').isNumeric().withMessage('Page number should number')],
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
         validateMW,
         cityController.getCitiesByPage
     )
