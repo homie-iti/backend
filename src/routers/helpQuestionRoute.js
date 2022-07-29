@@ -14,7 +14,12 @@ router
     .route('/help-questions')
 
     .get(
-        [query('page').isNumeric().withMessage('Page number should number')],
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
         validationMW,
         helpController.getHelpQuestionsByPage
     )
