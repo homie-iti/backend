@@ -11,6 +11,12 @@ const schema = new mongoose.Schema(
             default: false,
         },
 
+        isAccountActivated: {
+            // for registration process
+            type: Boolean,
+            default: false,
+        },
+
         isAgent: {
             type: Boolean,
             default: false,
@@ -59,7 +65,7 @@ const schema = new mongoose.Schema(
             },
         ],
         resetLink: {
-            data: String,
+            type: String,
             default: '',
         },
     },

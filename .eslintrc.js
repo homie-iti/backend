@@ -8,6 +8,7 @@ module.exports = {
     // ecmaFeatures: {
     //     // env=es6 doesn't include modules, which we are using
     //     modules: true,
+
     // },
     extends: ['airbnb-base', 'eslint:recommended', 'prettier'],
     // parser: '@typescript-eslint/parser',

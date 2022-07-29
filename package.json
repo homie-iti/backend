@@ -4,12 +4,18 @@
     "description": "Homie is an online rental accommodation platform for young professionals and international students who came to Egypt looking for apartment.  \r We allow users to rent a unit as agents and they are also allowed to rent their units as landlords.",
     "main": "./src/app.js",
     "scripts": {
-        "start": "nodemon ./src/app.js",
+        "start": "node ./src/app.js",
+        "start:dev": "set ENV=dev && nodemon ./src/app.js",
         "start:db": "mongod --dbpath \"./db\"",
-        "start:db-seeder": "node ./src/utilities/dbSeeder/index.js",
-        "test": "jasmine",
-        "format": "prettier --write  src/**/*.js",
-        "lint:fix": "eslint src/**/*.js --fix"
+        "start:db-seeder": "set ENV=dev && node ./src/utilities/dbSeeder/index.js",
+        "test:prod": "set ENV=testProd && jasmine",
+        "test:dev": "set ENV=test && jasmine",
+        "format": "npx prettier --write  src/**/*.js",
+        "lint:fix": "eslint src/**/*.js --fix",
+        "clean:cmd": "rmdir /q /s build",
+        "clean:bash": "rm -rf build",
+        "build:cmd": "@powershell copy -r ./src/ ./build/ && @powershell remove-item -r ./build/uploads && @powershell copy ./package.json ./build/package.json && @powershell remove-item ./build/app.js && @powershell copy ./src/app.js ./build/index.js",
+        "build:bash": "cp -r ./src/ ./build/ && rm -r ./build/uploads && cp ./package.json ./build/package.json && rm ./build/app.js && cp ./src/app.js ./build/index.js"
     },
     "author": "",
     "license": "ISC",
@@ -19,9 +25,11 @@
         "cors": "^2.8.5",
         "dotenv": "^16.0.1",
         "express": "^4.18.1",
+        "express-rate-limit": "^6.5.1",
         "express-validator": "^6.14.2",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^6.4.2",
+        "mongoose-paginate-v2": "^1.7.0",
         "morgan": "^1.10.0",
         "multer": "^1.4.5-lts.1",
         "nodemailer": "^6.7.7"
@@ -35,7 +43,8 @@
         "jasmine": "^4.2.1",
         "jasmine-spec-reporter": "^7.0.0",
         "nodemon": "^2.0.18",
-        "prettier": "^2.7.1"
+        "prettier": "^2.7.1",
+        "supertest": "^6.2.4"
     },
     "repository": {
         "type": "git",

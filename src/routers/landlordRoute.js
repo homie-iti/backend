@@ -6,7 +6,7 @@ const landlordController = require('../controllers/landlordController')
 const router = express.Router()
 
 router
-    .route('/landlord')
+    .route('/landlords')
     .get(landlordController.getAllLandLord)
     .post(
         [

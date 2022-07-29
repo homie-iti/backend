@@ -6,14 +6,12 @@ const validationMW = require('../middlewares/validationMW')
 
 const router = express.Router()
 
-router.route('/search/:name').get(
-    [
-        param('name')
-            .matches(/^[A-Za-z\s]+$/)
-            .withMessage('city name should be character'),
-    ],
-    validationMW,
-    search.getCityByName
-)
+router
+    .route('/search')
+    .get(
+        [query('cityname').isAlpha().withMessage('cityname should be string')],
+        validationMW,
+        search.getCityByName
+    )
 
 module.exports = router

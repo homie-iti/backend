@@ -10,7 +10,7 @@ const {
 const helpController = require('../controllers/helpQuestionController')
 
 router
-    .route('/helpQuestion')
+    .route('/help-questions')
 
     .get(helpController.getAllQuestion)
 

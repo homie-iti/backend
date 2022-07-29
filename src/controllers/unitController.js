@@ -10,16 +10,52 @@ const City = require('../models/cityModel')
 const Agent = require('../models/agentModel')
 
 // Get All Units
-module.exports.getAllUnits = (request, response, next) => {
-    Unit.find(
-        {},
-        'estateType images unitInfo isAvailable isPetsAllowed gender dailyPrice address'
-    )
-        .populate({ path: 'landlordId', select: 'fullName phone image' })
-        // .populate({ path: "agentId" })
+// module.exports.getAllUnits = (request, response, next) => {
+//     Unit.find(
+//         {},
+//         'estateType images unitInfo isAvailable isPetsAllowed gender dailyPrice address'
+//     )
+//         .populate({ path: 'landlordId', select: 'fullName phone image' })
+//         // .populate({ path: "agentId" })
+//         .then((data) => {
+//             // console.log(data)
+//             response.status(200).json(data)
+//         })
+//         .catch((error) => {
+//             next(error)
+//         })
+// }
 
+// module.exports.getAllUnits = (request, response, next) => {
+//     // response.dataResulted.populate({
+//     //     path: 'landlordId',
+//     //     select: 'fullName phone image',
+//     // })
+//     console.log(response.dataResulted)
+//     response.status(200).json(response.dataResulted)
+// }
+
+module.exports.getAllUnits = (request, response, next) => {
+    //! first parameter accept any query and find elements achieve this query{ 'address.city': 'Damietta' }
+    Unit.paginate(
+        {},
+        {
+            page: request.query.page,
+            limit: request.query.limit || 15,
+            select: 'estateType images unitInfo isAvailable gender dailyPrice address',
+            populate: { path: 'landlordId', select: 'fullName phone image' },
+        }
+    )
         .then((data) => {
-            response.status(200).json(data)
+            console.log(data)
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalUnits: data.totalDocs,
+                results: data.docs,
+            })
         })
         .catch((error) => {
             next(error)

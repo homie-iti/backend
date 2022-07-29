@@ -1,7 +1,7 @@
 const express = require('express')
 
 const router = express.Router()
-const { body, param, query } = require('express-validator')
+const { param, query } = require('express-validator')
 
 const unitController = require('../controllers/unitController')
 
@@ -12,10 +12,14 @@ const {
 } = require('../middlewares/unitValidations')
 
 const uploadImage = require('../middlewares/uploadImagesMW')
+const paginationResult = require('../middlewares/paginationMW')
+const unitsModel = require('../models/unitModel')
 
 router
     .route('/units')
+    // .get( paginationResult( unitsModel ), unitController.getAllUnits )
     .get(unitController.getAllUnits)
+
     .post(
         uploadImage('units/unitsImages').fields([
             { name: 'unitCover', maxCount: 1 },

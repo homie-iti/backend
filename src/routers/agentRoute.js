@@ -2,74 +2,33 @@ const express = require('express')
 const { body, param, query } = require('express-validator')
 const validationMW = require('../middlewares/validationMW')
 const agentController = require('../controllers/agentController')
+const { authMW, adminOnly, adminAndUser } = require('../middlewares/authMW')
 
 const router = express.Router()
-
+// console.log(authMW);
 router
-    .route('/agent')
-    .get(adminOnly, agentController.getAllAgents)
+    .route('/agents')
+    .get(authMW, adminOnly, agentController.getAllAgents)
     .post(
+        authMW,
         adminOnly,
         [
-            body('id').isMongoId().withMessage('agent id should be MongoId'),
-            body('fullname')
-                .isString()
-                .withMessage('agent name should be characters'),
-            body('age').isNumeric().withMessage('age should be number'),
-            body('password')
-                .isString()
-                .withMessage('agent password should be string'),
-            body('gender')
-                .isString()
-                .withMessage('agent gender should be string'),
-            body('phone')
-                .isNumeric()
-                .withMessage('agent phone should be number'),
-            body('national_id')
-                .isNumeric()
-                .withMessage('agent national ID should be number'),
-            body('image')
-                .isString()
-                .withMessage('agent image should be string'),
-            body('email')
-                .isString()
-                .withMessage('agent email should be string'),
-            body('address')
-                .isObject()
-                .withMessage('agent address should be object'),
+            body('id').isMongoId().withMessage('id should be isMongoId '),
+            body('unitID')
+                .isMongoId()
+                .withMessage('unitID isMongoId should be isMongoId'),
         ],
         validationMW,
         agentController.createAgent
     )
     .put(
+        authMW,
         adminOnly,
         [
-            body('id').isMongoId().withMessage('agent id should be MongoId'),
-            body('fullname')
-                .isString()
-                .withMessage('agent name should be characters'),
-            body('age').isNumeric().withMessage('age should be number'),
-            body('password')
-                .isString()
-                .withMessage('agent password should be string'),
-            body('gender')
-                .isString()
-                .withMessage('agent gender should be string'),
-            body('phone')
-                .isNumeric()
-                .withMessage('agent phone should be number'),
-            body('nationalID')
-                .isNumeric()
-                .withMessage('agent national ID should be number'),
-            body('image')
-                .isString()
-                .withMessage('agent image should be string'),
-            body('email')
-                .isString()
-                .withMessage('agent email should be string'),
-            body('address')
-                .isObject()
-                .withMessage('agent address should be object'),
+            body('id').isMongoId().withMessage('id should be isMongoId '),
+            body('unitID')
+                .isMongoId()
+                .withMessage('unitID isMongoId should be isMongoId'),
         ],
         validationMW,
         agentController.updateAgent
@@ -78,13 +37,15 @@ router
 router
     .route('/agent/:id')
     .get(
-        adminAndOwner,
+        authMW,
+        adminAndUser,
         [param('id').isMongoId().withMessage('agent id should be objectID')],
         validationMW,
         agentController.getAgentByID
     )
     .delete(
-        adminAndOwner,
+        authMW,
+        adminAndUser,
         [param('id').isMongoId().withMessage('agent id should be objectID')],
         validationMW,
         agentController.deleteAgent
@@ -93,18 +54,20 @@ router
 router
     .route('/agent/agentUnits')
     .get(
-        adminAndOwner,
+        authMW,
+        adminOnly,
         [param('id').isMongoId().withMessage('favorite id should be objectID')],
         validationMW,
         agentController.updateAgentUnits
     )
     .put(
-        adminAndOwner,
+        authMW,
+        adminOnly,
         [
             body('id').isMongoId().withMessage('agent id should be MongoId'),
-            body('agentUnits')
-                .isMongoId()
-                .withMessage('agent Units should be MongoId'),
+            // body('agentUnits')
+            //     .isMongoId()
+            //     .withMessage('agent Units should be MongoId'),
         ],
         validationMW,
         agentController.updateAgentUnits
@@ -113,14 +76,16 @@ router
 router
     .route('/agent/agentUnits/:id')
     .get(
-        adminAndOwner,
+        authMW,
+        adminAndUser,
         [param('id').isMongoId().withMessage('favorite id should be objectID')],
         validationMW,
         agentController.updateAgentUnits
     )
 
     .delete(
-        adminAndOwner,
+        authMW,
+        adminAndUser,
         [param('id').isMongoId().withMessage('favorite id should be objectID')],
         validationMW,
         agentController.RemoveAgentUnits

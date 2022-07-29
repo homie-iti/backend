@@ -13,10 +13,6 @@ module.exports.getAllAgents = (request, response, next) => {
             path: 'agentUnits',
             select: {},
         })
-        .populate({
-            path: 'favoriteUnits',
-            select: {},
-        })
         .then((data) => {
             response.status(200).json(data)
         })
@@ -36,10 +32,6 @@ module.exports.getAgentByID = (request, response, next) => {
             path: 'agentUnits',
             select: {},
         })
-        .populate({
-            path: 'favoriteUnits',
-            select: {},
-        })
         .then((data) => {
             if (data == null) next(new Error(' Agent not found'))
             response.status(200).json(data)
@@ -53,17 +45,7 @@ module.exports.getAgentByID = (request, response, next) => {
 module.exports.createAgent = (request, response, next) => {
     const object = new Agent({
         _id: request.body.id,
-        fullName: request.body.fullName,
-        age: request.body.age,
-        email: request.body.email,
-        password: bcrypt.hashSync(request.body.password, saltRounds),
-        phone: request.body.phone,
-        national_id: request.body.national_id,
-        gender: request.body.gender,
-        address: request.body.address,
-        image: request.body.image,
         agentUnits: request.body.agentUnits,
-        favoriteUnits: request.body.favoriteUnits,
     })
     object
         .save()
@@ -118,10 +100,11 @@ module.exports.updateAgentUnits = (request, response, next) => {
 }
 
 // Remove From Agent Units
+
 module.exports.RemoveAgentUnits = (request, response, next) => {
     Agent.updateOne(
         { _id: request.params.id },
-        { $pull: { agentUnits: request.body.agentUnits } }
+        { $pullAll: { agentUnits: request.body.agentUnits } }
     )
         .then((data) => {
             response.status(200).json(data)

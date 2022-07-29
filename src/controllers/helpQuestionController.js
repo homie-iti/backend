@@ -6,11 +6,7 @@ module.exports.getAllQuestion = (request, response, next) => {
             if (data == null) next(new Error(' question not found'))
             response.status(200).json(data)
         })
-        .catch(
-            console.error((error) => {
-                next(error)
-            })
-        )
+        .catch((error) => next(error))
 }
 
 module.exports.getQuestionById = (request, response, next) => {
@@ -35,7 +31,7 @@ module.exports.createQuestion = (request, response, next) => {
 }
 
 module.exports.updateHelpQuestion = (request, response, next) => {
-    const allowed = [ '_id', 'userId', 'adminId', 'question', 'answer' ]
+    const allowed = ['_id', 'userId', 'adminId', 'question', 'answer']
     console.log(allowed)
     const requested = Object.keys(request.body)
     console.log(requested)
