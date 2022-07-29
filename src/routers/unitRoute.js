@@ -13,12 +13,12 @@ const {
 
 const uploadImage = require('../middlewares/uploadImagesMW')
 const paginationResult = require('../middlewares/paginationMW')
-const Units = require('../models/unitModel')
+const unitsModel = require('../models/unitModel')
 
 router
     .route('/units')
-    .get(paginationResult(Units), unitController.getAllUnits)
-    // .get(unitController.getAllUnits)
+    // .get( paginationResult( unitsModel ), unitController.getAllUnits )
+    .get(unitController.getAllUnits)
 
     .post(
         uploadImage('units/unitsImages').fields([
