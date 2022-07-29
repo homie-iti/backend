@@ -1,12 +1,29 @@
 const HelpQuestion = require('../models/helpQuestionModel')
 
-module.exports.getAllQuestion = (request, response, next) => {
-    HelpQuestion.find({})
+module.exports.getHelpQuestionsByPage = (request, response, next) => {
+    HelpQuestion.paginate(
+        {},
+        {
+            page: request.query.page,
+            // select: '',
+        }
+    )
         .then((data) => {
-            if (data == null) next(new Error(' question not found'))
-            response.status(200).json(data)
+            console.log(data)
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalHelpQuestions: data.totalDocs,
+                helpQuestionsDisplayed: data.docs.length,
+                remained: data.totalDocs - data.docs.length,
+                results: data.docs,
+            })
         })
-        .catch((error) => next(error))
+        .catch((error) => {
+            next(error)
+        })
 }
 
 module.exports.getQuestionById = (request, response, next) => {
