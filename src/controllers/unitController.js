@@ -85,18 +85,15 @@ module.exports.getUnitById = (request, response, next) => {
 module.exports.createUnit = (request, response, next) => {
     const { cityId } = request.body
     const { landlordId } = request.body
-    console.log(request.files)
-    console.log(request.files.unitCover)
-    console.log(request.files.unitImages)
-    // TODO gives error when there is no images entered in unit images or unit cover(solve it later|try if condition)
-    const cover = request.files ? request.files.unitCover[0].path : ''
-    const unitImagesArray = request.files.unitImages
-    const UnitImagesPaths = unitImagesArray.map((image) => image.path)
+    const cover = request.files.unitCover ? request.files.unitCover[0].path : ''
+
+    let UnitImagesPaths = []
+    if (request.files.unitImages) {
+        const unitImagesArray = request.files.unitImages
+        UnitImagesPaths = unitImagesArray.map((image) => image.path)
+    }
     console.log(UnitImagesPaths)
-
-    const images = request.files ? UnitImagesPaths : []
-    console.log(request.file, request.files)
-
+    const images = request.files.unitImages ? UnitImagesPaths : []
     const unit = {
         landlordId,
         cityId,
@@ -110,7 +107,6 @@ module.exports.createUnit = (request, response, next) => {
         unitInfo: request.body.unitInfo,
         allowedGender: request.body.allowedGender,
     }
-    // if (request.file && request.file.originalname) console.log(request.file) unit.cover=request.file.path;
     const newUnit = new Unit(unit)
 
     Promise.all([
@@ -133,6 +129,7 @@ module.exports.createUnit = (request, response, next) => {
         })
         .catch((error) => next(error))
 }
+
 
 // Update Unit Data
 module.exports.updateUnitData = (request, response, next) => {
@@ -312,26 +309,26 @@ module.exports.getAllReviews = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-module.exports.getAllAgents = (request, response, next) => {
-    Agent.find({})
-        .then((data) => {
-            response.status(200).json(data)
-        })
-        .catch((error) => next(error))
-}
+// module.exports.getAllAgents = (request, response, next) => {
+//     Agent.find({})
+//         .then((data) => {
+//             response.status(200).json(data)
+//         })
+//         .catch((error) => next(error))
+// }
 
-module.exports.getAgentById = (request, response, next) => {
-    Agent.findOne({ _id: request.params.id })
-        .then((data) => {
-            if (data == null) next(new Error("Agent Doesn't Exist"))
-            else {
-                response.status(200).json(data)
-            }
-        })
-        .catch((error) => {
-            next(error)
-        })
-}
+// module.exports.getAgentById = (request, response, next) => {
+//     Agent.findOne({ _id: request.params.id })
+//         .then((data) => {
+//             if (data == null) next(new Error("Agent Doesn't Exist"))
+//             else {
+//                 response.status(200).json(data)
+//             }
+//         })
+//         .catch((error) => {
+//             next(error)
+//         })
+// }
 
 // TODO needs enhancement (try,catch to avoid callback hells)
 module.exports.addReview = (request, response, next) => {
