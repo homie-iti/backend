@@ -25,9 +25,42 @@ const City = require('../models/cityModel')
 //         })
 // }
 
+// module.exports.getAllUnits = (request, response, next) => {
+//     // response.dataResulted.populate({
+//     //     path: 'landlordId',
+//     //     select: 'fullName phone image',
+//     // })
+//     console.log(response.dataResulted)
+//     response.status(200).json(response.dataResulted)
+// }
+
 module.exports.getAllUnits = (request, response, next) => {
-    response.status(200).json(response.data)
+    //! first parameter accept any query and find elements achieve this query{ 'address.city': 'Damietta' }
+    Unit.paginate(
+        {},
+        {
+            page: request.query.page,
+            limit: request.query.limit || 15,
+            select: 'estateType images unitInfo isAvailable gender dailyPrice address',
+            populate: { path: 'landlordId', select: 'fullName phone image' },
+        }
+    )
+        .then((data) => {
+            console.log(data)
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalUnits: data.totalDocs,
+                results: data.docs,
+            })
+        })
+        .catch((error) => {
+            next(error)
+        })
 }
+
 // Get Specific Unit By Id
 // ! check if you can select unitInfo as unitInfo:{...unitInfo,isAvailable, isPetsAllowed ,gender} as one object
 module.exports.getUnitById = (request, response, next) => {
