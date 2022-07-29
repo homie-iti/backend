@@ -1,12 +1,39 @@
 const Landlord = require('../models/landlordModel')
 
 // Get All landlords
-module.exports.getAllLandLord = (request, response, next) => {
-    Landlord.find({})
-        .populate({ path: '_id' })
-        .populate({ path: 'landlordUnits' })
+// module.exports.getAllLandLord = (request, response, next) => {
+//     Landlord.find({})
+//         .populate({ path: '_id' })
+//         .populate({ path: 'landlordUnits' })
+//         .then((data) => {
+//             response.status(200).json(data)
+//         })
+//         .catch((error) => {
+//             next(error)
+//         })
+// }
+
+module.exports.getLandlordsByPage = (request, response, next) => {
+    Landlord.paginate(
+        {},
+        {
+            page: request.query.page,
+            // select: '',
+            populate: { path: 'landlordUnits _id' },
+        }
+    )
         .then((data) => {
-            response.status(200).json(data)
+            console.log(data)
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalLandlords: data.totalDocs,
+                LandlordsDisplayed: data.docs.length,
+                remained: data.totalDocs - data.docs.length,
+                results: data.docs,
+            })
         })
         .catch((error) => {
             next(error)
@@ -54,7 +81,7 @@ module.exports.updateLandlordUnits = (request, response, next) => {
 module.exports.deleteLandlordById = (request, response, next) => {
     Landlord.deleteOne({ _id: request.params.id })
         .then((data) => {
-            if (data.deletedCount == 0) {
+            if (data.deletedCount === 0) {
                 next(new Error('LandLord is not defined'))
             } else {
                 response.status(200).json(data)
