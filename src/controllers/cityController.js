@@ -6,12 +6,31 @@ const UnitModel = require('../models/unitModel')
 
 // let CityModel = require("../models/unit.model");
 
-module.exports.getAllCities = (request, response, next) => {
-    CityModel.find({})
+module.exports.getCitiesByPage = (request, response, next) => {
+    CityModel.paginate(
+        {},
+        {
+            page: request.query.page,
+            // select: '',
+            // populate: {},
+        }
+    )
         .then((data) => {
-            response.status(200).json(data)
+            console.log(data)
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalCities: data.totalDocs,
+                citiesDisplayed: data.docs.length,
+                remained: data.totalDocs - data.docs.length,
+                results: data.docs,
+            })
         })
-        .catch((error) => next(error))
+        .catch((error) => {
+            next(error)
+        })
 }
 
 module.exports.getCityById = (request, response, next) => {
