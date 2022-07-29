@@ -55,7 +55,10 @@ const addUnitValidations = [
         .isBoolean()
         .withMessage('Pets Allowed or Not-allowed Must Be Added ')
         .optional(),
-    body('cover').isURL().withMessage('Unit Cover must be image url.'),
+    body('cover')
+        .optional()
+        .isURL()
+        .withMessage('Unit Cover must be image url.'),
 ]
 
 const updateUnitValidations = [
