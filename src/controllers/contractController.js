@@ -5,9 +5,7 @@ module.exports.getLandlordContracts = (request, response, next) => {
     Contract.findOne({ landlordId: request.params.id })
         .then((data) => {
             if (data == null) {
-                {
-                    next(new Error('No Contracts For Entered Landlord'))
-                }
+                next(new Error('No Contracts For Entered Landlord'))
             } else {
                 response.status(200).json(data)
             }
@@ -32,19 +30,31 @@ module.exports.getUnitContracts = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-module.exports.getAllContracts = (request, response, next) => {
-    Contract.find({}) // ! discuss with team about data we want to display
-        .populate({
-            path: 'unitId',
-            select: 'cover estateType unitInfo dailyPrice',
-        })
-        .populate({ path: 'agentId', select: 'fullName' })
-        .populate({ path: 'landlordId', select: 'fullName' })
-
+module.exports.getContractsByPage = (request, response, next) => {
+    Contract.paginate(
+        {},
+        {
+            page: request.query.page,
+            // select: '',
+            populate: { path: 'landlordId agentId unitId' },
+        }
+    )
         .then((data) => {
-            response.status(200).json(data)
+            console.log(data)
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalContracts: data.totalDocs,
+                ContractsDisplayed: data.docs.length,
+                remained: data.totalDocs - data.docs.length,
+                results: data.docs,
+            })
         })
-        .catch((error) => next(error))
+        .catch((error) => {
+            next(error)
+        })
 }
 
 module.exports.addContract = (request, response, next) => {
@@ -60,7 +70,7 @@ module.exports.addContract = (request, response, next) => {
 module.exports.deleteUnitContract = (request, resposne, next) => {
     Contract.deleteOne({ unitId: request.params.id })
         .then((data) => {
-            if (data.deletedCount == 0) next(new Error('Contract Not Found'))
+            if (data.deletedCount === 0) next(new Error('Contract Not Found'))
             else {
                 resposne.status(200).json(data)
             }
@@ -73,9 +83,7 @@ module.exports.updateContractData = (request, response, next) => {
         .then((data) => {
             // console.log(data);
             if (data == null) {
-                {
-                    next(new Error('There is No Contract For This Unit'))
-                }
+                next(new Error('There is No Contract For This Unit'))
             } else {
                 const updates = request.body
                 // console.log(updates);
