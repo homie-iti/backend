@@ -1,32 +1,10 @@
 const CityModel = require('../models/cityModel')
 const UnitModel = require('../models/unitModel')
 
-// let CityModel = mongoose.model("cities");
-// let UnitModel = mongoose.model("units");
-
-// let CityModel = require("../models/unit.model");
-
-module.exports.getCitiesByPage = (request, response, next) => {
-    CityModel.paginate(
-        {},
-        {
-            page: request.query.page || 1,
-            // select: '',
-            // populate: {},
-        }
-    )
+module.exports.getAllCities = (request, response, next) => {
+    CityModel.find({})
         .then((data) => {
-            console.log(data)
-            response.status(200).json({
-                currentPage: data.page,
-                previousPage: data.prevPage,
-                nextPage: data.nextPage,
-                totalPages: data.totalPages,
-                totalCities: data.totalDocs,
-                citiesDisplayed: data.docs.length,
-                remained: data.totalDocs - data.docs.length,
-                results: data.docs,
-            })
+            response.status(200).json(data)
         })
         .catch((error) => {
             next(error)
