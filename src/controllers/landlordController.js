@@ -1,8 +1,12 @@
-const Landlord = require('../models/landlordModel')
+const helperFunctions = require('./_HelperFunctions')
+
+const LandlordModel = require('../models/landlordModel')
+const UserModel = require('../models/userModel')
+const UnitModel = require('../models/unitModel')
 
 // Get All landlords
 module.exports.getAllLandLord = (request, response, next) => {
-    Landlord.find({})
+    LandlordModel.find({})
         .populate({ path: '_id' })
         .populate({ path: 'landlordUnits' })
         .then((data) => {
@@ -15,7 +19,7 @@ module.exports.getAllLandLord = (request, response, next) => {
 
 // Get All landlord by Id
 module.exports.getLandLordById = (request, response, next) => {
-    Landlord.findOne({ _id: request.params.id })
+    LandlordModel.findOne({ _id: request.params.id })
         .then((data) => {
             if (data == null) next(new Error(' landlord is not found'))
             response.status(200).json(data)
@@ -27,18 +31,35 @@ module.exports.getLandLordById = (request, response, next) => {
 
 // Add LandLord
 module.exports.CreateLandLord = (request, response, next) => {
-    const object = new Landlord(request.body)
-    object
-        .save()
+    UserModel.exists({ _id: request.body._id })
         .then((data) => {
-            response.status(201).json({ data: 'added' })
+            console.log(data)
+            if (!data)
+                throw new Error(`_id isn't available in users collection`)
+
+            const object = new LandlordModel(request.body)
+            return object.save()
+        })
+        .then((data) =>
+            helperFunctions.updateOneDocument(
+                UserModel,
+                '_id',
+                request.body._id,
+                { isLandlord: true },
+                data
+            )
+        )
+        .then((data) => {
+            response.status(201).json({ data: `added ${data._id}` })
         })
         .catch((error) => next(error))
 }
 
 // Update LandLord Units
 module.exports.updateLandlordUnits = (request, response, next) => {
-    Landlord.findByIdAndUpdate(
+    // TODO shouldn't be used in api
+
+    LandlordModel.findByIdAndUpdate(
         { _id: request.body.id },
         { $addToSet: { landlordUnits: request.body.landlordUnits } }
     )
@@ -52,13 +73,31 @@ module.exports.updateLandlordUnits = (request, response, next) => {
 
 // Delete LandLord By ID
 module.exports.deleteLandlordById = (request, response, next) => {
-    Landlord.deleteOne({ _id: request.params.id })
+    LandlordModel.deleteOne({ _id: request.params.id })
         .then((data) => {
-            if (data.deletedCount == 0) {
+            if (data.deletedCount === 0)
                 next(new Error('LandLord is not defined'))
-            } else {
-                response.status(200).json(data)
-            }
+            return data
+        })
+        .then((data) =>
+            helperFunctions.updateOneDocument(
+                UserModel,
+                '_id',
+                request.params.id,
+                { isLandlord: false },
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByOneValue(
+                UnitModel,
+                'landlordId',
+                request.params.id,
+                data
+            )
+        )
+        .then((data) => {
+            response.status(201).json({ data: `deleted landlord` })
         })
         .catch((error) => {
             next(error)
@@ -67,7 +106,8 @@ module.exports.deleteLandlordById = (request, response, next) => {
 
 // Remove From LandLord Units
 module.exports.RemoveLandlordUnits = (request, response, next) => {
-    Landlord.updateOne(
+    // TODO shouldn't be used in api
+    LandlordModel.updateOne(
         { _id: request.params.id },
         { $pull: { landlordUnits: request.body.landlordUnits } }
     )
