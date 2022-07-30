@@ -4,16 +4,15 @@ const { promisify } = require('util')
 
 const unlinkAsync = promisify(fs.unlink)
 
+const helperFunctions = require('./_HelperFunctions')
+
 const User = require('../models/userModel')
 const Landlord = require('../models/landlordModel')
 const Agent = require('../models/agentModel')
 const HelpQuestion = require('../models/helpQuestionModel')
 const Contract = require('../models/contractModel')
-// const Contract = require('../models/')
 const Review = require('../models/reviewModel')
 const Unit = require('../models/unitModel')
-
-const helperFunctions = require('./_HelperFunctions')
 
 // const agentController = require('./ControlingFunctions')
 // const landlordController = require('../controllers/landlordController')
@@ -145,6 +144,7 @@ module.exports.deleteUser = (request, response, next) => {
             return data
         })
         .then((data) =>
+            // there is one document for each deleted user
             helperFunctions.deleteOneDocument(
                 Agent,
                 '_id',
@@ -153,6 +153,7 @@ module.exports.deleteUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there is one document for each deleted user
             helperFunctions.deleteOneDocument(
                 Landlord,
                 '_id',
@@ -161,6 +162,7 @@ module.exports.deleteUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for each deleted user
             helperFunctions.deleteManyDocumentsByOneValue(
                 HelpQuestion,
                 'userId',
@@ -169,6 +171,7 @@ module.exports.deleteUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for each deleted user
             helperFunctions.deleteManyDocumentsByOneValue(
                 Review,
                 'agentId',
@@ -177,6 +180,7 @@ module.exports.deleteUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for each deleted user
             helperFunctions.deleteManyDocumentsByOneValue(
                 Contract,
                 'agentId',
@@ -193,6 +197,7 @@ module.exports.deleteUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for each deleted user
             helperFunctions.deleteManyDocumentsByOneValue(
                 Unit,
                 'agentId',
@@ -201,6 +206,7 @@ module.exports.deleteUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for each deleted user
             helperFunctions.deleteManyDocumentsByOneValue(
                 Unit,
                 'landlordId',
@@ -222,6 +228,7 @@ module.exports.deleteManyUser = (request, response, next) => {
             return data
         })
         .then((data) =>
+            // there are many documents for many deleted users
             helperFunctions.deleteManyDocumentsByManyValues(
                 Agent,
                 '_id',
@@ -230,6 +237,7 @@ module.exports.deleteManyUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for many deleted users
             helperFunctions.deleteManyDocumentsByManyValues(
                 Landlord,
                 '_id',
@@ -238,6 +246,7 @@ module.exports.deleteManyUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for many deleted users
             helperFunctions.deleteManyDocumentsByManyValues(
                 HelpQuestion,
                 'userId',
@@ -246,6 +255,7 @@ module.exports.deleteManyUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for many deleted users
             helperFunctions.deleteManyDocumentsByManyValues(
                 Review,
                 'agentId',
@@ -254,6 +264,7 @@ module.exports.deleteManyUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for many deleted users
             helperFunctions.deleteManyDocumentsByManyValues(
                 Contract,
                 'agentId',
@@ -262,6 +273,7 @@ module.exports.deleteManyUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for many deleted users
             helperFunctions.deleteManyDocumentsByManyValues(
                 Contract,
                 'landlordId',
@@ -270,6 +282,7 @@ module.exports.deleteManyUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for many deleted users
             helperFunctions.deleteManyDocumentsByManyValues(
                 Unit,
                 'agentId',
@@ -278,6 +291,7 @@ module.exports.deleteManyUser = (request, response, next) => {
             )
         )
         .then((data) =>
+            // there are many documents for many deleted users
             helperFunctions.deleteManyDocumentsByManyValues(
                 Unit,
                 'landlordId',
