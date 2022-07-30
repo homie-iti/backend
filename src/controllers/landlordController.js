@@ -33,7 +33,7 @@ module.exports.getLandLordById = (request, response, next) => {
 module.exports.CreateLandLord = (request, response, next) => {
     UserModel.exists({ _id: request.body._id })
         .then((data) => {
-            console.log(data)
+            // console.log(data)
             if (!data)
                 throw new Error(`_id isn't available in users collection`)
 
