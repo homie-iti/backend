@@ -8,16 +8,7 @@ const cityController = require('../controllers/cityController')
 
 router
     .route('/cities')
-    .get(
-        [
-            query('page')
-                .optional()
-                .isNumeric()
-                .withMessage('Page number should number'),
-        ],
-        validateMW,
-        cityController.getCitiesByPage
-    )
+    .get(cityController.getAllCities)
     .post(
         [
             body('name')
