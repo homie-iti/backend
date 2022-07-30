@@ -1,30 +1,24 @@
-const Contract = require('../models/contractModel')
+const ContractModel = require('../models/contractModel')
+const AgentModel = require('../models/agentModel')
+const LandlordModel = require('../models/landlordModel')
 // let Unit = require("./../models/unitModel");
 
 module.exports.getLandlordContracts = (request, response, next) => {
-    Contract.findOne({ landlordId: request.params.id })
+    ContractModel.findOne({ landlordId: request.params.id })
         .then((data) => {
             if (data == null) {
-                {
-                    next(new Error('No Contracts For Entered Landlord'))
-                }
-            } else {
-                response.status(200).json(data)
+                throw new Error('No Contracts For Entered Landlord')
             }
+            response.status(200).json(data)
         })
         .catch((error) => next(error))
 }
 
 module.exports.getUnitContracts = (request, response, next) => {
-    Contract.findOne({ unitId: request.params.id })
-        // .populate({
-        //   path: "unitId",
-        //   select: " cover estateType unitInfo dailyPrice numberOfResidents ",
-        // })
-        // .populate({ path: "landlordId", select: "fullName" })
+    ContractModel.findOne({ unitId: request.params.id })
         .then((data) => {
             console.log(data)
-            if (data == null) next(new Error("Unit Doesn't Exist"))
+            if (data == null) throw new Error("Unit Doesn't Exist")
             else {
                 response.status(200).json(data)
             }
@@ -33,7 +27,7 @@ module.exports.getUnitContracts = (request, response, next) => {
 }
 
 module.exports.getAllContracts = (request, response, next) => {
-    Contract.find({}) // ! discuss with team about data we want to display
+    ContractModel.find({}) // ! discuss with team about data we want to display
         .populate({
             path: 'unitId',
             select: 'cover estateType unitInfo dailyPrice',
@@ -48,50 +42,59 @@ module.exports.getAllContracts = (request, response, next) => {
 }
 
 module.exports.addContract = (request, response, next) => {
-    const newContract = new Contract(request.body)
-    newContract
-        .save()
+    LandlordModel.exists({ _id: request.body._id })
         .then((data) => {
+            if (!data)
+                throw new Error(`_id isn't available in landlords collection`)
+            return AgentModel.exists({ _id: request.body._id })
+        })
+        .then((data) => {
+            // console.log(data)
+            if (!data)
+                throw new Error(`_id isn't available in agents collection`)
+
+            const newContract = new ContractModel(request.body)
+            return newContract.save()
+        })
+
+        .then((data) => {
+            response.status(201).json({ data: `added ${data._id}` })
+        })
+
+        .catch((error) => next(error))
+}
+
+module.exports.deleteUnitContract = (request, response, next) => {
+    ContractModel.deleteOne({ unitId: request.params.id })
+        .then((data) => {
+            if (data.deletedCount === 0) throw new Error('id Not Found')
             response.status(200).json(data)
         })
         .catch((error) => next(error))
 }
 
-module.exports.deleteUnitContract = (request, resposne, next) => {
-    Contract.deleteOne({ unitId: request.params.id })
-        .then((data) => {
-            if (data.deletedCount == 0) next(new Error('Contract Not Found'))
-            else {
-                resposne.status(200).json(data)
-            }
-        })
-        .catch((error) => next(error))
-}
-
 module.exports.updateContractData = (request, response, next) => {
-    Contract.findOne({ unitId: request.body.id })
+    // TODO shouldn't be available in api
+    // FIX this update
+    ContractModel.findOne({ unitId: request.body.id })
         .then((data) => {
             // console.log(data);
-            if (data == null) {
-                {
-                    next(new Error('There is No Contract For This Unit'))
-                }
-            } else {
-                const updates = request.body
-                // console.log(updates);
-                for (const property in updates) {
-                    data[property] = updates[property] || data[property]
-                    if (property in data === false) {
-                        console.log(property, updates[property])
-                        data.property = updates[property]
-                        console.log(data)
-                    }
-                }
-                data.save().then((data) => {
+            if (!data) throw new Error('There is No contract For This Unit')
+
+            const updates = request.body
+            // console.log(updates);
+            for (const property in updates) {
+                data[property] = updates[property] || data[property]
+                if (property in data === false) {
+                    console.log(property, updates[property])
+                    data.property = updates[property]
                     console.log(data)
-                    response.status(201).json({ data: 'Unit Data Updated' })
-                })
+                }
             }
+            data.save().then((data) => {
+                console.log(data)
+                response.status(201).json({ data: 'Unit Data Updated' })
+            })
         })
         .catch((error) => next(error))
 }
