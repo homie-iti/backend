@@ -1,8 +1,8 @@
 const { body } = require('express-validator')
 
 const addUnitValidations = [
-    body('landlordId').isMongoId().withMessage('Unit Id Must Be ObjectId'),
-    body('cityId').isMongoId().withMessage('Unit Id Must Be ObjectId'),
+    body('landlordId').isMongoId().withMessage('landlordId Must Be ObjectId'),
+    body('cityId').isMongoId().withMessage('cityId Must Be ObjectId'),
     body('estateType')
         .isIn(['studio', 'shared-room', 'single-room', 'apartment'])
         .withMessage(
