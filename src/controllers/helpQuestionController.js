@@ -10,6 +10,7 @@ module.exports.getHelpQuestionsByPage = (request, response, next) => {
     )
         .then((data) => {
             console.log(data)
+            if (data == null) throw new Error(' question not found')
             response.status(200).json({
                 currentPage: data.page,
                 previousPage: data.prevPage,
@@ -29,7 +30,7 @@ module.exports.getHelpQuestionsByPage = (request, response, next) => {
 module.exports.getQuestionById = (request, response, next) => {
     HelpQuestion.findOne({ _id: request.params.id })
         .then((data) => {
-            if (data == null) next(new Error(' question not found'))
+            if (data == null) throw new Error(' question not found')
             response.status(200).json(data)
         })
         .catch((error) => {
@@ -38,9 +39,18 @@ module.exports.getQuestionById = (request, response, next) => {
 }
 
 module.exports.createQuestion = (request, response, next) => {
-    const object = new HelpQuestion(request.body)
-    object
-        .save()
+    UserModel.exists({ _id: request.body.userId })
+        .then((data) => {
+            if (!data)
+                throw new Error(`userId isn't available in users collection`)
+            return AdminModel.exists({ _id: request.body.adminId })
+        })
+        .then((data) => {
+            if (!data)
+                throw new Error(`adminId isn't available in users collection`)
+            const object = new HelpQuestion(request.body)
+            return object.save()
+        })
         .then((data) => {
             response.status(201).json({ data: 'added' })
         })
@@ -48,24 +58,40 @@ module.exports.createQuestion = (request, response, next) => {
 }
 
 module.exports.updateHelpQuestion = (request, response, next) => {
-    const allowed = ['_id', 'userId', 'adminId', 'question', 'answer']
-    console.log(allowed)
+    // TODO move validations to the router
+    const allowed = ['userId', 'adminId', 'question', 'answer']
+    // console.log(allowed)
     const requested = Object.keys(request.body)
-    console.log(requested)
+    // console.log(requested)
     const isValidUpdates = requested.every((i) => allowed.includes(i))
-    console.log(isValidUpdates)
+    // console.log(isValidUpdates)
     if (!isValidUpdates) {
-        next(new Error('Question not allowed'))
+        throw new Error('Question not allowed')
     } else {
-        const newHelpQuestion = request.body
-        HelpQuestion.findOneAndUpdate(
-            { _id: request.body._id },
-            { $set: newHelpQuestion },
-            { new: false, runValidators: true }
-        )
+        // if (!Object.keys(request.body).includes('adminId'))
+        UserModel.exists({ _id: request.body.userId })
+            .then((data) => {
+                if (!data)
+                    throw new Error(
+                        `userId isn't available in users collection`
+                    )
+                return AdminModel.exists({ _id: request.body.adminId })
+            })
+            .then((data) => {
+                if (!data)
+                    throw new Error(
+                        `adminId isn't available in users collection`
+                    )
+                const newHelpQuestion = request.body
+                return HelpQuestion.findOneAndUpdate(
+                    { _id: request.body._id },
+                    { $set: newHelpQuestion },
+                    { new: false, runValidators: true }
+                )
+            })
             .then((data) => {
                 if (!data) {
-                    next(new Error('Question not found'))
+                    throw new Error('Question not found')
                 } else {
                     response.status(200).json('updated')
                 }
@@ -77,8 +103,8 @@ module.exports.updateHelpQuestion = (request, response, next) => {
 module.exports.deleteQuestion = (request, response, next) => {
     HelpQuestion.deleteOne({ _id: request.body._id })
         .then((data) => {
-            if (data.deletedCount == 0) {
-                next(new Error('QuestionID not found'))
+            if (data.deletedCount === 0) {
+                throw new Error('QuestionID not found')
             } else {
                 response.status(200).json(data)
             }
@@ -92,11 +118,9 @@ module.exports.deleteManyQuestion = (request, response, next) => {
         .then((data) => {
             response.status(200).json({ data: 'deleted' })
         })
-        .catch(
-            console.error((error) => {
-                next(error)
-            })
-        )
+        .catch((error) => {
+            next(error)
+        })
 }
 
 // module.exports.deleteAllQuestion=(request,response,next)=>{
