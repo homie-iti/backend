@@ -1,12 +1,9 @@
-const mongoose = require('mongoose')
 const fs = require('fs')
 const { promisify } = require('util')
 
 const unlinkAsync = promisify(fs.unlink)
 
 const User = require('../models/userModel')
-const Landlord = require('../models/landlordModel')
-const Agent = require('../models/agentModel')
 
 // const EmailClient = require('../utilities/sendEmail')
 
@@ -24,34 +21,52 @@ const Agent = require('../models/agentModel')
 // }
 
 // module.exports.getAllUsers = (request, response, next) => {
-//   response.status(200).json();
-// };
+//     User.find({})
+//         .then((data) => {
+//             if (data == null) next(new Error('User not Found'))
+//             // if (data.isLandlord == true) {
+//             //   Landlord.findone({ _id: request.params.id }).populate({ path: "isLandlord", select: { _id: 0, landlordUnits: 1 } })
+//             // }
+//             // if (data.isAgent) {
+//             //   Agent.findone({ _id: request.body.id }).populate({ path: "isAgent", select: { _id: 0, agentUnits: 1 } })
+//             // }
+//             // else if (data.isLandlord == true && data.isAgent == true) {
+//             //   Agent.findone({ _id: request.body.id }).populate({ path: "isAgent", select: { _id: 0, agentUnits: 1 } })
+//             //   Landlord.findone({ _id: request.body.id }).populate({ path: "isLandlord", select: { _id: 0, landlordUnits: 1 } })
+//             // }
+//             response.status(200).json(data)
+//         })
+//         .catch((error) => {
+//             next(error)
+//         })
+// }
 
-module.exports.getAllUsers = (request, response, next) => {
-    User.find({})
+module.exports.getUsersByPage = (request, response, next) => {
+    User.paginate(
+        {},
+        {
+            page: request.query.page || 1,
+            // select: '',
+            // populate: {},
+        }
+    )
         .then((data) => {
-            if (data == null) next(new Error('User not Found'))
-            // if (data.isLandlord == true) {
-            //   Landlord.findone({ _id: request.params.id }).populate({ path: "isLandlord", select: { _id: 0, landlordUnits: 1 } })
-            // }
-            // if (data.isAgent) {
-            //   Agent.findone({ _id: request.body.id }).populate({ path: "isAgent", select: { _id: 0, agentUnits: 1 } })
-            // }
-            // else if (data.isLandlord == true && data.isAgent == true) {
-            //   Agent.findone({ _id: request.body.id }).populate({ path: "isAgent", select: { _id: 0, agentUnits: 1 } })
-            //   Landlord.findone({ _id: request.body.id }).populate({ path: "isLandlord", select: { _id: 0, landlordUnits: 1 } })
-            // }
-            response.status(200).json(data)
+            console.log(data)
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalUsers: data.totalDocs,
+                usersDisplayed: data.docs.length,
+                remained: data.totalDocs - data.docs.length,
+                results: data.docs,
+            })
         })
         .catch((error) => {
             next(error)
         })
 }
-
-// module.exports.getAllUsers = (request, response, next) => {
-//     console.log(response.dataResulted)
-//     response.status(200).json(response.dataResulted)
-// }
 
 module.exports.getUserById = (request, response, next) => {
     User.findOne({ _id: request.params.id })

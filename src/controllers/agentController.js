@@ -3,24 +3,50 @@ const Agent = require('../models/agentModel')
 
 const saltRounds = 10
 // Get All Agents
-module.exports.getAllAgents = (request, response, next) => {
-    Agent.find({})
-        .populate({
-            path: '_id',
-            select: {},
-        })
-        .populate({
-            path: 'agentUnits',
-            select: {},
-        })
+// module.exports.getAllAgents = (request, response, next) => {
+//     Agent.find({})
+//         .populate({
+//             path: '_id',
+//             select: {},
+//         })
+//         .populate({
+//             path: 'agentUnits',
+//             select: {},
+//         })
+//         .then((data) => {
+//             response.status(200).json(data)
+//         })
+//         .catch((error) => {
+//             next(error)
+//         })
+// }
+
+module.exports.getAgentsByPage = (request, response, next) => {
+    Agent.paginate(
+        {},
+        {
+            page: request.query.page || 1,
+            // select: '',
+            populate: { path: 'agentUnits _id' },
+        }
+    )
         .then((data) => {
-            response.status(200).json(data)
+            console.log(data)
+            response.status(200).json({
+                currentPage: data.page,
+                previousPage: data.prevPage,
+                nextPage: data.nextPage,
+                totalPages: data.totalPages,
+                totalAgents: data.totalDocs,
+                agentsDisplayed: data.docs.length,
+                remained: data.totalDocs - data.docs.length,
+                results: data.docs,
+            })
         })
         .catch((error) => {
             next(error)
         })
 }
-
 // Get Agent By ID
 module.exports.getAgentByID = (request, response, next) => {
     Agent.findOne({ _id: request.params.id })

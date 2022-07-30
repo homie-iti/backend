@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-// const addressSchema = require("../Model/address.model");
+const mongoosePaginate = require('mongoose-paginate-v2')
+
 const schema = new mongoose.Schema(
     {
         _id: mongoose.Types.ObjectId,
@@ -49,4 +50,6 @@ const schema = new mongoose.Schema(
     },
     { timestamps: true }
 )
+
+schema.plugin(mongoosePaginate)
 module.exports = mongoose.model('contracts', schema)

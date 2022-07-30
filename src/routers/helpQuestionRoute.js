@@ -1,4 +1,5 @@
 const express = require('express')
+const { query } = require('express-validator')
 
 const router = express.Router()
 const validationMW = require('../middlewares/validationMW')
@@ -12,7 +13,16 @@ const helpController = require('../controllers/helpQuestionController')
 router
     .route('/help-questions')
 
-    .get(helpController.getAllQuestion)
+    .get(
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
+        validationMW,
+        helpController.getHelpQuestionsByPage
+    )
 
     .post(
         helpQuestionPostValidation,

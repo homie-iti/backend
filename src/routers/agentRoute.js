@@ -8,7 +8,17 @@ const router = express.Router()
 // console.log(authMW);
 router
     .route('/agents')
-    .get(authMW, adminOnly, agentController.getAllAgents)
+    // .get(authMW, adminOnly, agentController.getAllAgents)
+    .get(
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
+        validationMW,
+        agentController.getAgentsByPage
+    )
     .post(
         authMW,
         adminOnly,

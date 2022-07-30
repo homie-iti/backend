@@ -15,6 +15,6 @@ const appConfig = {
 
 mongoosePaginate.paginate.options = {
     lean: false,
-    limit: 15,
+    limit: 30,
 }
 module.exports = appConfig

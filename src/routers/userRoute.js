@@ -1,6 +1,7 @@
 const express = require('express')
 
 const router = express.Router()
+const { query } = require('express-validator')
 
 const validationMW = require('../middlewares/validationMW')
 const {
@@ -15,9 +16,19 @@ const upload = require('../middlewares/uploadImagesMW')
 router
     .route('/users')
 
-    .get(userController.getAllUsers)
+    // .get(userController.getAllUsers)
     // .get(paginationResult(usersModel), userController.getAllUsers)
 
+    .get(
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
+        validationMW,
+        userController.getUsersByPage
+    )
     .post(
         userPostValidation,
         validationMW,

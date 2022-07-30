@@ -26,7 +26,17 @@ router.get(
 
 router
     .route('/contracts')
-    .get(contractController.getAllContracts)
+    //  .get(contractController.getAllContracts)
+    .get(
+        [
+            query('page')
+                .optional()
+                .isNumeric()
+                .withMessage('Page number should number'),
+        ],
+        validationMW,
+        contractController.getContractsByPage
+    )
     .post(
         createContractValidations,
         validationMW,
