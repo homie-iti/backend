@@ -142,14 +142,7 @@
                 "tags": [
                     "Cities"
                 ],
-                "summary": "Get array of city objects containing cities that exist on the given page with limit 30 city.",
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number that we want to display cities exist on it"
-                    }
-                ],
+                "summary": "Get an array of city objects containing all cities that exist in the database.",
                 "responses": {
                     "200": {
                         "description": "OK",
