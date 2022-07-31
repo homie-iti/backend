@@ -116,28 +116,28 @@ describe('POST -> /cities', () => {
 //     // })
 // })
 
-describe('UPDATE -> /cities/:id', () => {
-    const id = '62e6bc5b05d77664fa872728'
+// describe('UPDATE -> /cities/:id', () => {
+//     const id = '62e6bc5b05d77664fa872728'
 
-    const updatedProperty = {
-        name: 'Damietta',
-    }
+//     const updatedProperty = {
+//         name: 'Damietta',
+//     }
 
-    beforeAll(() => {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
-    })
+//     beforeAll(() => {
+//         jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
+//     })
 
-    // it('expected to send objectId of city to update ', async () => {
-    //     expect(cityId.id).toBeTruthy()
-    // })
+//     it('expected to send objectId of city to update ', async () => {
+//         expect(cityId.id).toBeTruthy()
+//     })
 
-    it('expected to send valid objectId ', async () => {
-        const result = await request.put(`/cities/${id}`)
-        expect(true).toBe(isValidObjectId(id))
-        console.log(result)
-    })
+//     it('expected to send valid objectId ', async () => {
+//         const result = await request.put(`/cities/${id}`)
+//         expect(true).toBe(isValidObjectId(id))
+//         console.log(result)
+//     })
 
-    // afterAll(async () => {
-    //     await mongoose.connection.db.dropCollection('cities')
-    // })
-})
+//     afterAll(async () => {
+//         await mongoose.connection.db.dropCollection('cities')
+//     })
+// })
