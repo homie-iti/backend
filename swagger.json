@@ -2,12 +2,36 @@
     "swagger": "2.0",
     "info": {
         "version": "1.0.0",
-        "title": "Our Homie Project API Documentation",
+        "title": "Homie API Documentation",
         "description": "Our Homie Project Application API",
         "license": {
             "name": "MIT",
             "url": "https://opensource.org/licenses/MIT"
-        }
+        },
+        "contact": {
+            "name": "Homie Website",
+            "url": "https://homie-iti.vercel.app/",
+            "email": "process.env.ORG_EMAIL"
+        },
+        "servers": [
+            {
+                "url": "https://localhost:8080",
+                "description": "Local server"
+            },
+            {
+                "url": "http://homie-iti.herokuapp.com/",
+                "description": "Development server"
+            }
+        ],
+        "schemes": [
+            "http"
+        ],
+        "consumes": [
+            "application/json"
+        ],
+        "produces": [
+            "application/json"
+        ]
     },
     "host": "localhost:8080",
     "basePath": "/",
@@ -15,15 +39,487 @@
         {
             "name": "Units",
             "description": "API for units in the system"
+        },
+        {
+            "name": "Cities",
+            "description": "API for cities in the system"
         }
     ],
-    "schemes": [
-        "http"
-    ],
-    "consumes": [
-        "application/json"
-    ],
-    "produces": [
-        "application/json"
-    ]
+    "paths": {
+        "/units": {
+            "get": {
+                "tags": [
+                    "Units"
+                ],
+                "summary": "Get array of unit objects containing units that exist on the given page with limit 30 unit",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to display units exist on it"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success,",
+                        "schema": {
+                            "type": "array",
+                            "$ref": "#/definitions/Unit"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Units"
+                ],
+                "summary": "Adding new unit",
+                "parameters": [
+                    {
+                        "name": "unit",
+                        "in": "formData",
+                        "description": "Unit data that we want to add",
+                        "schema": {
+                            "$ref": "#/definitions/Unit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New unit is added",
+                        "schema": {
+                            "$ref": "#/definitions/Unit"
+                        }
+                    }
+                }
+            }
+        },
+        "/units/{id}": {
+            "get": {
+                "tags": [
+                    "Units"
+                ],
+                "summary": "Get unit data that matches the given id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of unit that we want to find",
+                        "type": "objectId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success,Specific unit data",
+                        "schema": {
+                            "$ref": "#/definitions/Unit"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Units"
+                ],
+                "summary": "Delete unit data that matches the given id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of unit that we want to delete",
+                        "type": "objectId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success,Unit deleted successfully"
+                    }
+                }
+            }
+        },
+        "/cities": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Get an array of city objects containing all cities that exist in the database.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/City"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Adding new city to cities collection & return the id of added city",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "body",
+                        "description": "City data that we want to add",
+                        "schema": {
+                            "$ref": "#/definitions/City"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New city is added",
+                        "schema": {
+                            "$ref": "#/definitions/City"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Delete city data that matches the given id",
+                "parameters": [
+                    {
+                        "name": "cityId",
+                        "in": "body",
+                        "description": "cityId that we want to delete",
+                        "schema": {
+                            "type": "objectId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "City with given id has been deleted"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/cities/{id}": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Get city data that match the given id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of city that we want to find",
+                        "type": "objectId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/City"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Update specific city data by given its id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City data that we want to add",
+                        "type": "objectId"
+                    },
+                    {
+                        "name": "new properties to update",
+                        "in": "body",
+                        "description": "City data that we want to update",
+                        "schema": {
+                            "$ref": "#/definitions/updateCity"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "City with given id has been updated"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/cities/{id}/units": {
+            "post": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Adding a unit or more than a unit to a specific city with a given id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of city that we want to add new unit to it",
+                        "type": "objectId"
+                    },
+                    {
+                        "name": "units",
+                        "in": "body",
+                        "description": "units that we want to add to the city.",
+                        "type": [
+                            "objectId"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/City"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Deleting a unit or more than a unit from a specific city with a given id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of city that we want to delete unit from it",
+                        "type": "objectId"
+                    },
+                    {
+                        "name": "units",
+                        "in": "body",
+                        "description": "units that we want to delete from the city.",
+                        "type": [
+                            "objectId"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/cities/{id}/{prop}": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Get specific city units",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of city that we want to get its units",
+                        "type": "objectId"
+                    },
+                    {
+                        "name": "prop",
+                        "in": "path",
+                        "description": "Property that we wants to get specific city by it.",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "description": "[units ids exist in the city]"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/search": {
+            "get": {
+                "tags": [
+                    "Search Cities"
+                ],
+                "summary": "Get cities that matches the entered string.",
+                "parameters": [
+                    {
+                        "name": "cityname",
+                        "in": "query",
+                        "description": "Letter or letters of city that we search about"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/City"
+                        }
+                    }
+                }
+            }
+        },
+        "/recommendations": {
+            "get": {
+                "tags": [
+                    "Recommendations"
+                ],
+                "summary": "Get cities that matches the entered string.",
+                "parameters": [
+                    {
+                        "name": "citiesNumber",
+                        "in": "query",
+                        "description": "Number of cities we want to display"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Unit": {
+            "required": [
+                "landlordId",
+                "cityId",
+                "estateType",
+                "dailyPrice",
+                "cover",
+                "numberOfResidents",
+                "unitInfo",
+                "allowedGender"
+            ],
+            "properties": {
+                "landlordId": {
+                    "type": "objectId"
+                },
+                "cityId": {
+                    "type": "objectId"
+                },
+                "unitInfo": {
+                    "type": "object",
+                    "properties": {
+                        "description": {
+                            "type": "string"
+                        },
+                        "rooms": {
+                            "type": "number"
+                        },
+                        "bathrooms": {
+                            "type": "number"
+                        },
+                        "floor": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "address": {
+                    "type": "object",
+                    "city": {
+                        "description": {
+                            "type": "string"
+                        },
+                        "streetName": {
+                            "type": "number"
+                        },
+                        "buildingNumber": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "estateType": {
+                    "type": "string"
+                },
+                "isAvailable": {
+                    "type": "boolean"
+                },
+                "isPetsAllowed": {
+                    "type": "boolean"
+                },
+                "numberOfResidents": {
+                    "type": "number"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "City": {
+            "required": [
+                "name",
+                "units"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "cover": {
+                    "type": "string"
+                },
+                "units": {
+                    "type": "array",
+                    "items": {
+                        "type": "objectId"
+                    }
+                }
+            }
+        },
+        "updateCity": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "cover": {
+                    "type": "string"
+                },
+                "units": {
+                    "type": "array",
+                    "items": {
+                        "type": "objectId"
+                    }
+                }
+            }
+        }
+    }
 }
