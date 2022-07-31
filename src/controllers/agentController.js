@@ -9,7 +9,6 @@ let Unit = mongoose.model("units");
 
 const saltRounds = 10
 // Get All Agents
-<<<<<<< HEAD
 // module.exports.getAllAgents = (request, response, next) => {
 //     Agent.find({})
 //         .populate({
@@ -54,30 +53,6 @@ module.exports.getAgentsByPage = (request, response, next) => {
             next(error)
         })
 }
-=======
-module.exports.getAllAgents = (request, response, next) => {
-  Agent.find({})
-    .populate({
-      path: "_id",
-      select: {},
-    })
-    .populate({
-      path: "agentUnits.unitId",
-      select: {},
-    })
-    // .populate({
-    //   path: "favoriteUnits",
-    //   select: {},
-    // })
-    .then((data) => {
-      response.status(200).json(data);
-    })
-    .catch((error) => {
-      next(error);
-    });
-};
-
->>>>>>> origin/rad-AgentUpdates
 // Get Agent By ID
 module.exports.getAgentByID = (request, response, next) => {
   Agent.findOne({ _id: request.params.id })
