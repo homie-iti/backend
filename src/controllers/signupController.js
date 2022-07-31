@@ -10,19 +10,15 @@ const EmailClient = require('../utilities/sendEmail')
 
 const emailNotifier = new EmailClient()
 function notifyUser(event, userInfo) {
-    console.log(userInfo)
+    // console.log(userInfo)
     const configs = {
         slug: userInfo._id,
         name: userInfo.fullName,
         email: userInfo.email,
     }
-    return emailNotifier.sendMessage(event, configs).then((msgState) => {
-        console.log(msgState)
-        return {
-            ...userInfo._doc,
-            isEmailSent: msgState,
-        }
-    })
+    return emailNotifier
+        .sendMessage(event, configs)
+        .then((msgState) => ({ ...userInfo._doc, isEmailSent: msgState }))
 }
 
 module.exports.checkAvailability = (request, response, next) => {
@@ -36,12 +32,8 @@ module.exports.checkAvailability = (request, response, next) => {
         // console.log(filterObj)
         return filterObj
     })()
-        .then((filterObj) => {
-            console.log(filterObj)
-            return User.exists(filterObj)
-        })
+        .then((filterObj) => User.exists(filterObj))
         .then((data) => {
-            console.log(data)
             response.status(200).json({ isAvailable: !data })
         })
         .catch((error) => {
