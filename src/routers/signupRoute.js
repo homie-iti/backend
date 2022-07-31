@@ -10,10 +10,10 @@ const router = express.Router()
 router.route('/signup/check-availability').post(
     [
         body().custom((value, { req, loc, path }) => {
-            console.log(value)
+            // console.log(value)
 
             const bodyKeysArr = Object.keys(value)
-            console.log(bodyKeysArr)
+            // console.log(bodyKeysArr)
             let errMessage
 
             if (bodyKeysArr.length === 0)
