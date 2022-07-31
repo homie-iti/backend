@@ -50,24 +50,31 @@ const userPostValidation = [
 const userUpdateValidation = [
     // body("id").isMongoId().withMessage("user id should be a number"),
     body('fullName')
+        .optional()
         .isAlpha('en-US', { ignore: ' ' })
         .withMessage('user name should be characters'),
-    body('age').isNumeric({ min: 18 }).withMessage('user age is not valid'),
+    body('age')
+        .isNumeric({ min: 18 })
+        .withMessage('user age is not valid')
+        .optional(),
     body('gender')
         .isIn(['male', 'female'])
-        .withMessage('user gender is not valid'),
+        .withMessage('user gender is not valid')
+        .optional(),
     body('address')
         .optional()
         .isObject()
         .withMessage('user address is not valid'),
-    body('email').isEmail().withMessage('user email is not valid'),
+    body('email').isEmail().withMessage('user email is not valid').optional(),
     body('phone')
         .isAlphanumeric()
-        .withMessage('userPhone should be characters'),
+        .withMessage('userPhone should be characters')
+        .optional(),
     body('password')
         .isString({ min: 8 })
         .isLength({ min: 8 })
-        .withMessage('password cannot be less than 8 characters'),
+        .withMessage('password cannot be less than 8 characters')
+        .optional(),
     //  body("national_id ").isNumeric().withMessage("user national_id  is not valid"),
     body('address.city')
         .optional()
