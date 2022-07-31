@@ -22,23 +22,35 @@ router
     .post(
         [
             body('id').isMongoId().withMessage('id should be isMongoId '),
-            body('unitID')
-                .isMongoId()
-                .withMessage('unitID isMongoId should be isMongoId'),
+            // body('unitID')
+            //     .isMongoId()
+            //     .withMessage('unitID isMongoId should be isMongoId'),
         ],
         validationMW,
         agentController.createAgent
     )
-    .put(
-        [
-            body('id').isMongoId().withMessage('id should be isMongoId '),
-            body('unitID')
-                .isMongoId()
-                .withMessage('unitID isMongoId should be isMongoId'),
-        ],
-        validationMW,
-        agentController.updateAgent
-    )
+    // .put(
+    //     [
+    //         body('id').isMongoId().withMessage('id should be isMongoId '),
+    //         body('unitID')
+    //             .isMongoId()
+    //             .withMessage('unitID isMongoId should be isMongoId'),
+    //     ],
+    //     validationMW,
+    //     agentController.updateAgent
+    // )
+    // .put(
+    //     authMW,
+    //     adminOnly,
+    //     [
+    //         body('id').isMongoId().withMessage('id should be isMongoId '),
+    //         body('unitID')
+    //             .isMongoId()
+    //             .withMessage('unitID isMongoId should be isMongoId'),
+    //     ],
+    //     validationMW,
+    //     agentController.updateAgent
+    // )
 
 router
     .route('/agents/:id')
