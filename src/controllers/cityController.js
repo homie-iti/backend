@@ -55,14 +55,16 @@ exports.getCityProperty = async (request, response, next) => {
 
     CityModel.findOne({ _id: cityId }, { _id: 0, [prop]: 1 })
         .then((data) => {
+            if (!data) throw new Error('City not found')
+
             console.log(data, prop)
             if (prop === 'units') {
                 data.populate({
                     path: 'units',
                     select: { dailyPrice: 1, estateType: 1, images: 1 },
                 })
-                response.status(200).json(data)
             }
+            response.status(200).json(data)
             console.log(data)
 
             if (data == null) next(new Error('City not found'))
