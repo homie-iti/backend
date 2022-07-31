@@ -43,6 +43,10 @@
         {
             "name": "Cities",
             "description": "API for cities in the system"
+        },
+        {
+            "name": "Users",
+            "description": "API for users in the system"
         }
     ],
     "paths": {
@@ -222,7 +226,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/City"
+                            "$ref": "#/definitions/getCityById"
                         }
                     },
                     "500": {
@@ -371,6 +375,86 @@
                 }
             }
         },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get array of users objects containing users that exist on the given page with limit 30 unit",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to display users exist on it"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Adding a new user to users' collection & returning the data of the added user",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User data that we want to add",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New city is added",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete city data that matches the given id",
+                "parameters": [
+                    {
+                        "name": "cityId",
+                        "in": "body",
+                        "description": "cityId that we want to delete",
+                        "schema": {
+                            "type": "objectId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "City with given id has been deleted"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
         "/search": {
             "get": {
                 "tags": [
@@ -413,6 +497,32 @@
                     }
                 }
             }
+        },
+        "/signup": {
+            "post": {
+                "tags": [
+                    "Sign Up"
+                ],
+                "summary": "Users sign up",
+                "parameters": [
+                    {
+                        "name": "User Data",
+                        "in": "body",
+                        "description": "User Data used to sign up",
+                        "schema": {
+                            "$ref": "#/definitions/UserSignUp"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -425,7 +535,10 @@
                 "cover",
                 "numberOfResidents",
                 "unitInfo",
-                "allowedGender"
+                "allowedGender",
+                "unitInfo",
+                "address",
+                "isAvailable"
             ],
             "properties": {
                 "landlordId": {
@@ -477,6 +590,12 @@
                 "numberOfResidents": {
                     "type": "number"
                 },
+                "dailyPrice": {
+                    "type": "number"
+                },
+                "cover": {
+                    "type": "string"
+                },
                 "images": {
                     "type": "array",
                     "items": {
@@ -492,7 +611,8 @@
             ],
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "required": true
                 },
                 "cover": {
                     "type": "string"
@@ -518,6 +638,128 @@
                     "items": {
                         "type": "objectId"
                     }
+                }
+            }
+        },
+        "getCityById": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "cover": {
+                    "type": "string"
+                },
+                "units": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Unit"
+                    }
+                }
+            }
+        },
+        "User": {
+            "required": [
+                "fullName",
+                "age",
+                "email",
+                "gender",
+                "password",
+                "phone",
+                "national_id"
+            ],
+            "properties": {
+                "fullName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "number"
+                },
+                "favoriteUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "objectId"
+                    }
+                },
+                "image": {
+                    "type": "string"
+                },
+                "isAgent": {
+                    "type": "boolean"
+                },
+                "isLandlord": {
+                    "type": "boolean"
+                },
+                "address": {
+                    "type": "object",
+                    "city": {
+                        "description": {
+                            "type": "string"
+                        },
+                        "streetName": {
+                            "type": "number"
+                        },
+                        "buildingNumber": {
+                            "type": "number"
+                        }
+                    }
+                }
+            }
+        },
+        "UserSignUp": {
+            "required": [
+                "firstName",
+                "middleName",
+                "lastName",
+                "age",
+                "email",
+                "gender",
+                "password",
+                "confirmPassword",
+                "phone",
+                "national_id"
+            ],
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "middleName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "number"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "confirmPassword": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "number"
                 }
             }
         }
