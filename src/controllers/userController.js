@@ -101,7 +101,7 @@ module.exports.createUser = (request, response, next) => {
         gender: request.body.gender,
         password: request.body.password,
         phone: request.body.phone,
-        national_id: request.body.nationalId,
+        national_id: request.body.national_id,
         // image,
     })
     object
