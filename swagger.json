@@ -262,7 +262,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "City data that we want to add",
+                        "description": "ID of the city ",
                         "type": "objectId"
                     },
                     {
@@ -447,26 +447,26 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Update",
+                "summary": "Update specific user data",
                 "parameters": [
                     {
                         "name": "user",
                         "in": "body",
                         "description": "User data that we want to update",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UpdateUser"
                         }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "New user has been added",
-                        "schema": {
-                            "$ref": "#/definitions/User"
-                        }
+                    "200": {
+                        "description": "updated"
                     },
                     "500": {
                         "description": "Internal server error"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
                     },
                     "404": {
                         "description": "Not found"
@@ -477,20 +477,50 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Delete city data that matches the given id",
+                "summary": "Delete more than one user data that matches the given array",
                 "parameters": [
                     {
-                        "name": "cityId",
+                        "name": "userIds",
                         "in": "body",
-                        "description": "cityId that we want to delete",
+                        "description": "userIds that we want to delete",
                         "schema": {
-                            "type": "objectId"
+                            "type": "object"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "City with given id has been deleted"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user data that match the given id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of user that we want to find",
+                        "type": "objectId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User data",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
                     },
                     "500": {
                         "description": "Internal server error"
@@ -554,7 +584,7 @@
                     {
                         "name": "User Data",
                         "in": "body",
-                        "description": "User Data used to sign up",
+                        "description": "User Data to use in sign up",
                         "schema": {
                             "$ref": "#/definitions/UserSignUp"
                         }
@@ -563,6 +593,29 @@
                 "responses": {
                     "200": {
                         "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/forgetPassword": {
+            "put": {
+                "tags": [
+                    "Forget Password"
+                ],
+                "summary": "Forget Password Feature",
+                "parameters": [
+                    {
+                        "name": "User Email",
+                        "in": "body",
+                        "description": "User email used to sign up"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Email with link will be sent to the given email if its registered "
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -729,8 +782,8 @@
                 "phone": {
                     "type": "string"
                 },
-                "gender":{
-                    "type":"string"
+                "gender": {
+                    "type": "string"
                 },
                 "national_id": {
                     "type": "number"
@@ -740,6 +793,54 @@
                     "items": {
                         "type": "objectId"
                     }
+                },
+                "image": {
+                    "type": "string"
+                },
+                "isAgent": {
+                    "type": "boolean"
+                },
+                "isLandlord": {
+                    "type": "boolean"
+                },
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string"
+                        },
+                        "streetName": {
+                            "type": "number"
+                        },
+                        "buildingNumber": {
+                            "type": "number"
+                        }
+                    }
+                }
+            }
+        },
+        "UpdateUser": {
+            "required": [
+                "_id"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "objectId"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
                 },
                 "image": {
                     "type": "string"
@@ -835,7 +936,7 @@
                     "type": "string"
                 },
                 "phone": {
-                    "type": "string"
+                    "type": "number"
                 },
                 "national_id": {
                     "type": "number"
@@ -844,58 +945,56 @@
         },
         "Agent": {
             "properties": {
-                "required":[
+                "required": [
                     "agentUnits"
                 ],
                 "_id": {
                     "type": "objectId",
-                    "$ref":"#/definitions/User"
+                    "$ref": "#/definitions/User"
                 },
                 "agentUnits": {
                     "type": "array",
                     "items": {
-                        "type":"object",
-                        "properties":{
-                            "unitId":{
-                                "type":"objectId",
-                                "$ref":"#/definitions/Unit"
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId",
+                                "$ref": "#/definitions/Unit"
                             },
-                            "numberOfRenting":{
-                                "type":"number"
+                            "numberOfRenting": {
+                                "type": "number"
                             }
-                        } 
-                       
+                        }
                     }
                 }
             }
         },
         "Landlord": {
             "properties": {
-                "required":[
+                "required": [
                     "landlordUnits"
                 ],
                 "_id": {
                     "type": "objectId",
-                    "$ref":"#/definitions/User"
+                    "$ref": "#/definitions/User"
                 },
                 "landlordUnits": {
                     "type": "array",
                     "items": {
-                        "type":"object",
-                        "properties":{
-                            "unitId":{
-                                "type":"objectId",
-                                "$ref":"#/definitions/Unit"
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId",
+                                "$ref": "#/definitions/Unit"
                             }
-                        } 
-                       
+                        }
                     }
                 }
             }
         },
         "HelpQuestion": {
             "properties": {
-                "required":[
+                "required": [
                     "userId",
                     "adminId",
                     "question",
@@ -903,27 +1002,27 @@
                 ],
                 "_id": {
                     "type": "objectId",
-                    "$ref":"#/definitions/User"
+                    "$ref": "#/definitions/User"
                 },
                 "userId": {
                     "type": "objectId",
-                    "$ref":"#/definitions/User"
+                    "$ref": "#/definitions/User"
                 },
                 "adminId": {
                     "type": "objectId",
-                    "$ref":"#/definitions/Admin"
+                    "$ref": "#/definitions/Admin"
                 },
                 "question": {
                     "type": "string"
                 },
                 "answer": {
                     "type": "string"
-                }  
+                }
             }
         },
         "Reviews": {
             "properties": {
-                "required":[
+                "required": [
                     "agentId",
                     "unitId",
                     "comment",
@@ -934,24 +1033,23 @@
                 },
                 "agentId": {
                     "type": "objectId",
-                    "$ref":"#/definitions/Agent"
+                    "$ref": "#/definitions/Agent"
                 },
                 "unitId": {
                     "type": "objectId",
-                    "$ref":"#/definitions/Unit"
+                    "$ref": "#/definitions/Unit"
                 },
                 "comment": {
                     "type": "string"
                 },
                 "rating": {
                     "type": "number"
-            
-                }  
+                }
             }
         },
         "Contract": {
             "properties": {
-                "required":[
+                "required": [
                     "landlordId",
                     "agentId",
                     "unitId",
@@ -965,18 +1063,17 @@
                 "_id": {
                     "type": "objectId"
                 },
-                 
                 "landlordId": {
                     "type": "objectId",
-                    "$ref":"#/definitions/Landlord"
+                    "$ref": "#/definitions/Landlord"
                 },
                 "agentId": {
                     "type": "objectId",
-                    "$ref":"#/definitions/Agent"
+                    "$ref": "#/definitions/Agent"
                 },
                 "unitId": {
                     "type": "objectId",
-                    "$ref":"#/definitions/Unit"
+                    "$ref": "#/definitions/Unit"
                 },
                 "rentalStart": {
                     "type": "Date"
