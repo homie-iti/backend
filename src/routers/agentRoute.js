@@ -14,9 +14,9 @@ router
         adminOnly,
         [
             body('id').isMongoId().withMessage('id should be isMongoId '),
-            body('unitID')
-                .isMongoId()
-                .withMessage('unitID isMongoId should be isMongoId'),
+            // body('unitID')
+            //     .isMongoId()
+            //     .withMessage('unitID isMongoId should be isMongoId'),
         ],
         validationMW,
         agentController.createAgent
