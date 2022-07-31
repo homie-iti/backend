@@ -47,6 +47,22 @@
         {
             "name": "Users",
             "description": "API for users in the system"
+        },
+        {
+            "name": "Agents",
+            "description": "API for agents in the system"
+        },
+        {
+            "name": "Landlords",
+            "description": "API for landlords in the system"
+        },
+        {
+            "name": "Help Questions",
+            "description": "API for help questions in the system"
+        },
+        {
+            "name": "Reviews",
+            "description": "API for reviews in the system"
         }
     ],
     "paths": {
@@ -414,7 +430,37 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "New city is added",
+                        "description": "New user has been added",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User data that we want to update",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New user has been added",
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
@@ -566,8 +612,8 @@
                 },
                 "address": {
                     "type": "object",
-                    "city": {
-                        "description": {
+                    "properties": {
+                        "city": {
                             "type": "string"
                         },
                         "streetName": {
@@ -683,6 +729,9 @@
                 "phone": {
                     "type": "string"
                 },
+                "gender":{
+                    "type":"string"
+                },
                 "national_id": {
                     "type": "number"
                 },
@@ -703,8 +752,8 @@
                 },
                 "address": {
                     "type": "object",
-                    "city": {
-                        "description": {
+                    "properties": {
+                        "city": {
                             "type": "string"
                         },
                         "streetName": {
@@ -714,6 +763,36 @@
                             "type": "number"
                         }
                     }
+                }
+            }
+        },
+        "Admin": {
+            "required": [
+                "fullName",
+                "age",
+                "email",
+                "password",
+                "phone",
+                "national_id"
+            ],
+            "properties": {
+                "fullName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "number"
                 }
             }
         },
@@ -728,7 +807,7 @@
                 "password",
                 "confirmPassword",
                 "phone",
-                "national_id"
+                "nationalId"
             ],
             "properties": {
                 "firstName": {
@@ -759,6 +838,162 @@
                     "type": "string"
                 },
                 "national_id": {
+                    "type": "number"
+                }
+            }
+        },
+        "Agent": {
+            "properties": {
+                "required":[
+                    "agentUnits"
+                ],
+                "_id": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/User"
+                },
+                "agentUnits": {
+                    "type": "array",
+                    "items": {
+                        "type":"object",
+                        "properties":{
+                            "unitId":{
+                                "type":"objectId",
+                                "$ref":"#/definitions/Unit"
+                            },
+                            "numberOfRenting":{
+                                "type":"number"
+                            }
+                        } 
+                       
+                    }
+                }
+            }
+        },
+        "Landlord": {
+            "properties": {
+                "required":[
+                    "landlordUnits"
+                ],
+                "_id": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/User"
+                },
+                "landlordUnits": {
+                    "type": "array",
+                    "items": {
+                        "type":"object",
+                        "properties":{
+                            "unitId":{
+                                "type":"objectId",
+                                "$ref":"#/definitions/Unit"
+                            }
+                        } 
+                       
+                    }
+                }
+            }
+        },
+        "HelpQuestion": {
+            "properties": {
+                "required":[
+                    "userId",
+                    "adminId",
+                    "question",
+                    "answer"
+                ],
+                "_id": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/User"
+                },
+                "userId": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/User"
+                },
+                "adminId": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/Admin"
+                },
+                "question": {
+                    "type": "string"
+                },
+                "answer": {
+                    "type": "string"
+                }  
+            }
+        },
+        "Reviews": {
+            "properties": {
+                "required":[
+                    "agentId",
+                    "unitId",
+                    "comment",
+                    "rating"
+                ],
+                "_id": {
+                    "type": "objectId"
+                },
+                "agentId": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/Agent"
+                },
+                "unitId": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/Unit"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+            
+                }  
+            }
+        },
+        "Contract": {
+            "properties": {
+                "required":[
+                    "landlordId",
+                    "agentId",
+                    "unitId",
+                    "rentalStart",
+                    "rentalEnd",
+                    "paymentAmount",
+                    "paymentMethod",
+                    "totalAmount",
+                    "offerPercentage"
+                ],
+                "_id": {
+                    "type": "objectId"
+                },
+                 
+                "landlordId": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/Landlord"
+                },
+                "agentId": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/Agent"
+                },
+                "unitId": {
+                    "type": "objectId",
+                    "$ref":"#/definitions/Unit"
+                },
+                "rentalStart": {
+                    "type": "Date"
+                },
+                "rentalEnd": {
+                    "type": "Date"
+                },
+                "paymentAmount": {
+                    "type": "number"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "paymentMethod": {
+                    "type": "string"
+                },
+                "offerPercentage": {
                     "type": "number"
                 }
             }
