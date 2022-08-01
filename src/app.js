@@ -3,7 +3,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 
 const mongoose = require('mongoose')
-require('dotenv').config()
+// require('dotenv').config()
 
 const appConfig = require('./config/app.config')
 const dbConfig = require('./config/database.config')
