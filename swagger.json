@@ -396,7 +396,7 @@
                 "tags": [
                     "Cities"
                 ],
-                "summary": "Get specific city units",
+                "summary": "Get specific city units with limit 30 for each page",
                 "parameters": [
                     {
                         "name": "id",
@@ -407,7 +407,7 @@
                     {
                         "name": "page",
                         "in": "query",
-                        "description": "Page number that we want to git its units",
+                        "description": "Page number that we want to get its units",
                         "type": "string"
                     }
                 ],
