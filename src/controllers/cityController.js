@@ -43,7 +43,7 @@ module.exports.getCityById = (request, response, next) => {
     CityModel.findOne({ _id: cityId }, { _id: 0 })
         .populate({
             path: 'units',
-            select: { dailyPrice: 1, estateType: 1, images: 1 },
+            // select: { dailyPrice: 1, estateType: 1, images: 1 },
         })
         .then((data) => {
             if (data == null) next(new Error('City not found'))
