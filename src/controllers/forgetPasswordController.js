@@ -5,6 +5,7 @@ const saltRounds = 10
 
 const User = require('../models/userModel')
 const EmailClient = require('../utilities/sendEmail')
+const { isValidObjectId } = require('mongoose')
 
 const emailNotifier = new EmailClient()
 function notifyUser(event, user) {
@@ -32,11 +33,12 @@ module.exports.forgetPassword = (request, response, next) => {
                 error.status = 401
                 throw error
             }
-            const token = jwt.sign({ email: user.email }, 'forgetPassword', {
-                expiresIn: '20m',
-            })
-            console.log(token)
-            user.updateOne({ resetLink: token }).then((updatedUser) => {
+            // const token = jwt.sign({ email: user.email }, 'forgetPassword', {
+            //     expiresIn: '20m',
+            // })
+
+            console.log(user)
+            user.updateOne({ resetLink: user._id }).then((updatedUser) => {
                 console.log(updatedUser, user)
                 if (updatedUser.modifiedCount === 0)
                     next(
@@ -58,33 +60,30 @@ module.exports.forgetPassword = (request, response, next) => {
 
 module.exports.resetPassword = (request, response, next) => {
     const { resetLink, newPassword } = request.body
-    if (resetLink) {
-        jwt.verify(resetLink, 'forgetPassword', (error) => {
-            // console.log(decodedToken)
-            if (error) {
-                return response
-                    .status(401)
-                    .json({ error: 'Incorrect or expired link' })
-            }
-            User.findOne({ resetLink }).then((user) => {
-                console.log(user)
-                if (user == null)
-                    next(new Error("Expired link or user doesn't found "))
-                else {
-                    const hashedPassword = bcrypt.hashSync(
-                        newPassword,
-                        saltRounds
-                    )
-                    user.password = hashedPassword
-                    user.resetLink = ''
-                    console.log(user.password)
-                    user.save()
-                    notifyUser('password_changed', user)
-                    response.status(201).json('Your password has been changed')
-                }
-            })
-        })
-    } else {
-        response.status(401).json({ error: 'Not Authorized' })
-    }
+    // if (resetLink) {
+    //     jwt.verify(resetLink, 'forgetPassword', (error) => {
+    //         console.log(decodedToken)
+    //         if (error) {
+    //             return response
+    //                 .status(401)
+    //                 .json({ error: 'Incorrect or expired link' })
+    //         }
+    if (!isValidObjectId(resetLink)) throw new Error('Not Valid reset Link ')
+    User.findOne({ _id: resetLink, resetLink: resetLink }).then((user) => {
+        console.log(user)
+        if (user == null) next(new Error("Expired link or user doesn't found "))
+        else {
+            const hashedPassword = bcrypt.hashSync(newPassword, saltRounds)
+            user.password = hashedPassword
+            user.resetLink = ''
+            console.log(user.password)
+            user.save()
+            // notifyUser('password_changed', user)
+            response.status(200).json('Your password has been changed')
+        }
+    })
+    //     })
+    // } else {
+    //     response.status(401).json({ error: 'Not Authorized' })
+    // }
 }

@@ -140,4 +140,5 @@ router
     .route('/cities/:id/:prop')
     .get(validateMW, cityController.getCityProperty)
 
+router.get('/cityUnits/:id', cityController.getCityUnits)
 module.exports = router
