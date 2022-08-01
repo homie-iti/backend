@@ -3,7 +3,10 @@
 // require the necessary libraries
 const { faker } = require('@faker-js/faker')
 const mongoose = require('mongoose')
-require('dotenv').config()
+// require('dotenv').config()
+
+const appConfig = require('../../config/app.config')
+const dbConfig = require('../../config/database.config')
 
 const seedHelpQuestions = require('./seeders/helpQuestionsSeeder')
 const seedAdmins = require('./seeders/adminsSeeder')
@@ -145,12 +148,14 @@ async function seedDB() {
 }
 
 async function connectToLocalDB() {
-    const homieDB_URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+    const homieDB_URL = `mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`
+    console.log(homieDB_URL)
     return mongoose.connect(homieDB_URL)
 }
 
 async function connectToCloudDB() {
-    const atlasDB_URL = `mongodb+srv://${process.env.ATLAS_DB_USER}:${process.env.ATLAS_DB_PASSWORD}@cluster0.7du11.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
+    const atlasDB_URL = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@${dbConfig.host}/${dbConfig.name}?retryWrites=true&w=majority`
+    console.log(atlasDB_URL)
     return mongoose.connect(atlasDB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
