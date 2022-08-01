@@ -86,48 +86,48 @@ describe('POST -> /cities', () => {
     // })
 })
 
-describe('DELETE -> /cities', () => {
-    const cityId = {
-        id: '62e78a37e82de1268b40edb4',
-    }
+// describe('DELETE -> /cities', () => {
+//     const cityId = {
+//         id: '62e78a37e82de1268b40edb4',
+//     }
 
-    beforeAll(() => {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
-    })
+//     beforeAll(() => {
+//         jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
+//     })
 
-    it('expected to send objectId of city to delete ', async () => {
-        const result = await request.delete('/cities')
-        expect(cityId.id).toBeTruthy()
-    })
+//     it('expected to send objectId of city to delete ', async () => {
+//         const result = await request.delete('/cities')
+//         expect(cityId.id).toBeTruthy()
+//     })
 
-    it('expected to send valid objectId ', async () => {
-        const result = await request.delete('/cities')
-        expect(true).toBe(isValidObjectId(cityId.id))
-    })
+//     it('expected to send valid objectId ', async () => {
+//         const result = await request.delete('/cities')
+//         expect(true).toBe(isValidObjectId(cityId.id))
+//     })
 
-    it('expected to respond with status code 200 with message deleted city', async () => {
-        result = await request.delete('/cities').send(cityId)
-        // console.log(result)
-        expect(result.status).toEqual(200)
-        expect( result.type ).toBe( 'application/json' )
-        expect(result._body.message).toEqual('deleted city')
-    })
+//     it('expected to respond with status code 200 with message deleted city', async () => {
+//         result = await request.delete('/cities').send(cityId)
+//         // console.log(result)
+//         expect(result.status).toEqual(200)
+//         expect( result.type ).toBe( 'application/json' )
+//         expect(result._body.message).toEqual('deleted city')
+//     })
 
-    // it('expected to respond with message deleted city', async () => {
-    //     result = await request.delete('/cities').send(cityId)
-    //     // console.log(result)
-    //     expect(result._body.message).toEqual('deleted city')
-    // })
+//     // it('expected to respond with message deleted city', async () => {
+//     //     result = await request.delete('/cities').send(cityId)
+//     //     // console.log(result)
+//     //     expect(result._body.message).toEqual('deleted city')
+//     // })
 
-    it('expected to respond with status code 500', async () => {
-        result = await request.delete('/cities').send(cityId)
-        expect(result.status).toEqual(500)
-    })
+//     it('expected to respond with status code 500', async () => {
+//         result = await request.delete('/cities').send(cityId)
+//         expect(result.status).toEqual(500)
+//     })
 
-    // afterAll(async () => {
-    //     await mongoose.connection.db.dropCollection('cities')
-    // })
-})
+//     // afterAll(async () => {
+//     //     await mongoose.connection.db.dropCollection('cities')
+//     // })
+// })
 
 // describe('UPDATE -> /cities/:id', () => {
 //     const id = '62e6bc5b05d77664fa872728'
