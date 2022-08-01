@@ -11,6 +11,27 @@ module.exports.getAllCities = (request, response, next) => {
         })
 }
 
+module.exports.getCityUnits = (request, response, next) => {
+    const { page } = request.query
+    const start = (page - 1) * 30
+    const end = page * 30
+    console.log(page, start, end)
+    CityModel.findOne(
+        { _id: request.params.id },
+        {
+            select: { units: 1 },
+            units: { $slice: [start, end] },
+        }
+    )
+        .then((data) => {
+            // console.log(data.units)
+            response.status(200).json({ units: data.units })
+        })
+        .catch((error) => {
+            next(error)
+        })
+}
+
 module.exports.getCityById = (request, response, next) => {
     const { id: cityId } = request.params
 
