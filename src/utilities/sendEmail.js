@@ -27,6 +27,9 @@ module.exports = class EmailClient {
         const orgEmail = appConfig.orgEmail || ''
         const orgPass = appConfig.orgEmailPassword || ''
 
+        console.log(orgEmail)
+        console.log(orgPass)
+
         this.#transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -44,10 +47,15 @@ module.exports = class EmailClient {
     }
 
     #defineMessage(event, configs) {
+        const appWebsiteHost =
+            appConfig.environment === 'prod'
+                ? 'https://homie-iti.herokuapp.com'
+                : 'http://localhost:8080'
+
         switch (event) {
             case 'user_signup':
                 const activationLink =
-                    'http://localhost:8080/activate-account/' + configs.slug
+                    appWebsiteHost + '/activate-account/' + configs.slug
                 this.#message = {
                     subject: `Hola ${
                         configs.name.split(' ')[0]
@@ -81,7 +89,7 @@ module.exports = class EmailClient {
 
             case 'reset_password':
                 const resetPasswordLink =
-                    'http://localhost:8080/reset-password/' + configs.resetLink
+                    appWebsiteHost + '/reset-password/' + configs.resetLink
                 this.#message = {
                     subject: `Reset your forgotten password `,
                     body: `
