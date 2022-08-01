@@ -360,12 +360,12 @@
                 "tags": [
                     "Cities"
                 ],
-                "summary": "Get specific city units",
+                "summary": "Get specific city property",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of city that we want to get its units",
+                        "description": "ID of city that we want to get its specific property",
                         "type": "objectId"
                     },
                     {
@@ -381,6 +381,39 @@
                         "schema": {
                             "description": "[units ids exist in the city]"
                         }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/cityUnits/{id}": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Get specific city units",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of city that we want to get its units",
+                        "type": "objectId"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to git its units",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Units exists on selected page or empty array in selected page has no units"
                     },
                     "500": {
                         "description": "Internal server error"
