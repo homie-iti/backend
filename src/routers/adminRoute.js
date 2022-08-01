@@ -2,13 +2,13 @@ const express = require('express')
 const { body, param, query } = require('express-validator')
 const validationMW = require('../middlewares/validationMW')
 const adminController = require('../controllers/adminController')
-const {authMW, adminOnly } = require('../middlewares/authMW')
+const { authMW, adminOnly } = require('../middlewares/authMW')
 
 const router = express.Router()
 
 router
-    .route('/admin')
-    .get( adminController.getAllAdmins)
+    .route('/admins')
+    .get(adminController.getAllAdmins)
     .post(
         authMW,
         adminOnly,
@@ -61,7 +61,7 @@ router
     )
 
 router
-    .route('/admin/:id')
+    .route('/admins/:id')
     .get(
         authMW,
         adminOnly,
