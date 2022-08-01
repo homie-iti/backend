@@ -56,7 +56,7 @@ module.exports.filteredUnit = async (request, response, next) => {
         }
 
         const data = await city
-            .find({ _id: request.params._id })
+            .findOne({ _id: request.params._id })
             .populate({ path: 'units', match: filter })
             .sort(sort)
         response.status(200).json({ data })
