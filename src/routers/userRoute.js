@@ -11,14 +11,9 @@ const {
 } = require('../middlewares/validtion')
 const userController = require('../controllers/userController')
 const upload = require('../middlewares/uploadImagesMW')
-// const paginationResult = require('../middlewares/paginationMW')
-// const usersModel = require('../models/userModel')
+
 router
     .route('/users')
-
-    // .get(userController.getAllUsers)
-    // .get(paginationResult(usersModel), userController.getAllUsers)
-
     .get(
         [
             query('page')

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 require("../models/unitModel");
 let Unit = mongoose.model("units");
+let city=mongoose.model("cities")
 
 module.exports.filteredUnit = async (request, response, next) => {
   try {
@@ -54,7 +55,7 @@ module.exports.filteredUnit = async (request, response, next) => {
       sort = { dailyPrice: -1 };
     }
 
-    const data = await Unit.find(filter).sort(sort);
+    const data = await city.find({}).populate({path: 'units',match: filter }).sort(sort);
     response.status(200).json({ data });
   } catch (error) {
     next(error);
