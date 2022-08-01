@@ -276,7 +276,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "City with given id has been updated"
+                        "description": " Given property of City with given id has been updated"
                     },
                     "422": {
                         "description": " Unprocessable Entity"
@@ -531,6 +531,86 @@
                 }
             }
         },
+        "/landlords": {
+            "get": {
+                "tags": [
+                    "Landlords"
+                ],
+                "summary": "Get array of landlords objects containing users that exist on the given page with limit 30 landlords",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to display landlords exist on it"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of landlords",
+                        "schema": {
+                            "$ref": "#/definitions/Landlord"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Landlords"
+                ],
+                "summary": "Adding a new landlord exists in users' collection to landlords' collection then update the value of isLandlord to true in users' collection",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "Landlord data that we want to add",
+                        "schema": {
+                            "$ref": "#/definitions/AddingNewLandlord"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "The id of landlord added"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Landlords"
+                ],
+                "summary": "Update specific user data",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User data that we want to update",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "updated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
         "/search": {
             "get": {
                 "tags": [
@@ -574,6 +654,32 @@
                 }
             }
         },
+        "/signup/check-availability": {
+            "post": {
+                "tags": [
+                    "Sign Up"
+                ],
+                "summary": "Check availability of user data",
+                "parameters": [
+                    {
+                        "name": "User Data",
+                        "in": "body",
+                        "description": "One field to check its availability",
+                        "schema": {
+                            "$ref": "#/definitions/UserDataAvailability"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "True or false according to availability"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
         "/signup": {
             "post": {
                 "tags": [
@@ -592,7 +698,59 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "User data used to sign up"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Login of the user",
+                "parameters": [
+                    {
+                        "name": "User data to login",
+                        "in": "body",
+                        "description": "To login, enter the user's email address and password",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message confirm login and token created while logging in"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/login/admin": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Login of the admin",
+                "parameters": [
+                    {
+                        "name": "Admin Data",
+                        "in": "body",
+                        "description": "To login, enter the user's email address and password",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message confirm login and token created while logging in"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -603,14 +761,17 @@
         "/forgetPassword": {
             "put": {
                 "tags": [
-                    "Forget Password"
+                    "Forget & Reset Password"
                 ],
                 "summary": "Forget Password Feature",
                 "parameters": [
                     {
-                        "name": "User Email",
+                        "name": "User Email that wants to reset its password",
                         "in": "body",
-                        "description": "User email used to sign up"
+                        "description": "User email used to sign up",
+                        "schema": {
+                            "type": "email"
+                        }
                     }
                 ],
                 "responses": {
@@ -619,6 +780,35 @@
                     },
                     "500": {
                         "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/resetPassword": {
+            "put": {
+                "tags": [
+                    "Forget & Reset Password"
+                ],
+                "summary": "Resetting Password after clicking the reset link",
+                "parameters": [
+                    {
+                        "name": "New Password",
+                        "in": "body",
+                        "description": "new password to enable login again"
+                    },
+                    {
+                        "name": "Reset Link",
+                        "in": "body",
+                        "description": "reset link to enable changing password"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Your password has been changed, and an email has been sent to confirm the change. "
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "type": "Expired link or user doesn't found"
                     }
                 }
             }
@@ -725,17 +915,15 @@
             }
         },
         "updateCity": {
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "cover": {
-                    "type": "string"
-                },
-                "units": {
-                    "type": "array",
-                    "items": {
-                        "type": "objectId"
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "prop": {
+                        "type": "name|cover|units"
+                    },
+                    "value": {
+                        "type": "new value we want to change"
                     }
                 }
             }
@@ -943,11 +1131,25 @@
                 }
             }
         },
-        "Agent": {
+        "UserDataAvailability": {
             "properties": {
-                "required": [
-                    "agentUnits"
-                ],
+                "email": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "number"
+                },
+                "national_id": {
+                    "type": "number"
+                }
+            }
+        },
+        "Agent": {
+            "required": [
+                "agentUnits",
+                "_id"
+            ],
+            "properties": {
                 "_id": {
                     "type": "objectId",
                     "$ref": "#/definitions/User"
@@ -970,10 +1172,11 @@
             }
         },
         "Landlord": {
+            "required": [
+                "landlordUnits",
+                "_id"
+            ],
             "properties": {
-                "required": [
-                    "landlordUnits"
-                ],
                 "_id": {
                     "type": "objectId",
                     "$ref": "#/definitions/User"
@@ -986,6 +1189,24 @@
                             "unitId": {
                                 "type": "objectId",
                                 "$ref": "#/definitions/Unit"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "AddingNewLandlord": {
+            "properties": {
+                "_id": {
+                    "type": "objectId"
+                },
+                "landlordUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId"
                             }
                         }
                     }
