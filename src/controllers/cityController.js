@@ -1,5 +1,10 @@
 const CityModel = require('../models/cityModel')
 const UnitModel = require('../models/unitModel')
+const LandlordModel = require('../models/landlordModel')
+const AgentModel = require('../models/agentModel')
+const ContractModel = require('../models/contractModel')
+
+const helperFunctions = require('./_HelperFunctions')
 
 module.exports.getAllCities = (request, response, next) => {
     CityModel.find({})
@@ -71,12 +76,53 @@ exports.createCity = async (request, response, next) => {
 }
 
 exports.deleteCity = async (request, response, next) => {
-    CityModel.deleteOne({
-        _id: request.body.id,
+    CityModel.findOneAndDelete({
+        _id: request.params.id,
     })
+        .populate({ path: 'units', select: { _id: 1, landlordId: 1 } })
+        .select({ _id: 1, units: 1 })
         .then((data) => {
-            if (data.deletedCount < 1) throw new Error('City  not found')
-
+            if (!data) throw new Error('City  not found')
+            console.log(data)
+            return data
+        })
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                UnitModel,
+                '_id',
+                data.units.map((obj) => obj._id.toString()),
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteArrayFieldElementsByManyValues(
+                LandlordModel,
+                '_id',
+                { $in: data.units.map((obj) => obj.landlordId.toString()) },
+                'landlordUnits',
+                data.units.map((obj) => obj._id.toString()),
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteManyDocumentsByManyValues(
+                ContractModel,
+                'unitId',
+                data.units.map((obj) => obj._id.toString()),
+                data
+            )
+        )
+        .then((data) =>
+            helperFunctions.deleteArrayFieldElementsByManyValues(
+                AgentModel,
+                'agentUnits.unitId',
+                { $in: data.units.map((obj) => obj.landlordId.toString()) },
+                'agentUnits.unitId',
+                data.units.map((obj) => obj._id.toString()),
+                data
+            )
+        )
+        .then((data) => {
             response.status(200).json({ message: 'deleted city' })
         })
 
@@ -93,13 +139,13 @@ exports.addUnitToCity = (request, response, next) => {
             _id: 1,
         })
         .then((realIdsObjs) => {
-            console.log(realIdsObjs)
+            // console.log(realIdsObjs)
             const realIds = [...realIdsObjs].map((obj) => obj._id.toString())
-            console.log(realIds)
+            // console.log(realIds)
             const notRealIds = uniqueUnits.filter(
                 (id) => !realIds.includes(id.toString())
             )
-            console.log(notRealIds)
+            // console.log(notRealIds)
             if (notRealIds.length > 0)
                 throw new Error(
                     `unit with ${
@@ -171,8 +217,31 @@ exports.updateCityProperties = async (request, response, next) => {
 
     // console.log(modificationsObject);
 
-    if (modificationsObject.units)
+    if (modificationsObject.units) {
         modificationsObject.units = [...new Set([...modificationsObject.units])]
+        const realIds = await UnitModel.find({
+            _id: { $in: modificationsObject.units },
+        })
+            .select({ _id: 1 })
+            .transform((value) => {
+                console.log({ value })
+                return value.map((obj) => obj._id.toString())
+            })
+        // console.log({ x })
+        const notRealIds = modificationsObject.units.filter(
+            (id) => !realIds.includes(id.toString())
+        )
+        // console.log(notRealIds)
+        if (notRealIds.length > 0)
+            next(
+                new Error(
+                    `unit with ${
+                        notRealIds.length === 1 ? 'id' : 'ids'
+                    } (${notRealIds.join('-')}) not found`
+                )
+            )
+        return
+    }
 
     CityModel.updateOne({ _id: request.params.id }, modificationsObject)
         .then((data) => {

@@ -61,6 +61,19 @@ module.exports.createUnit = (request, response, next) => {
     const { landlordId } = request.body
     const cover = request.files.unitCover ? request.files.unitCover[0].path : ''
 
+    Landlord.exists({ _id: landlordId })
+        .then((data) => {
+            if (!data) throw new Error('landlordId is not in db')
+            return City.exists({ _id: cityId })
+        })
+        .then((data) => {
+            if (!data) throw new Error('cityId is not in db')
+            return data
+        })
+        .catch((error) => {
+            next(error)
+        })
+
     let UnitImagesPaths = []
     if (request.files.unitImages) {
         const unitImagesArray = request.files.unitImages

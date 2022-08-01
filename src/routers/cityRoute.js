@@ -27,18 +27,7 @@ router
         validateMW,
         cityController.createCity
     )
-    .delete(
-        [
-            body('id')
-                .exists()
-                .withMessage('city id is required')
-                .isMongoId()
-                .withMessage('city id must be a mongo id'),
-        ],
-        // classValidator.idBodyValidator,
-        validateMW,
-        cityController.deleteCity
-    )
+
 // .put(
 // 	classValidator.updatingValidator,
 // 	validateMW,
@@ -55,16 +44,42 @@ router
                 .withMessage('city id is required')
                 .isMongoId()
                 .withMessage('city id must be a mongo id'),
-            // TODO fix updating city attrs and add validations
-            // body("*.cover")
-            // 	.optional()
-            // 	.isURL()
-            // 	.withMessage("city cover must be a url"),
+            body('')
+                // .optional()
+                // .withMessage('units are required')
+                .isArray()
+                .withMessage('body must be an array')
+                .not()
+                .isEmpty()
+                .withMessage("body array can't be empty"),
+            // body('*.units')
+            //     .optional()
+            //     // .withMessage('units are required')
+            //     .isArray()
+            //     .withMessage('units must be an array')
+            //     .not()
+            //     .isEmpty()
+            //     .withMessage("units array can't be empty"),
+            // body('*.units.*')
+            //     .isMongoId()
+            //     .withMessage('unit id in units field must be a mongo id'),
         ],
         // classValidator.idParamValidator,
         // classValidator.propParamValidator,
         validateMW,
         cityController.updateCityProperties
+    )
+    .delete(
+        [
+            param('id')
+                .exists()
+                .withMessage('city id is required')
+                .isMongoId()
+                .withMessage('city id must be a mongo id'),
+        ],
+        // classValidator.idBodyValidator,
+        validateMW,
+        cityController.deleteCity
     )
 
 router
