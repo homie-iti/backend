@@ -9,7 +9,7 @@ const dbConfig = require('../config/database.config')
 module.exports.loginUser = (request, response, next) => {
     User.findOne({
         email: request.body.email,
-        // password: request.body.password,
+        password: request.body.password,
     })
 
         .then((data) => {
@@ -41,7 +41,7 @@ module.exports.loginUser = (request, response, next) => {
 module.exports.loginAdmin = (request, response, next) => {
     Admin.findOne({
         email: request.body.email,
-        // password: request.body.password,
+        password: request.body.password,
     })
         .then((data) => {
             console.log(data)
