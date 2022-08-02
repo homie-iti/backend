@@ -32,10 +32,10 @@ const schema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'admin password is required'],
-        match: [
-            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/,
-            'password must be than 8 characters , contains at least one lowercase  one uppercase  at least one digit and special character',
-        ],
+        // match: [
+        //     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/,
+        //     'password must be than 8 characters , contains at least one lowercase  one uppercase  at least one digit and special character',
+        // ],
     },
     phone: {
         type: String,
