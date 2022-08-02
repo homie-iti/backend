@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 require('../models/unitModel')
 let Unit = mongoose.model('units')
-let city = require('../models/cityModel')
+let city = mongoose.model('cities')
 
 module.exports.filteredUnit = async (request, response, next) => {
     try {
@@ -56,7 +56,7 @@ module.exports.filteredUnit = async (request, response, next) => {
         }
 
         const data = await city
-            .findOne({ _id: request.params._id })
+            .find({})
             .populate({ path: 'units', match: filter })
             .sort(sort)
         response.status(200).json({ data })
