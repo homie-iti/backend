@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 
 const supertest = require('supertest')
 const app = require('../../../src/app')
+const User = require('../../../src/models/userModel')
 
 const request = supertest(app) // initiated new app connection and ran it
 
@@ -42,11 +43,12 @@ describe(`GET -> ${endpoint}`, () => {
         expect(result.body.isAvailable).toBe(true)
     })
 
-    it('signup', async () => {
+    it('expected to send the data of a user used in signup', async () => {
         const result = await request.post(`${endpoint}`).send(user)
-        // console.log(result)
+        console.log(result)
         // expect(result.status).toEqual(201)
-        // expect(result.body._id).toBeTruthy()
+        expect(result.body.userInfo).toBeTruthy()
+        expect(result.body.userInfo).toBeInstanceOf(Object)
     })
 
     it('expected to respond with data = false', async () => {
@@ -58,7 +60,6 @@ describe(`GET -> ${endpoint}`, () => {
     })
 
     afterAll(async () => {
-        // const collection = mongoose.model('users')
-        await mongoose.connection.db.dropCollection('users')
+        await User.deleteMany({})
     })
 })
