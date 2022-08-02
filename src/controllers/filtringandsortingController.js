@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 require('../models/unitModel')
 let Unit = mongoose.model('units')
-let city = mongoose.model('cities')
+let city = require('../models/cityModel')
 
 module.exports.filteredUnit = async (request, response, next) => {
     try {
