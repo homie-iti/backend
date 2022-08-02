@@ -94,7 +94,7 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
             buildingNumber: faker.address.buildingNumber(),
         }
 
-        const dailyPrice = faker.commerce.price()
+        const dailyPrice = faker.commerce.price(1, 50)
         const isAvailable = faker.datatype.boolean()
         const { cover } = unitsImages[i]
         const { images } = unitsImages[i]
