@@ -56,8 +56,9 @@ async function getUnitsImages(numberOfDocuments, numberOfImagesPerUnit) {
 
 async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
     const collection = mongoose.model('units')
-    await mongoose.connection.db.dropCollection('units')
+    // await mongoose.connection.db.dropCollection('units')
     // collection.drop();
+    await collection.deleteMany({})
 
     const unitsImages = await getUnitsImages(numberOfDocuments, 5)
     // console.log(unitsImages)

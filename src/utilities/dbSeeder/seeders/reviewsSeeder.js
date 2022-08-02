@@ -10,8 +10,9 @@ function randomIntFromInterval(min, max) {
 
 async function seedReview(numberOfDocuments, agentsIds, unitsIds) {
     const collection = mongoose.model('reviews')
-    await mongoose.connection.db.dropCollection('reviews')
+    // await mongoose.connection.db.dropCollection('reviews')
     // collection.drop();
+    await collection.deleteMany({})
 
     const data = []
     const ids = []

@@ -7,8 +7,8 @@ const { generateAvatarImage } = require('../apiDataGrabber')
 
 async function seedAdmin(numberOfDocuments) {
     const collection = mongoose.model('admins')
-    await mongoose.connection.db.dropCollection('admins')
-    // collection.drop();
+    // await mongoose.connection.db.dropCollection('admins')
+    await collection.deleteMany({})
 
     const data = []
     const ids = []
