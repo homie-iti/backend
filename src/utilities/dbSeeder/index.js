@@ -120,7 +120,7 @@ async function seedDB() {
         console.log('- started reviews seeding')
         collectionsIds.reviewsIds = [
             ...(await seedReviews(
-                111,
+                500,
                 collectionsIds.agentsIds,
                 collectionsIds.unitsIds
             )),

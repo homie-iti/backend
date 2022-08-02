@@ -60,10 +60,6 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
     // collection.drop();
     await collection.deleteMany({})
 
-    const unitsImages = await getUnitsImages(numberOfDocuments, 5)
-    // console.log(unitsImages)
-    // console.log(unitsImages.length)
-
     const data = []
     const ids = []
     for (let i = 0; i < numberOfDocuments; i++) {
@@ -96,8 +92,13 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
 
         const dailyPrice = faker.commerce.price(1, 50)
         const isAvailable = faker.datatype.boolean()
+
+        const unitsImages = await getUnitsImages(numberOfDocuments, 5)
+        // console.log(unitsImages)
+        // console.log(unitsImages.length)
         const { cover } = unitsImages[i]
         const { images } = unitsImages[i]
+
         const isPetsAllowed = faker.datatype.boolean()
         const numberOfResidents = randomIntFromInterval(1, 5)
 
@@ -136,4 +137,22 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
     return ids
 }
 
+async function addReviewToUnit(reviews) {
+    const collection = mongoose.model('units')
+
+    for (let i = 0; i < reviews.length; i++) {
+        // console.log(reviews[i])
+        await collection.updateOne(
+            { _id: reviews[i].unitId },
+            {
+                $push: {
+                    'reviews.reviews': reviews[i]._id,
+                    'reviews.ratings': reviews[i].rating,
+                },
+            }
+        )
+    }
+}
+
 module.exports = seedUnits
+module.exports.addReviewToUnit = addReviewToUnit

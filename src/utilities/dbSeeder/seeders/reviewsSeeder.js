@@ -1,6 +1,8 @@
 const { faker } = require('@faker-js/faker')
 const mongoose = require('mongoose')
 
+const { addReviewToUnit } = require('./unitsSeeder')
+
 require('../../../models/reviewModel')
 
 function randomIntFromInterval(min, max) {
@@ -28,9 +30,9 @@ async function seedReview(numberOfDocuments, agentsIds, unitsIds) {
         const unitId = unitsIds[randomIntFromInterval(0, unitsIds.length - 1)]
 
         if (
-            data.some((obj) => {
-                return obj.agentId === agentId && obj.agentId === unitId
-            })
+            data.some(
+                (obj) => obj.agentId === agentId && obj.agentId === unitId
+            )
         )
             continue
 
@@ -46,6 +48,8 @@ async function seedReview(numberOfDocuments, agentsIds, unitsIds) {
             rating,
         })
     }
+
+    addReviewToUnit(data)
 
     await collection.insertMany(data)
     return ids
