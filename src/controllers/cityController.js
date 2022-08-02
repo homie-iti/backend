@@ -16,27 +16,6 @@ module.exports.getAllCities = (request, response, next) => {
         })
 }
 
-module.exports.getCityUnits = (request, response, next) => {
-    const { page } = request.query
-    const start = (page - 1) * 30
-    const end = page * 30
-    console.log(page, start, end)
-    CityModel.findOne(
-        { _id: request.params.id },
-        {
-            select: { units: 1 },
-            units: { $slice: [start, end] },
-        }
-    )
-        .then((data) => {
-            // console.log(data.units)
-            response.status(200).json({ units: data.units })
-        })
-        .catch((error) => {
-            next(error)
-        })
-}
-
 module.exports.getCityById = (request, response, next) => {
     const { id: cityId } = request.params
 
@@ -103,7 +82,7 @@ exports.deleteCity = async (request, response, next) => {
         .populate({ path: 'units', select: { _id: 1, landlordId: 1 } })
         .select({ _id: 1, units: 1 })
         .then((data) => {
-            if (!data) throw new Error('City  not found')
+            if (!data) throw new Error('City not found')
             console.log(data)
             return data
         })
@@ -267,7 +246,7 @@ exports.updateCityProperties = async (request, response, next) => {
     CityModel.updateOne({ _id: request.params.id }, modificationsObject)
         .then((data) => {
             // console.log(data);
-            if (data.matchedCount < 1) throw new Error('city  not found')
+            if (data.matchedCount < 1) throw new Error('city not found')
             if (data.modifiedCount < 1)
                 throw new Error("props couldn't be modified")
 
