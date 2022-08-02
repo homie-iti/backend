@@ -43,7 +43,7 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
         const dailyPrice = faker.commerce.price()
         const isAvailable = faker.datatype.boolean()
         const cover = faker.image.unsplash.buildings()
-        const images = new Array(randomIntFromInterval(2, 14)).fill(
+        const images = new Array(randomIntFromInterval(4, 4)).fill(
             faker.image.unsplash.buildings()
         )
         const isPetsAllowed = faker.datatype.boolean()
