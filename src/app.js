@@ -3,7 +3,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 
 const mongoose = require('mongoose')
-require('dotenv').config()
+// require('dotenv').config()
 
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('../swagger.json')

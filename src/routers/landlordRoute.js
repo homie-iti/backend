@@ -42,7 +42,7 @@ router
     )
 
 router
-    .route('/landlord/:id')
+    .route('/landlords/:id')
     .get(
         [param('id').isMongoId().withMessage('landlord id should be objectID')],
         validationMW,
@@ -54,7 +54,7 @@ router
         landlordController.deleteLandlordById
     )
 
-router.route('/landlord/:id/unit').delete(
+router.route('/landlords/:id/units').delete(
     [param('id').isMongoId().withMessage('landlord id should be objectID')],
     body('landlordUnits')
         .isMongoId()

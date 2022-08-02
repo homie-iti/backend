@@ -1,36 +1,32 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken')
+const appConfig = require('../config/app.config')
+const dbConfig = require('../config/database.config')
 
 const authMW = (request, response, next) => {
-  let decodedToken = null;
-  try {
-    let token = request.get("Authorization").split(" ")[1];
-    decodedToken = jwt.verify(token, process.env.secret);
-    console.log(decodedToken);
-    request.role = decodedToken.role;
-    request.id = decodedToken.id;
-    next();
-  } catch (error) {
-    error.message = "Not Authorized";
-    error.status = 403;
-    next(error);
-  }
-};
-
-
-
-const adminOnly = (request, response, next) => {
-    if (request.role === 'Admin') next()
-         else {
-            console.log(request.role)
-            const error = new Error('Not authorized')
+    let decodedToken = null
+    try {
+        const token = request.get('Authorization').split(' ')[1]
+        decodedToken = jwt.verify(token, appConfig.jwtSecret)
+        console.log(decodedToken)
+        request.role = decodedToken.role
+        request.id = decodedToken.id
+        next()
+    } catch (error) {
+        error.message = 'Not Authorized'
         error.status = 403
         next(error)
     }
 }
 
-
-
-
+const adminOnly = (request, response, next) => {
+    if (request.role === 'Admin') next()
+    else {
+        console.log(request.role)
+        const error = new Error('Not authorized')
+        error.status = 403
+        next(error)
+    }
+}
 
 const adminAndUser = (request, response, next) => {
     if (request.role === 'Admin') next()
@@ -42,4 +38,4 @@ const adminAndUser = (request, response, next) => {
     }
 }
 
-module.exports = { authMW,adminAndUser, adminOnly }
+module.exports = { authMW, adminAndUser, adminOnly }

@@ -3,7 +3,10 @@
 const nodemailer = require('nodemailer')
 const SMTPTransport = require('nodemailer/lib/smtp-transport')
 
-require('dotenv').config()
+const appConfig = require('../config/app.config')
+const dbConfig = require('../config/database.config')
+
+// require('dotenv').config()
 
 // type EmailType =
 //     | 'invoice_creation'
@@ -21,8 +24,11 @@ module.exports = class EmailClient {
         // console.log(process.env)
 
         const orgName = 'Homie 🏠'
-        const orgEmail = process.env.ORG_EMAIL || ''
-        const orgPass = process.env.ORG_EMAIL_PASSWORD || ''
+        const orgEmail = appConfig.orgEmail || ''
+        const orgPass = appConfig.orgEmailPassword || ''
+
+        console.log(orgEmail)
+        console.log(orgPass)
 
         this.#transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -41,10 +47,15 @@ module.exports = class EmailClient {
     }
 
     #defineMessage(event, configs) {
+        const appWebsiteHost =
+            appConfig.environment === 'prod'
+                ? 'https://homie-iti.herokuapp.com'
+                : 'http://localhost:8080'
+
         switch (event) {
             case 'user_signup':
                 const activationLink =
-                    'http://localhost:8080/activate-account/' + configs.slug
+                    appWebsiteHost + '/activate-account/' + configs.slug
                 this.#message = {
                     subject: `Hola ${
                         configs.name.split(' ')[0]
@@ -78,7 +89,7 @@ module.exports = class EmailClient {
 
             case 'reset_password':
                 const resetPasswordLink =
-                    'http://localhost:8080/reset-password/' + configs.resetLink
+                    appWebsiteHost + '/reset-password/' + configs.resetLink
                 this.#message = {
                     subject: `Reset your forgotten password `,
                     body: `

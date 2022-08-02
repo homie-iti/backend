@@ -3,10 +3,13 @@ const bcrypt = require('bcrypt')
 const Admin = require('../models/adminModel')
 const User = require('../models/userModel')
 
+const appConfig = require('../config/app.config')
+const dbConfig = require('../config/database.config')
+
 module.exports.loginUser = (request, response, next) => {
     User.findOne({
         email: request.body.email,
-        // password: request.body.password,
+        password: request.body.password,
     })
 
         .then((data) => {
@@ -24,12 +27,11 @@ module.exports.loginUser = (request, response, next) => {
                                 id: data._id,
                                 role: 'User',
                             },
-                            process.env.secret,
+                            appConfig.jwtSecret,
+                            // process.env.secret,
                             { expiresIn: '1h' }
                         )
-                        response
-                            .status(200)
-                            .json({ token, message: 'login' })
+                        response.status(200).json({ token, message: 'login' })
                     })
             }
         })
@@ -39,7 +41,7 @@ module.exports.loginUser = (request, response, next) => {
 module.exports.loginAdmin = (request, response, next) => {
     Admin.findOne({
         email: request.body.email,
-        // password: request.body.password,
+        password: request.body.password,
     })
         .then((data) => {
             console.log(data)
@@ -56,12 +58,10 @@ module.exports.loginAdmin = (request, response, next) => {
                                 id: data._id,
                                 role: 'Admin',
                             },
-                            process.env.secret,
+                            appConfig.jwtSecret,
                             { expiresIn: '1h' }
                         )
-                        response
-                            .status(200)
-                            .json({ token, message: 'login' })
+                        response.status(200).json({ token, message: 'login' })
                     })
             }
         })

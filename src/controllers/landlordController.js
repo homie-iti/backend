@@ -23,7 +23,7 @@ module.exports.getLandlordsByPage = (request, response, next) => {
         {
             page: request.query.page || 1,
             // select: '',
-            populate: { path: 'landlordUnits _id' },
+            // populate: { path: 'landlordUnits _id' },
         }
     )
         .then((data) => {

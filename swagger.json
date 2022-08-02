@@ -43,6 +43,26 @@
         {
             "name": "Cities",
             "description": "API for cities in the system"
+        },
+        {
+            "name": "Users",
+            "description": "API for users in the system"
+        },
+        {
+            "name": "Agents",
+            "description": "API for agents in the system"
+        },
+        {
+            "name": "Landlords",
+            "description": "API for landlords in the system"
+        },
+        {
+            "name": "Help Questions",
+            "description": "API for help questions in the system"
+        },
+        {
+            "name": "Reviews",
+            "description": "API for reviews in the system"
         }
     ],
     "paths": {
@@ -222,7 +242,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/City"
+                            "$ref": "#/definitions/getCityById"
                         }
                     },
                     "500": {
@@ -242,7 +262,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "City data that we want to add",
+                        "description": "ID of the city ",
                         "type": "objectId"
                     },
                     {
@@ -256,7 +276,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "City with given id has been updated"
+                        "description": " Given property of City with given id has been updated"
                     },
                     "422": {
                         "description": " Unprocessable Entity"
@@ -340,12 +360,12 @@
                 "tags": [
                     "Cities"
                 ],
-                "summary": "Get specific city units",
+                "summary": "Get specific city property",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of city that we want to get its units",
+                        "description": "ID of city that we want to get its specific property",
                         "type": "objectId"
                     },
                     {
@@ -364,6 +384,259 @@
                     },
                     "500": {
                         "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/cityUnits/{id}": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Get specific city units with limit 30 for each page",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of city that we want to get its units",
+                        "type": "objectId"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to get its units",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Units exists on selected page or empty array in selected page has no units"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get array of users objects containing users that exist on the given page with limit 30 unit",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to display users exist on it"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Adding a new user to users' collection & returning the data of the added user",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User data that we want to add",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New user has been added",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update specific user data",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User data that we want to update",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "updated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete more than one user data that matches the given array",
+                "parameters": [
+                    {
+                        "name": "userIds",
+                        "in": "body",
+                        "description": "userIds that we want to delete",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "City with given id has been deleted"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user data that match the given id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of user that we want to find",
+                        "type": "objectId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User data",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/landlords": {
+            "get": {
+                "tags": [
+                    "Landlords"
+                ],
+                "summary": "Get array of landlords objects containing users that exist on the given page with limit 30 landlords",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to display landlords exist on it"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of landlords",
+                        "schema": {
+                            "$ref": "#/definitions/Landlord"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Landlords"
+                ],
+                "summary": "Adding a new landlord exists in users' collection to landlords' collection then update the value of isLandlord to true in users' collection",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "Landlord data that we want to add",
+                        "schema": {
+                            "$ref": "#/definitions/AddingNewLandlord"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "The id of landlord added"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Landlords"
+                ],
+                "summary": "Update specific user data",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User data that we want to update",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "updated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
                     },
                     "404": {
                         "description": "Not found"
@@ -413,6 +686,165 @@
                     }
                 }
             }
+        },
+        "/signup/check-availability": {
+            "post": {
+                "tags": [
+                    "Sign Up"
+                ],
+                "summary": "Check availability of user data",
+                "parameters": [
+                    {
+                        "name": "User Data",
+                        "in": "body",
+                        "description": "One field to check its availability",
+                        "schema": {
+                            "$ref": "#/definitions/UserDataAvailability"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "True or false according to availability"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/signup": {
+            "post": {
+                "tags": [
+                    "Sign Up"
+                ],
+                "summary": "Users sign up",
+                "parameters": [
+                    {
+                        "name": "User Data",
+                        "in": "body",
+                        "description": "User Data to use in sign up",
+                        "schema": {
+                            "$ref": "#/definitions/UserSignUp"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User data used to sign up"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Login of the user",
+                "parameters": [
+                    {
+                        "name": "User data to login",
+                        "in": "body",
+                        "description": "To login, enter the user's email address and password",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message confirm login and token created while logging in"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/login/admin": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Login of the admin",
+                "parameters": [
+                    {
+                        "name": "Admin Data",
+                        "in": "body",
+                        "description": "To login, enter the user's email address and password",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message confirm login and token created while logging in"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/forgetPassword": {
+            "put": {
+                "tags": [
+                    "Forget & Reset Password"
+                ],
+                "summary": "Forget Password Feature",
+                "parameters": [
+                    {
+                        "name": "User Email that wants to reset its password",
+                        "in": "body",
+                        "description": "User email used to sign up",
+                        "schema": {
+                            "type": "email"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Email with link will be sent to the given email if its registered "
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/resetPassword": {
+            "put": {
+                "tags": [
+                    "Forget & Reset Password"
+                ],
+                "summary": "Resetting Password after clicking the reset link",
+                "parameters": [
+                    {
+                        "name": "New Password",
+                        "in": "body",
+                        "description": "new password to enable login again"
+                    },
+                    {
+                        "name": "Reset Link",
+                        "in": "body",
+                        "description": "reset link to enable changing password"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Your password has been changed, and an email has been sent to confirm the change. "
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "type": "Expired link or user doesn't found"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -425,7 +857,10 @@
                 "cover",
                 "numberOfResidents",
                 "unitInfo",
-                "allowedGender"
+                "allowedGender",
+                "unitInfo",
+                "address",
+                "isAvailable"
             ],
             "properties": {
                 "landlordId": {
@@ -453,8 +888,8 @@
                 },
                 "address": {
                     "type": "object",
-                    "city": {
-                        "description": {
+                    "properties": {
+                        "city": {
                             "type": "string"
                         },
                         "streetName": {
@@ -477,6 +912,12 @@
                 "numberOfResidents": {
                     "type": "number"
                 },
+                "dailyPrice": {
+                    "type": "number"
+                },
+                "cover": {
+                    "type": "string"
+                },
                 "images": {
                     "type": "array",
                     "items": {
@@ -492,7 +933,8 @@
             ],
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "required": true
                 },
                 "cover": {
                     "type": "string"
@@ -506,6 +948,20 @@
             }
         },
         "updateCity": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "prop": {
+                        "type": "name|cover|units"
+                    },
+                    "value": {
+                        "type": "new value we want to change"
+                    }
+                }
+            }
+        },
+        "getCityById": {
             "properties": {
                 "name": {
                     "type": "string"
@@ -516,8 +972,380 @@
                 "units": {
                     "type": "array",
                     "items": {
+                        "$ref": "#/definitions/Unit"
+                    }
+                }
+            }
+        },
+        "User": {
+            "required": [
+                "fullName",
+                "age",
+                "email",
+                "gender",
+                "password",
+                "phone",
+                "national_id"
+            ],
+            "properties": {
+                "fullName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "number"
+                },
+                "favoriteUnits": {
+                    "type": "array",
+                    "items": {
                         "type": "objectId"
                     }
+                },
+                "image": {
+                    "type": "string"
+                },
+                "isAgent": {
+                    "type": "boolean"
+                },
+                "isLandlord": {
+                    "type": "boolean"
+                },
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string"
+                        },
+                        "streetName": {
+                            "type": "number"
+                        },
+                        "buildingNumber": {
+                            "type": "number"
+                        }
+                    }
+                }
+            }
+        },
+        "UpdateUser": {
+            "required": [
+                "_id"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "objectId"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "isAgent": {
+                    "type": "boolean"
+                },
+                "isLandlord": {
+                    "type": "boolean"
+                },
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string"
+                        },
+                        "streetName": {
+                            "type": "number"
+                        },
+                        "buildingNumber": {
+                            "type": "number"
+                        }
+                    }
+                }
+            }
+        },
+        "Admin": {
+            "required": [
+                "fullName",
+                "age",
+                "email",
+                "password",
+                "phone",
+                "national_id"
+            ],
+            "properties": {
+                "fullName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "number"
+                }
+            }
+        },
+        "UserSignUp": {
+            "required": [
+                "firstName",
+                "middleName",
+                "lastName",
+                "age",
+                "email",
+                "gender",
+                "password",
+                "confirmPassword",
+                "phone",
+                "nationalId"
+            ],
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "middleName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "number"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "confirmPassword": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "number"
+                },
+                "national_id": {
+                    "type": "number"
+                }
+            }
+        },
+        "UserDataAvailability": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "number"
+                },
+                "national_id": {
+                    "type": "number"
+                }
+            }
+        },
+        "Agent": {
+            "required": [
+                "agentUnits",
+                "_id"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/User"
+                },
+                "agentUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId",
+                                "$ref": "#/definitions/Unit"
+                            },
+                            "numberOfRenting": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "Landlord": {
+            "required": [
+                "landlordUnits",
+                "_id"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/User"
+                },
+                "landlordUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId",
+                                "$ref": "#/definitions/Unit"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "AddingNewLandlord": {
+            "properties": {
+                "_id": {
+                    "type": "objectId"
+                },
+                "landlordUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "HelpQuestion": {
+            "properties": {
+                "required": [
+                    "userId",
+                    "adminId",
+                    "question",
+                    "answer"
+                ],
+                "_id": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/User"
+                },
+                "userId": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/User"
+                },
+                "adminId": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/Admin"
+                },
+                "question": {
+                    "type": "string"
+                },
+                "answer": {
+                    "type": "string"
+                }
+            }
+        },
+        "Reviews": {
+            "properties": {
+                "required": [
+                    "agentId",
+                    "unitId",
+                    "comment",
+                    "rating"
+                ],
+                "_id": {
+                    "type": "objectId"
+                },
+                "agentId": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/Agent"
+                },
+                "unitId": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/Unit"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                }
+            }
+        },
+        "Contract": {
+            "properties": {
+                "required": [
+                    "landlordId",
+                    "agentId",
+                    "unitId",
+                    "rentalStart",
+                    "rentalEnd",
+                    "paymentAmount",
+                    "paymentMethod",
+                    "totalAmount",
+                    "offerPercentage"
+                ],
+                "_id": {
+                    "type": "objectId"
+                },
+                "landlordId": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/Landlord"
+                },
+                "agentId": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/Agent"
+                },
+                "unitId": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/Unit"
+                },
+                "rentalStart": {
+                    "type": "Date"
+                },
+                "rentalEnd": {
+                    "type": "Date"
+                },
+                "paymentAmount": {
+                    "type": "number"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "paymentMethod": {
+                    "type": "string"
+                },
+                "offerPercentage": {
+                    "type": "number"
                 }
             }
         }

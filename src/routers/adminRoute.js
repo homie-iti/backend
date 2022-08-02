@@ -7,7 +7,7 @@ const { authMW, adminOnly } = require('../middlewares/authMW')
 const router = express.Router()
 
 router
-    .route('/admin')
+    .route('/admins')
     // .get( adminController.getAllAdmins )
     .get(
         [
@@ -71,7 +71,7 @@ router
     )
 
 router
-    .route('/admin/:id')
+    .route('/admins/:id')
     .get(
         authMW,
         adminOnly,
