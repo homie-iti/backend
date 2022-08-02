@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 require('../../../models/userModel')
 
-const { generateAvatarImage } = require('./apiDataGrabber')
+const { generateAvatarImage } = require('../apiDataGrabber')
 
 function randomIntFromInterval(min, max) {
     // min and max included
