@@ -54,7 +54,7 @@ async function seedDB() {
         console.log('..')
 
         console.log('- started users seeding')
-        collectionsIds.usersIds = [...(await seedUsers(1000))]
+        collectionsIds.usersIds = [...(await seedUsers(50))]
         console.log('+ done')
 
         console.log('..')
