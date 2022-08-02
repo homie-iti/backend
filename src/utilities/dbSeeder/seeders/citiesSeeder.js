@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 
 require('../../../models/cityModel')
 
+const { generateCityImage } = require('../apiDataGrabber')
+
 function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min)
@@ -19,8 +21,8 @@ async function seedCities(numberOfDocuments) {
         const _id = mongoose.Types.ObjectId(
             faker.unique(faker.database.mongodbObjectId)
         )
-        const name = faker.address.cityName()
-        const cover = faker.image.city()
+        const name = faker.address.state()
+        const cover = (await generateCityImage(name))[0].src.large
         const units = []
 
         ids.push(_id)
@@ -45,11 +47,9 @@ async function addUnitsToCities(unitsIds) {
         const unitsEnd = unitsStart + randomIntFromInterval(0, 100)
 
         let slicedUnits = unitsIds.slice(unitsStart, unitsEnd)
-        slicedUnits = slicedUnits.map((unitId) => {
-            {
-                return mongoose.Types.ObjectId(unitId)
-            }
-        })
+        slicedUnits = slicedUnits.map((unitId) =>
+            mongoose.Types.ObjectId(unitId)
+        )
 
         city.units = slicedUnits
         await city.save()

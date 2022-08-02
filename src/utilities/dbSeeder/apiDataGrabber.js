@@ -17,13 +17,30 @@ async function generateApartmentImage(page = 1, query = '') {
     // https://api.pexels.com/v1/search?query=apartment inside
     // query.replace(/ /g, '%20')
     const apiURL = `https://api.pexels.com/v1/search?per_page=80&orientation=landscape&page=${page}&query=${query}`
-    console.log(apiURL)
+    // console.log(apiURL)
     // console.l
     const options = { headers: { Authorization: appConfig.pexelsKey } }
-    console.log(options)
-    const { photos } = await getData(apiURL + query, options)
-    console.log(photos)
+    // console.log(options)
+    const { photos } = await getData(apiURL, options)
+    // console.log(photos)
     return photos
 }
 
-module.exports = { generateAvatarImage, generateApartmentImage }
+async function generateCityImage(query = '') {
+    // https://api.pexels.com/v1/search?query=apartment inside
+    // query.replace(/ /g, '%20')
+    const apiURL = `https://api.pexels.com/v1/search?per_page=1&orientation=landscape&query=${query}`
+    // console.log(apiURL)
+    // console.l
+    const options = { headers: { Authorization: appConfig.pexelsKey } }
+    // console.log(options)
+    const { photos } = await getData(apiURL, options)
+    // console.log(photos)
+    return photos
+}
+
+module.exports = {
+    generateAvatarImage,
+    generateApartmentImage,
+    generateCityImage,
+}
