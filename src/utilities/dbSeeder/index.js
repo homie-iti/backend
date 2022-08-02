@@ -165,7 +165,8 @@ async function connectToCloudDB() {
 ;(async function main() {
     try {
         // console.log(process.env)
-        await connectToLocalDB()
+        if (appConfig.environment === 'prod') await connectToCloudDB()
+        else connectToLocalDB()
         await seedDB()
     } catch (error) {
         console.log('DB Connection Error', error)
