@@ -30,11 +30,11 @@ router
         helpController.createQuestion
     )
 
-    .put(
-        helpQuestionUpdateValidation,
-        validationMW,
-        helpController.updateHelpQuestion
-    )
+// .put(
+//     helpQuestionUpdateValidation,
+//     validationMW,
+//     helpController.updateHelpQuestion
+// )
 
 // router.route("/helpQuestion/all")
 //     .delete(helpController.deleteAllQuestion)
@@ -44,6 +44,11 @@ router.route('/helpQuestion/many').delete(helpController.deleteManyQuestion)
 router
     .route('/helpQuestion/:id')
     .get(helpController.getQuestionById)
+    .put(
+        helpQuestionUpdateValidation,
+        validationMW,
+        helpController.updateHelpQuestion
+    )
 
     .delete(
         helpQuestionDeleteValidation,
