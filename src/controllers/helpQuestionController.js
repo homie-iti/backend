@@ -1,4 +1,6 @@
 const HelpQuestion = require('../models/helpQuestionModel')
+const UserModel = require('../models/userModel')
+const AdminModel = require('../models/adminModel')
 
 module.exports.getHelpQuestionsByPage = (request, response, next) => {
     HelpQuestion.paginate(
@@ -62,9 +64,9 @@ module.exports.updateHelpQuestion = (request, response, next) => {
     const allowed = ['userId', 'adminId', 'question', 'answer']
     // console.log(allowed)
     const requested = Object.keys(request.body)
-    // console.log(requested)
+    console.log(requested)
     const isValidUpdates = requested.every((i) => allowed.includes(i))
-    // console.log(isValidUpdates)
+    console.log(isValidUpdates)
     if (!isValidUpdates) {
         throw new Error('Question not allowed')
     } else {
@@ -101,7 +103,7 @@ module.exports.updateHelpQuestion = (request, response, next) => {
 }
 
 module.exports.deleteQuestion = (request, response, next) => {
-    HelpQuestion.deleteOne({ _id: request.body._id })
+    HelpQuestion.deleteOne({ _id: request.params.id })
         .then((data) => {
             if (data.deletedCount === 0) {
                 throw new Error('QuestionID not found')
