@@ -57,7 +57,7 @@ module.exports.filteredUnit = async (request, response, next) => {
         }
 
     const data = await city.findOne({_id:request.params.id}).populate({path: 'units',match: filter }).sort(sort);
-    response.status(200).json({ data });
+    response.status(200).json( data );
   } catch (error) {
     next(error);
   }

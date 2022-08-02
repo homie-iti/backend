@@ -6,7 +6,7 @@ const filtringsController = require('../controllers/filtringandsortingController
 router.route(`/Homie`).get(filtringsController.filteredUnit)
 
 
-router.route(`/Homie/:id`)
+router.route(`/Homie/:id/filter`)
     .get(filtringsController.filteredUnit)
 
 
