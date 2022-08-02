@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 
 require('../../../models/userModel')
 
+const { generateAvatarImage } = require('./apiDataGrabber')
+
 function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min)
@@ -28,7 +30,7 @@ async function seedUsers(numberOfDocuments) {
         const password = '1234@aBcD'
         const phone = faker.phone.number('01#########')
         const national_id = faker.phone.number('##############')
-        const image = faker.internet.avatar()
+        const image = await generateAvatarImage()
         const address = {
             city: faker.address.cityName(),
             streetName: faker.address.street(),
