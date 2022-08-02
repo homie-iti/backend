@@ -54,7 +54,7 @@ module.exports.createQuestion = (request, response, next) => {
             return object.save()
         })
         .then((data) => {
-            response.status(201).json({ data: 'added' })
+            response.status(201).json({ data: 'added', id: data._id })
         })
         .catch((error) => next(error))
 }
@@ -75,18 +75,19 @@ module.exports.updateHelpQuestion = (request, response, next) => {
             .then((data) => {
                 if (!data)
                     throw new Error(
-                        `userId isn't available in users collection`
+                        `userId is not available in users collection`
                     )
                 return AdminModel.exists({ _id: request.body.adminId })
             })
             .then((data) => {
                 if (!data)
                     throw new Error(
-                        `adminId isn't available in users collection`
+                        `adminId is not available in users collection`
                     )
                 const newHelpQuestion = request.body
+                console.log(newHelpQuestion)
                 return HelpQuestion.findOneAndUpdate(
-                    { _id: request.body._id },
+                    { _id: request.params.id },
                     { $set: newHelpQuestion },
                     { new: false, runValidators: true }
                 )
