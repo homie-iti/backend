@@ -195,33 +195,6 @@
                         }
                     }
                 }
-            },
-            "delete": {
-                "tags": [
-                    "Cities"
-                ],
-                "summary": "Delete city data that matches the given id",
-                "parameters": [
-                    {
-                        "name": "cityId",
-                        "in": "body",
-                        "description": "cityId that we want to delete",
-                        "schema": {
-                            "type": "objectId"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "City with given id has been deleted"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                }
             }
         },
         "/cities/{id}": {
@@ -280,6 +253,33 @@
                     },
                     "422": {
                         "description": " Unprocessable Entity"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Delete city data that matches the given id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "cityId that we want to delete",
+                        "schema": {
+                            "type": "objectId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted city"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
                     }
                 }
             }
