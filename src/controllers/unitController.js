@@ -41,7 +41,7 @@ module.exports.getUnitsByPage = (request, response, next) => {
 module.exports.getUnitById = (request, response, next) => {
     Unit.findOne(
         { _id: request.params.id },
-        'estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice cover geoLocation'
+        'estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice cover geoLocation reviews'
     )
         .populate({ path: 'landlordId', select: 'fullName phone image' })
         .then((data) => {
@@ -59,8 +59,6 @@ module.exports.getUnitById = (request, response, next) => {
 module.exports.createUnit = (request, response, next) => {
     const { cityId } = request.body
     const { landlordId } = request.body
-    const cover = request.files.unitCover ? request.files.unitCover[0].path : ''
-
     Landlord.exists({ _id: landlordId })
         .then((data) => {
             if (!data) throw new Error('landlordId is not in db')
@@ -75,12 +73,18 @@ module.exports.createUnit = (request, response, next) => {
         })
 
     let UnitImagesPaths = []
-    if (request.files.unitImages) {
+    let images
+    let cover
+    if (request.files.unitImages && request.files.path) {
         const unitImagesArray = request.files.unitImages
         UnitImagesPaths = unitImagesArray.map((image) => image.path)
+        images = request.files.unitImages ? UnitImagesPaths : []
+    }
+    if (request.files.unitCover) {
+        cover = request.files.unitCover[0].path
     }
     console.log(UnitImagesPaths)
-    const images = request.files.unitImages ? UnitImagesPaths : []
+
     const unit = {
         landlordId,
         cityId,
