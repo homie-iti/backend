@@ -39,7 +39,11 @@ const schema = new mongoose.Schema(
 
         isAvailable: Boolean,
 
-        cover: { type: String, required: [true, 'unit cover is required'] },
+        cover: {
+            type: String,
+            required: [true, 'unit cover is required'],
+            default: '',
+        },
 
         // images: [{ type: String, required: [true, "unit images are required"] }],
         images: [String],
