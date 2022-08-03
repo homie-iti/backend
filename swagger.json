@@ -11,7 +11,7 @@
         "contact": {
             "name": "Homie Website",
             "url": "https://homie-iti.vercel.app/",
-            "email": "process.env.ORG_EMAIL"
+            "email": "best.clinic.in.the.world@gmail.com"
         },
         "servers": [
             {
@@ -195,33 +195,6 @@
                         }
                     }
                 }
-            },
-            "delete": {
-                "tags": [
-                    "Cities"
-                ],
-                "summary": "Delete city data that matches the given id",
-                "parameters": [
-                    {
-                        "name": "cityId",
-                        "in": "body",
-                        "description": "cityId that we want to delete",
-                        "schema": {
-                            "type": "objectId"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "City with given id has been deleted"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                }
             }
         },
         "/cities/{id}": {
@@ -280,6 +253,33 @@
                     },
                     "422": {
                         "description": " Unprocessable Entity"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Delete city data that matches the given id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "cityId that we want to delete",
+                        "schema": {
+                            "type": "objectId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted city"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
                     }
                 }
             }
@@ -381,39 +381,6 @@
                         "schema": {
                             "description": "[units ids exist in the city]"
                         }
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                }
-            }
-        },
-        "/cityUnits/{id}": {
-            "get": {
-                "tags": [
-                    "Cities"
-                ],
-                "summary": "Get specific city units with limit 30 for each page",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of city that we want to get its units",
-                        "type": "objectId"
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number that we want to get its units",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Units exists on selected page or empty array in selected page has no units"
                     },
                     "500": {
                         "description": "Internal server error"
@@ -663,6 +630,184 @@
                         "schema": {
                             "$ref": "#/definitions/City"
                         }
+                    }
+                }
+            }
+        },
+        "/help-questions": {
+            "get": {
+                "tags": [
+                    "Help Questions"
+                ],
+                "summary": "Get array of helpQuestions objects containing helpQuestions that exist on the given page with limit 30 unit",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to display helpQuestions exist on it"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/HelpQuestion"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Help Questions"
+                ],
+                "summary": "Adding a new help-question to helpQuestions' collection & returning added",
+                "parameters": [
+                    {
+                        "name": "help-question",
+                        "in": "body",
+                        "description": "Question data that we want to add",
+                        "schema": {
+                            "$ref": "#/definitions/HelpQuestion"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New Help Question has been added",
+                        "schema": {
+                            "type": "added"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/helpQuestion/{id}": {
+            "get": {
+                "tags": [
+                    "Help Questions"
+                ],
+                "summary": "Get help question data that match the given id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of help question that we want to find",
+                        "type": "objectId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Help Question data",
+                        "schema": {
+                            "$ref": "#/definitions/HelpQuestion"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Help Questions"
+                ],
+                "summary": "Update specific help question",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of help question that we want to update"
+                    },
+                    {
+                        "name": "help-question",
+                        "in": "body",
+                        "description": "userId & adminId and data desired to be be updated"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "updated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Help Questions"
+                ],
+                "summary": "Delete help question data that match the given id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of help question that we want to delete",
+                        "type": "objectId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data specifies status of deletion operation"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/helpQuestion/many": {
+            "delete": {
+                "tags": [
+                    "Help Questions"
+                ],
+                "summary": "Delete more than one help question data that match the given ids.",
+                "parameters": [
+                    {
+                        "name": "ids",
+                        "in": "body",
+                        "description": "Array of ids of help questions that we want to delete",
+                        "type": [
+                            "ids"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
                     }
                 }
             }
@@ -1247,24 +1392,18 @@
             }
         },
         "HelpQuestion": {
+            "required": [
+                "userId",
+                "adminId",
+                "question",
+                "answer"
+            ],
             "properties": {
-                "required": [
-                    "userId",
-                    "adminId",
-                    "question",
-                    "answer"
-                ],
-                "_id": {
-                    "type": "objectId",
-                    "$ref": "#/definitions/User"
-                },
                 "userId": {
-                    "type": "objectId",
-                    "$ref": "#/definitions/User"
+                    "type": "objectId"
                 },
                 "adminId": {
-                    "type": "objectId",
-                    "$ref": "#/definitions/Admin"
+                    "type": "objectId"
                 },
                 "question": {
                     "type": "string"
@@ -1275,16 +1414,13 @@
             }
         },
         "Reviews": {
+            "required": [
+                "agentId",
+                "unitId",
+                "comment",
+                "rating"
+            ],
             "properties": {
-                "required": [
-                    "agentId",
-                    "unitId",
-                    "comment",
-                    "rating"
-                ],
-                "_id": {
-                    "type": "objectId"
-                },
                 "agentId": {
                     "type": "objectId",
                     "$ref": "#/definitions/Agent"
@@ -1302,32 +1438,26 @@
             }
         },
         "Contract": {
+            "required": [
+                "landlordId",
+                "agentId",
+                "unitId",
+                "rentalStart",
+                "rentalEnd",
+                "paymentAmount",
+                "paymentMethod",
+                "totalAmount",
+                "offerPercentage"
+            ],
             "properties": {
-                "required": [
-                    "landlordId",
-                    "agentId",
-                    "unitId",
-                    "rentalStart",
-                    "rentalEnd",
-                    "paymentAmount",
-                    "paymentMethod",
-                    "totalAmount",
-                    "offerPercentage"
-                ],
-                "_id": {
+                "landlordId": {
                     "type": "objectId"
                 },
-                "landlordId": {
-                    "type": "objectId",
-                    "$ref": "#/definitions/Landlord"
-                },
                 "agentId": {
-                    "type": "objectId",
-                    "$ref": "#/definitions/Agent"
+                    "type": "objectId"
                 },
                 "unitId": {
-                    "type": "objectId",
-                    "$ref": "#/definitions/Unit"
+                    "type": "objectId"
                 },
                 "rentalStart": {
                     "type": "Date"

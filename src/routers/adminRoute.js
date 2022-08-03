@@ -20,10 +20,10 @@ router
         adminController.getAdminsByPage
     )
     .post(
-        authMW,
-        adminOnly,
+        // authMW,
+        // adminOnly,
         [
-            body('id').isMongoId().withMessage('id should be isMongoId '),
+            // body('id').isMongoId().withMessage('id should be isMongoId '),
             body('fullName')
                 .isAlpha('en-US', { ignore: ' ' })
                 .withMessage('user name should be characters'),
@@ -45,10 +45,10 @@ router
         adminController.createAdmin
     )
     .put(
-        authMW,
-        adminOnly,
+        // authMW,
+        // adminOnly,
         [
-            body('id').isMongoId().withMessage('id should be isMongoId '),
+            // body('id').isMongoId().withMessage('id should be isMongoId '),
             body('fullName')
                 .isAlpha('en-US', { ignore: ' ' })
                 .withMessage('user name should be characters'),
@@ -73,15 +73,15 @@ router
 router
     .route('/admins/:id')
     .get(
-        authMW,
-        adminOnly,
+        // authMW,
+        // adminOnly,
         [param('id').isMongoId().withMessage('admin id should be objectID')],
         validationMW,
         adminController.getAdminByID
     )
     .delete(
-        authMW,
-        adminOnly,
+        // authMW,
+        // adminOnly,
         [param('id').isMongoId().withMessage('admin id should be objectID')],
         validationMW,
         adminController.deleteAdmin

@@ -29,7 +29,7 @@ const schema = new mongoose.Schema(
 
         address: {
             type: addressSchema,
-            // required: [true, "unit address is required"],
+            required: [true, 'unit address is required'],
         },
 
         dailyPrice: {
@@ -39,7 +39,11 @@ const schema = new mongoose.Schema(
 
         isAvailable: Boolean,
 
-        cover: { type: String, required: [true, 'unit cover is required'] },
+        cover: {
+            type: String,
+            required: [true, 'unit cover is required'],
+            default: '//src//uploads//units//cover//default_cover.jpg',
+        },
 
         // images: [{ type: String, required: [true, "unit images are required"] }],
         images: [String],

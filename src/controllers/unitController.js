@@ -41,7 +41,7 @@ module.exports.getUnitsByPage = (request, response, next) => {
 module.exports.getUnitById = (request, response, next) => {
     Unit.findOne(
         { _id: request.params.id },
-        'estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice cover geoLocation'
+        'estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice cover geoLocation reviews'
     )
         .populate({ path: 'landlordId', select: 'fullName phone image' })
         .then((data) => {
@@ -59,8 +59,6 @@ module.exports.getUnitById = (request, response, next) => {
 module.exports.createUnit = (request, response, next) => {
     const { cityId } = request.body
     const { landlordId } = request.body
-    const cover = request.files.unitCover ? request.files.unitCover[0].path : ''
-
     Landlord.exists({ _id: landlordId })
         .then((data) => {
             if (!data) throw new Error('landlordId is not in db')
@@ -75,17 +73,11 @@ module.exports.createUnit = (request, response, next) => {
         })
 
     let UnitImagesPaths = []
-    if (request.files.unitImages) {
-        const unitImagesArray = request.files.unitImages
-        UnitImagesPaths = unitImagesArray.map((image) => image.path)
-    }
-    console.log(UnitImagesPaths)
-    const images = request.files.unitImages ? UnitImagesPaths : []
+    //  console.log(UnitImagesPaths)
+
     const unit = {
         landlordId,
         cityId,
-        cover,
-        images,
         estateType: request.body.estateType,
         address: request.body.address,
         dailyPrice: request.body.dailyPrice,
@@ -93,6 +85,16 @@ module.exports.createUnit = (request, response, next) => {
         numberOfResidents: request.body.numberOfResidents,
         unitInfo: request.body.unitInfo,
         allowedGender: request.body.allowedGender,
+    }
+
+    if (request.files && request.files.unitCover) {
+        unit.cover = request.files.unitCover[0].path
+    }
+
+    if (request.files && request.files.unitImages) {
+        const unitImagesArray = request.files.unitImages
+        UnitImagesPaths = unitImagesArray.map((image) => image.path)
+        unit.images = UnitImagesPaths
     }
     const newUnit = new Unit(unit)
 
@@ -112,7 +114,7 @@ module.exports.createUnit = (request, response, next) => {
         ),
     ])
         .then((data) => {
-            response.status(200).json(data)
+            response.status(201).json({ data: 'added', id: newUnit._id })
         })
         .catch((error) => next(error))
 }
@@ -174,12 +176,11 @@ module.exports.deleteUnit = (request, response, next) => {
         ),
     ])
         .then((data) => {
-            if (data.matchedCount === 0) {
+            console.log(data)
+            if (data[0].deletedCount === 0) {
                 next(new Error('Unit Not Found'))
-                // ! doesn't work check it again
-            } else {
-                response.status(200).json('Unit Deleted')
             }
+            response.status(200).json('Unit Deleted')
         })
         .catch((error) => next(error))
 }
