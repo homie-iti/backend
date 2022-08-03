@@ -73,23 +73,11 @@ module.exports.createUnit = (request, response, next) => {
         })
 
     let UnitImagesPaths = []
-    let images
-    let cover
-    if (request.files.unitImages && request.files.path) {
-        const unitImagesArray = request.files.unitImages
-        UnitImagesPaths = unitImagesArray.map((image) => image.path)
-        images = request.files.unitImages ? UnitImagesPaths : []
-    }
-    if (request.files.unitCover) {
-        cover = request.files.unitCover[0].path
-    }
-    console.log(UnitImagesPaths)
+    //  console.log(UnitImagesPaths)
 
     const unit = {
         landlordId,
         cityId,
-        cover,
-        images,
         estateType: request.body.estateType,
         address: request.body.address,
         dailyPrice: request.body.dailyPrice,
@@ -97,6 +85,16 @@ module.exports.createUnit = (request, response, next) => {
         numberOfResidents: request.body.numberOfResidents,
         unitInfo: request.body.unitInfo,
         allowedGender: request.body.allowedGender,
+    }
+
+    if (request.files && request.files.unitCover) {
+        unit.cover = request.files.unitCover[0].path
+    }
+
+    if (request.files && request.files.unitImages) {
+        const unitImagesArray = request.files.unitImages
+        UnitImagesPaths = unitImagesArray.map((image) => image.path)
+        unit.images = UnitImagesPaths
     }
     const newUnit = new Unit(unit)
 
