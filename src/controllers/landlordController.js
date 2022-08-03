@@ -62,7 +62,7 @@ module.exports.CreateLandLord = (request, response, next) => {
         .then((data) => {
             // console.log(data)
             if (!data)
-                throw new Error(`_id isn't available in users collection`)
+                throw new Error(`_id is not available in users collection`)
 
             const object = new LandlordModel(request.body)
             return object.save()
@@ -77,7 +77,7 @@ module.exports.CreateLandLord = (request, response, next) => {
             )
         )
         .then((data) => {
-            response.status(201).json({ data: `added ${data._id}` })
+            response.status(201).json({ data: 'added', id: data._id })
         })
         .catch((error) => next(error))
 }
@@ -124,7 +124,7 @@ module.exports.deleteLandlordById = (request, response, next) => {
             )
         )
         .then((data) => {
-            response.status(201).json({ data: `deleted landlord` })
+            response.status(200).json({ data: `deleted landlord` })
         })
         .catch((error) => {
             next(error)
