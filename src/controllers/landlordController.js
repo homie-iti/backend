@@ -88,7 +88,8 @@ module.exports.updateLandlordUnits = (request, response, next) => {
 
     LandlordModel.findByIdAndUpdate(
         { _id: request.body.id },
-        { $addToSet: { landlordUnits: request.body.landlordUnits } }
+        { $addToSet: { landlordUnits: request.body.landlordUnits } },
+        { new: true }
     )
         .then((data) => {
             response.status(200).json(data)
@@ -136,7 +137,8 @@ module.exports.RemoveLandlordUnits = (request, response, next) => {
     // TODO shouldn't be used in api
     LandlordModel.updateOne(
         { _id: request.params.id },
-        { $pull: { landlordUnits: request.body.landlordUnits } }
+        { $pull: { landlordUnits: request.body.landlordUnits } },
+        { new: true }
     )
         .then((data) => {
             response.status(200).json(data)
