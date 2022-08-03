@@ -79,26 +79,26 @@ router
         unitController.deleteUnitImages
     )
 
-router.get(
-    '/units/reviews/:id',
+// router.get(
+//     '/units/reviews/:id',
 
-    [
-        query('page')
-            .optional()
-            .isNumeric()
-            .withMessage('Page number should number'),
-        param('id').isMongoId().withMessage('Unit Id Must Be ObjectId'),
-    ],
-    validationMW,
-    unitController.getUnitReviewsByPage
-)
+//     [
+//         query('page')
+//             .optional()
+//             .isNumeric()
+//             .withMessage('Page number should number'),
+//         param('id').isMongoId().withMessage('Unit Id Must Be ObjectId'),
+//     ],
+//     validationMW,
+//     unitController.getUnitReviewsByPage
+// )
 
 router
     .route('/reviews')
     .get(unitController.getAllReviews)
     .post(unitController.addReview)
 
-router.get('/units/ratings/:id', unitController.getUnitAverageRatings)
+router.get('/units/reviews/:id', unitController.getUnitReviews)
 
 // router.get('/agents', unitController.getAllAgents)
 // router.get('/agents/:id', unitController.getAgentById)
