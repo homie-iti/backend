@@ -114,7 +114,7 @@ module.exports.createUnit = (request, response, next) => {
         ),
     ])
         .then((data) => {
-            response.status(200).json(data)
+            response.status(201).json({ data: 'added', id: newUnit._id })
         })
         .catch((error) => next(error))
 }
@@ -176,12 +176,11 @@ module.exports.deleteUnit = (request, response, next) => {
         ),
     ])
         .then((data) => {
-            if (data.matchedCount === 0) {
+            console.log(data)
+            if (data[0].deletedCount === 0) {
                 next(new Error('Unit Not Found'))
-                // ! doesn't work check it again
-            } else {
-                response.status(200).json('Unit Deleted')
             }
+            response.status(200).json('Unit Deleted')
         })
         .catch((error) => next(error))
 }
