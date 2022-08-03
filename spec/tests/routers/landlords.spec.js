@@ -15,14 +15,14 @@ describe('GET -> /landlords', () => {
         result = await request.get('/landlords')
     })
 
-    it('expected to respond with status code 200', async () => {
+    it('expected to respond with status code 200', () => {
         // console.log(result)
         expect(result.status).toEqual(200)
     })
-    it("expected to respond with data of type 'application/json'", async () => {
+    it("expected to respond with data of type 'application/json'", () => {
         expect(result.type).toBe('application/json')
     })
-    it('expected to get all landlords on selected page or on page one if not', async () => {
+    it('expected to get all landlords on selected page or on page one if not', () => {
         // console.log(result)
         expect(result._body).toBeInstanceOf(Object)
     })
@@ -97,7 +97,7 @@ describe('POST & UPDATE & DELETE -> /landlords', () => {
             expect(newLandlord.status).toEqual(201)
         })
 
-        it('expected to respond with message added and id of added landlord', async () => {
+        it('expected to respond with message added and id of added landlord', () => {
             // console.log(newLandlord)
             expect(newLandlord._body.data).toEqual('added')
             expect(true).toEqual(isValidObjectId(newLandlord._body.id))
@@ -142,12 +142,11 @@ describe('POST & UPDATE & DELETE -> /landlords', () => {
             })
             // console.log(newLandlord)
             // console.log(updateLandlord)
-
             expect(updateLandlord.status).toEqual(200)
             expect(updateLandlord._body.landlordUnits).toBeInstanceOf(Array)
         })
 
-        it('expected to respond with array of landlord units & its id', async () => {
+        it('expected to respond with array of landlord units & its id', () => {
             expect(true).toEqual(isValidObjectId(updateLandlord._body._id))
             expect(updateLandlord._body.landlordUnits).toBeInstanceOf(Array)
         })

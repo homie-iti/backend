@@ -13,13 +13,13 @@ describe('GET -> /users', () => {
         result = await request.get('/users')
     })
 
-    it('expected to respond with status code 200', async () => {
+    it('expected to respond with status code 200', () => {
         expect(result.status).toEqual(200)
     })
-    it("expected to respond with data of type 'application/json'", async () => {
+    it("expected to respond with data of type 'application/json'", () => {
         expect(result.type).toBe('application/json')
     })
-    it('expected to get all users on selected page or on page one if not', async () => {
+    it('expected to get all users on selected page or on page one if not', () => {
         expect(result._body).toBeInstanceOf(Object)
     })
 })
