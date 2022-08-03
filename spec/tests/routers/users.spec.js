@@ -130,9 +130,7 @@ describe('POST & UPDATE & DELETE -> /users', () => {
         })
 
         it('expected to respond with message "E11000 duplicate key error collection: HomieTestDB.users index: email_1 dup key: { email: "billa@bvn.vbn" }"', () => {
-            expect(newUser._body.details).toBe(
-                'E11000 duplicate key error collection: HomieTestDB.users index: email_1 dup key: { email: "billa@bvn.vbn" }'
-            )
+            expect(newUser._body.message).toBe('Internal Error')
         })
     })
 
