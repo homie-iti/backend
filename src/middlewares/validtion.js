@@ -1,4 +1,4 @@
-const { body } = require('express-validator')
+const { body, param } = require('express-validator')
 
 const helpQuestionPostValidation = [
     // body("id").isMongoId().withMessage(" helpQuestion id is not valid"),
@@ -23,7 +23,7 @@ const helpQuestionUpdateValidation = [
 ]
 
 const helpQuestionDeleteValidation = [
-    body('id').isMongoId().withMessage('helpQuestion id is not valid '),
+    param('id').isMongoId().withMessage('helpQuestion id is not valid '),
 ]
 
 const userPostValidation = [

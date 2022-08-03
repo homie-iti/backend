@@ -22,7 +22,7 @@ module.exports.getCityById = (request, response, next) => {
     CityModel.findOne({ _id: cityId }, { _id: 0 })
         .populate({
             path: 'units',
-            select: { dailyPrice: 1, estateType: 1, images: 1 },
+            select: {},
         })
         .then((data) => {
             if (data == null) next(new Error('City not found'))
@@ -82,7 +82,7 @@ exports.deleteCity = async (request, response, next) => {
         .populate({ path: 'units', select: { _id: 1, landlordId: 1 } })
         .select({ _id: 1, units: 1 })
         .then((data) => {
-            if (!data) throw new Error('City  not found')
+            if (!data) throw new Error('City not found')
             console.log(data)
             return data
         })
@@ -246,7 +246,7 @@ exports.updateCityProperties = async (request, response, next) => {
     CityModel.updateOne({ _id: request.params.id }, modificationsObject)
         .then((data) => {
             // console.log(data);
-            if (data.matchedCount < 1) throw new Error('city  not found')
+            if (data.matchedCount < 1) throw new Error('city not found')
             if (data.modifiedCount < 1)
                 throw new Error("props couldn't be modified")
 

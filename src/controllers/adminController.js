@@ -65,7 +65,7 @@ module.exports.createAdmin = (request, response, next) => {
     object
         .save()
         .then((data) => {
-            response.status(201).json({ data: 'added' })
+            response.status(201).json({ data: 'added', id: data._id })
         })
         .catch((error) => next(error))
 }
