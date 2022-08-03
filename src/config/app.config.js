@@ -7,6 +7,7 @@ const appConfig = {
     environment: process.env.ENV?.trim() || 'dev',
     port: Number(process.env.PORT) || 8080,
     jwtSecret: process.env.JWT_SECRET,
+    pexelsKey: process.env.PEXELS_KEY || '',
     bcryptSalt: Number(process.env.SALT_ROUNDS) || 10,
     // bcryptPaper: process.env.BCRYPT_PASSWORD,
     orgEmail: process.env.ORG_EMAIL,

@@ -3,10 +3,12 @@ const mongoose = require('mongoose')
 
 require('../../../models/adminModel')
 
+const { generateAvatarImage } = require('../apiDataGrabber')
+
 async function seedAdmin(numberOfDocuments) {
     const collection = mongoose.model('admins')
-    await mongoose.connection.db.dropCollection('admins')
-    // collection.drop();
+    // await mongoose.connection.db.dropCollection('admins')
+    await collection.deleteMany({})
 
     const data = []
     const ids = []
@@ -30,7 +32,7 @@ async function seedAdmin(numberOfDocuments) {
         const password = '1234@aBcD'
         const phone = faker.phone.number('012########')
         const national_id = parseInt(faker.phone.number('##############'))
-        const image = faker.internet.avatar()
+        const image = await generateAvatarImage()
 
         ids.push(_id)
         data.push({

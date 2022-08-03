@@ -15,8 +15,9 @@ async function seedContract(
     unitsIds
 ) {
     const collection = mongoose.model('contracts')
-    await mongoose.connection.db.dropCollection('contracts')
+    // await mongoose.connection.db.dropCollection('contracts')
     // collection.drop();
+    await collection.deleteMany({})
 
     const data = []
     const ids = []

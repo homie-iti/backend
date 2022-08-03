@@ -44,6 +44,16 @@ module.exports.getUnitById = (request, response, next) => {
         'estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice cover geoLocation reviews'
     )
         .populate({ path: 'landlordId', select: 'fullName phone image' })
+        .populate({
+            path: 'reviews.reviews',
+            select: 'createdAt rating comment agentId _id',
+            populate: {
+                path: 'agentId',
+                select: '_id',
+                populate: { path: '_id', select: 'fullName image' },
+            },
+        })
+
         .then((data) => {
             if (data == null) next(new Error("Unit Doesn't Exist"))
             else {

@@ -31,7 +31,7 @@ jobs:
             - run:
                   name: Testing
                   command: |
-                      npm run test:prod
+                      npm run test:atlas
 
     deploy:
         docker:

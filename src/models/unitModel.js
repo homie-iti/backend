@@ -102,7 +102,9 @@ const schema = new mongoose.Schema(
                     max: 5,
                 },
             ],
-            totalReviews: [{ type: mongoose.Types.ObjectId, ref: 'reviews' }],
+
+            // ],
+            reviews: [{ type: mongoose.Types.ObjectId, ref: 'reviews' }],
         },
     },
     { timestamps: true }

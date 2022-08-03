@@ -3,19 +3,73 @@ const mongoose = require('mongoose')
 
 require('../../../models/unitModel')
 
+const { generateApartmentImage } = require('../apiDataGrabber')
+
 function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+async function getUnitsImages(numberOfDocuments, numberOfImagesPerUnit) {
+    // console.log(await generateApartmentImage(1, 'apartment furniture inside'))
+
+    const apiImagesMaximum = 80
+    const numberOfNeededRequests = Math.ceil(
+        (numberOfDocuments * numberOfImagesPerUnit) / apiImagesMaximum
+    )
+    const requestsArray = new Array(numberOfNeededRequests)
+        .fill(1)
+        .map((_, index) =>
+            generateApartmentImage(index + 1, 'apartment furniture inside')
+        )
+    // console.log({ requestsArray })
+
+    const response = await Promise.allSettled(requestsArray)
+    // console.log({ response })
+
+    const imagesArray = response
+        .reduce((acc, curr, index) => {
+            // if (!curr.value) console.log({ curr, index })
+            acc = [...acc, ...curr.value]
+            return acc
+        }, [])
+        .map((curr) => curr.src.landscape)
+
+    // console.log(imagesArray.length)
+
+    const apartmentsImagesArray = []
+
+    for (let i = 0; i < imagesArray.length / numberOfImagesPerUnit; i++) {
+        const apartment = {}
+        apartment.cover = imagesArray[i * numberOfImagesPerUnit]
+        apartment.images = [
+            imagesArray[i * numberOfImagesPerUnit + 1],
+            imagesArray[i * numberOfImagesPerUnit + 2],
+            imagesArray[i * numberOfImagesPerUnit + 3],
+            imagesArray[i * numberOfImagesPerUnit + 4],
+        ]
+        apartmentsImagesArray.push(apartment)
+    }
+
+    return apartmentsImagesArray
+}
+
 async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
     const collection = mongoose.model('units')
-    await mongoose.connection.db.dropCollection('units')
+    // await mongoose.connection.db.dropCollection('units')
     // collection.drop();
+    await collection.deleteMany({})
+
+    const unitsImages = await getUnitsImages(numberOfDocuments, 5)
+    // console.log(unitsImages)
+    // console.log(unitsImages.length)
 
     const data = []
     const ids = []
     for (let i = 0; i < numberOfDocuments; i++) {
+        // console.log(i)
+        // console.log(unitsImages[i])
+
         const _id = mongoose.Types.ObjectId(
             faker.unique(faker.database.mongodbObjectId)
         )
@@ -40,12 +94,12 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
             buildingNumber: faker.address.buildingNumber(),
         }
 
-        const dailyPrice = faker.commerce.price()
+        const dailyPrice = faker.commerce.price(1, 50)
         const isAvailable = faker.datatype.boolean()
-        const cover = faker.image.unsplash.buildings()
-        const images = new Array(randomIntFromInterval(2, 14)).fill(
-            faker.image.unsplash.buildings()
-        )
+
+        const { cover } = unitsImages[i]
+        const { images } = unitsImages[i]
+
         const isPetsAllowed = faker.datatype.boolean()
         const numberOfResidents = randomIntFromInterval(1, 5)
 
@@ -84,4 +138,22 @@ async function seedUnits(numberOfDocuments, usersIds, citiesIds) {
     return ids
 }
 
+async function addReviewToUnit(reviews) {
+    const collection = mongoose.model('units')
+
+    for (let i = 0; i < reviews.length; i++) {
+        // console.log(reviews[i])
+        await collection.updateOne(
+            { _id: reviews[i].unitId },
+            {
+                $push: {
+                    'reviews.reviews': reviews[i]._id,
+                    'reviews.ratings': reviews[i].rating,
+                },
+            }
+        )
+    }
+}
+
 module.exports = seedUnits
+module.exports.addReviewToUnit = addReviewToUnit

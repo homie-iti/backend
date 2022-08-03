@@ -54,7 +54,7 @@ async function seedDB() {
         console.log('..')
 
         console.log('- started users seeding')
-        collectionsIds.usersIds = [...(await seedUsers(1000))]
+        collectionsIds.usersIds = [...(await seedUsers(50))]
         console.log('+ done')
 
         console.log('..')
@@ -120,7 +120,7 @@ async function seedDB() {
         console.log('- started reviews seeding')
         collectionsIds.reviewsIds = [
             ...(await seedReviews(
-                111,
+                500,
                 collectionsIds.agentsIds,
                 collectionsIds.unitsIds
             )),
@@ -165,7 +165,8 @@ async function connectToCloudDB() {
 ;(async function main() {
     try {
         // console.log(process.env)
-        await connectToLocalDB()
+        if (appConfig.environment === 'prod') await connectToCloudDB()
+        else connectToLocalDB()
         await seedDB()
     } catch (error) {
         console.log('DB Connection Error', error)
