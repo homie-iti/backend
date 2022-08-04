@@ -3,7 +3,7 @@ const mongoosePaginate = require('mongoose-paginate-v2')
 
 const schema = new mongoose.Schema(
     {
-        _id: mongoose.Types.ObjectId,
+        //  _id: mongoose.Types.ObjectId,
         landlordId: {
             type: mongoose.Types.ObjectId,
             ref: 'landlords',
@@ -31,7 +31,7 @@ const schema = new mongoose.Schema(
         },
         paymentAmount: {
             type: Number,
-            required: [true, 'contract paymentAmount is required'],
+            // required: [true, 'contract paymentAmount is required'],
         },
         // contractType: {},
         paymentMethod: {
@@ -45,7 +45,12 @@ const schema = new mongoose.Schema(
         },
         offerPercentage: {
             type: Number,
-            required: [true, 'contract offerPercentage is required'],
+            // required: [true, 'contract offerPercentage is required'],
+        },
+        state: {
+            type: String,
+            enum: ['active', 'canceled', 'proposed'],
+            required: [true, 'contract state is required'],
         },
     },
     { timestamps: true }
