@@ -26,7 +26,8 @@ const adminRoute = require('./routers/adminRoute')
 const loginRoute = require('./routers/loginRoute')
 const forgetPasswordRoute = require('./routers/forgetPasswordRoute')
 const signupRoute = require('./routers/signupRoute')
-const filterandsort=require('./routers/filtringandsortingRoute')
+const filterandsort = require('./routers/filtringandsortingRoute')
+const paymentRoute = require('./routers/paymentRoute')
 
 // require('./models/addressModel')
 // require('./models/adminModel')
@@ -91,6 +92,7 @@ app.use(landlordRoute)
 app.use(helpRoute)
 app.use(forgetPasswordRoute)
 app.use(filterandsort)
+app.use(paymentRoute)
 
 // not-found middleware
 app.use((request, response, next) => {
