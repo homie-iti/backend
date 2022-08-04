@@ -389,7 +389,7 @@ module.exports.getUnitReviews = (request, response, next) => {
     )
         .populate({
             path: 'reviews.reviews',
-            select: { agentId: 1, comment: 1, createdAt: 1 },
+            select: { agentId: 1, comment: 1, rating: 1, createdAt: 1 },
         })
         .then((data) => {
             console.log(data)
@@ -411,6 +411,10 @@ module.exports.getUnitReviews = (request, response, next) => {
             next(error)
         })
 }
+
+
+
+
 
 // ! Things to think about it:
 //* Landlord upload new images in addition to the exist one.
