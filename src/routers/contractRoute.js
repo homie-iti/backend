@@ -10,12 +10,18 @@ const {
     updateContractValidations,
 } = require('../middlewares/contractValidations')
 
-router.get(
-    '/contracts/unit/:id',
-    [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
-    validationMW,
-    contractController.getUnitContracts
-)
+router
+    .route('/contracts/unit/:id')
+    .get(
+        [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
+        validationMW,
+        contractController.getUnitContracts
+    )
+    .delete(
+        [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
+        validationMW,
+        contractController.deleteUnitContract
+    )
 
 router.get(
     '/contracts/landlord/:id',
@@ -48,11 +54,5 @@ router
         contractController.updateContractData
     )
 
-router.delete(
-    '/unit/contract/:id',
-    [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
-    validationMW,
-    contractController.deleteUnitContract
-)
-
+router.get('/contracts/:id', contractController.getContract)
 module.exports = router
