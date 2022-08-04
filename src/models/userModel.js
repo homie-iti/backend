@@ -70,6 +70,10 @@ const schema = new mongoose.Schema(
             type: String,
             default: '',
         },
+        balance: {
+            type: Number,
+            required: [true, 'User balance is required'],
+        },
     },
     { timestamps: true }
 )
