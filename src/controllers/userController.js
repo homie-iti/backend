@@ -107,7 +107,7 @@ module.exports.createUser = (request, response, next) => {
     object
         .save()
         .then((data) => {
-            response.status(201).json({ data })
+            response.status(201).json({ data:'added',id:data._id })
             // return { name: data.fullName, email: data.email }
         })
         // .then(notifyUser)
