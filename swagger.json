@@ -711,7 +711,10 @@
                     {
                         "name": "agent",
                         "in": "body",
-                        "description": "Agent data that we want to add(_id present in users & AgentUnits array of objects each object contains unitId &numberOfRenting )"
+                        "description": "Agent data that we want to add(_id present in users & AgentUnits array of objects each object contains unitId &numberOfRenting )",
+                        "schema": {
+                            "$ref": "#/definitions/AddingNewAgent"
+                        }
                     }
                 ],
                 "responses": {
@@ -1650,7 +1653,31 @@
                     "type": "objectId"
                 },
                 "landlordUnits": {
-                    "type": "array"
+                    "type": "array",
+                    "items": {
+                        "type": "objectId"
+                    }
+                }
+            }
+        },
+        "AddingNewAgent": {
+            "properties": {
+                "_id": {
+                    "type": "objectId"
+                },
+                "agentUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId"
+                            },
+                            "numberOfRenting": {
+                                "type": "number"
+                            }
+                        }
+                    }
                 }
             }
         },
