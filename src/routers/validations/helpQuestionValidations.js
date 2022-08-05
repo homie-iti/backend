@@ -22,12 +22,9 @@ const helpQuestionUpdateValidation = [
         .withMessage('Answer name should be characters'),
 ]
 
-const helpQuestionDeleteValidation = [
-    param('id').isMongoId().withMessage('helpQuestion id is not valid '),
-]
+
 
 module.exports = {
     helpQuestionPostValidation,
-    helpQuestionUpdateValidation,
-    helpQuestionDeleteValidation,
+    helpQuestionUpdateValidation
 }
