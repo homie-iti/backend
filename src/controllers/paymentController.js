@@ -9,12 +9,30 @@ const emailNotifier = new EmailClient()
 function notifyLandlord(event, contractDetails) {
     console.log(contractDetails)
     const configs = {
-        ...contractDetails,
+        contractDetails,
+        name: contractDetails.landlordName,
+        email: contractDetails.landlordEmail,
     }
     return emailNotifier.sendMessage(event, configs).then((msgState) => {
         console.log(msgState)
         return {
-            ...user._doc,
+            ...contractDetails._doc,
+            isEmailSent: msgState,
+        }
+    })
+}
+
+function notifyAgent(event, agentDetails) {
+    console.log(agentDetails)
+    const configs = {
+        agentDetails,
+        name: agentDetails.agentName,
+        email: agentDetails.agentEmail,
+    }
+    return emailNotifier.sendMessage(event, configs).then((msgState) => {
+        console.log(msgState)
+        return {
+            ...agentDetails._doc,
             isEmailSent: msgState,
         }
     })
@@ -43,7 +61,7 @@ module.exports.bookUnit = (request, response, next) => {
 
             if (user.balance < unitData.dailyPrice * daysOfReserve)
                 throw new Error(
-                    `Sorry, you can't reserve this unit as your balance as not enough`
+                    `Sorry, you can't reserve this unit as your balance is not enough.`
                 )
             console.log(unitData.dailyPrice * daysOfReserve)
             // console.log(unitData)
@@ -78,7 +96,7 @@ module.exports.bookUnit = (request, response, next) => {
                 )
             console.log(landlord)
             const contractDetails = {
-                ...contractData,
+                contractData,
                 agentName: userData.fullName,
                 agentPhoneNumber: userData.phone,
                 agentEmail: userData.email,
@@ -87,11 +105,11 @@ module.exports.bookUnit = (request, response, next) => {
                 landlordEmail: landlord._id.email,
             }
             console.log(contractDetails)
-            // notifyLandlord('unit_reserve', contractDetails)
+            notifyLandlord('book_unit', contractDetails)
             response
                 .status(200)
                 .json(
-                    'Email has been send successfully to the landlord to confirm booking'
+                    'An email has been sent successfully to the landlord to confirm the booking.'
                 )
         })
 
@@ -100,26 +118,51 @@ module.exports.bookUnit = (request, response, next) => {
 
 module.exports.confirmBookingUnit = (request, response, next) => {
     let contractData
+    let agentData
+    let landlordData
+
     ContractModel.findOne({ _id: request.body.id })
         .then((contract) => {
             // console.log(contract)
             if (!contract) throw new Error(`Contract not found`)
             contractData = contract
             contractData.state = 'active'
-            console.log(contractData)
+            // console.log(contractData)
+            // console.log(contractData.unitId)
+            // console.log(contractData.agentId)
+
             return UnitModel.findOneAndUpdate(
-                { _id: contractData.unitId._id },
+                { _id: contractData.unitId },
                 {
                     $set: {
                         isAvailable: false,
-                        agentId: contractData.agentId._id,
+                        agentId: contractData.agentId,
                     },
-                }
+                },
+                { new: true }
             )
         })
         .then((unit) => {
             if (!unit) throw new Error(`Unit not found`)
-            console.log(unit)
+            // console.log(unit)
+            return UserModel.findOneAndUpdate(
+                {
+                    _id: contractData.landlordId,
+                },
+                {
+                    $inc: { balance: contractData.totalAmount },
+                },
+                { new: true }
+            )
+        })
+        .then((landlord) => {
+            if (!landlord)
+                throw new Error(
+                    `Landlord is not found in the landlords' collection`
+                )
+            landlordData = landlord
+            console.log(landlordData)
+            // if (!agent) throw new Error(`Agent not found`)
             return UserModel.findOneAndUpdate(
                 {
                     _id: contractData.agentId,
@@ -127,29 +170,37 @@ module.exports.confirmBookingUnit = (request, response, next) => {
                 {
                     $set: { isAgent: true },
                     $inc: { balance: -contractData.totalAmount },
-                }
+                },
+                { new: true }
             )
         })
         .then((agent) => {
-            console.log(agent)
-            if (!agent) throw new Error(`Agent not found`)
-
+            agentData = agent
+            console.log(agentData)
             const newAgent = new AgentModel({
-                _id: agent._id,
+                _id: contractData.agentId,
                 agentUnits: [
                     { unitId: contractData.unitId, numberOfRenting: 1 },
                 ],
             })
             return newAgent.save()
         })
-        .then((data) => {
-            console.log(data)
+        .then(() => {
+            const agentDetails = {
+                agentName: agentData.fullName,
+                agentPhoneNumber: agentData.phone,
+                agentEmail: agentData.email,
+                landlordName: landlordData.fullName,
+                landlordPhoneNumber: landlordData.phone,
+                landlordEmail: landlordData.email,
+            }
+            console.log(agentDetails)
+            notifyAgent('confirm_booking_unit', agentDetails)
             response
                 .status(200)
                 .json(
-                    'Email will send to the agent to notify that contract has been confirmed'
+                    'An email has been sent to the agent to notify him that the landlord has been confirmed to book the unit.'
                 )
-            // TODO send email to agent to notify that landlord has confirmed
         })
 
         .catch((error) => next(error))
@@ -172,10 +223,17 @@ module.exports.cancelBookingUnit = (request, response, next) => {
         .then((user) => {
             console.log(user)
             if (!user) throw new Error(`User not found`)
+            const agentDetails = {
+                agentName: user.fullName,
+                agentPhoneNumber: user.phone,
+                agentEmail: user.email,
+            }
+            notifyAgent('cancel_booking_unit', agentDetails)
             response
                 .status(200)
                 .json(
-                    'Email will send to the agent to notify that contract has been canceled'
+                    'An email has been sent to the agent to notify that the contract has been canceled.'
                 )
         })
+        .catch((error) => next(error))
 }
