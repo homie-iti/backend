@@ -51,6 +51,7 @@ module.exports.signup = (request, response, next) => {
         email: request.body.email,
         phone: request.body.phone,
         national_id: request.body.nationalId,
+        balance: request.body.balance,
     }
 
     bcrypt
