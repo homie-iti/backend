@@ -20,6 +20,7 @@ const newUser = {
     address: {
         city: 'Cairo',
     },
+    balance: 2000,
 }
 const newAdmin = {
     fullName: 'Ali Adel Amir',
@@ -39,8 +40,8 @@ let adminData
 beforeAll(async () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
     userData = await request.post('/users').send(newUser)
-    // console.log(userData)
-    userId = userData._body.data._id
+    console.log(userData)
+    userId = userData._body.id
     console.log(userId)
     adminData = await request.post('/admins').send(newAdmin)
     // console.log(adminData)
@@ -133,6 +134,7 @@ describe('POST -> /help-questions', () => {
         result = await request
             .post('/help-questions')
             .send({ userId, adminId, question: 'why?', answer: 'ok' })
+        console.log(result)
         expect(result.status).toEqual(201)
         expect(result.type).toBe('application/json')
     })

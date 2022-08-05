@@ -536,7 +536,7 @@
                 "tags": [
                     "Landlords"
                 ],
-                "summary": "Get array of landlords objects containing users that exist on the given page with limit 30 landlords",
+                "summary": "Get array of landlords objects containing landlords that exist on the given page with limit 30 landlords",
                 "parameters": [
                     {
                         "name": "page",
@@ -560,9 +560,9 @@
                 "summary": "Adding a new landlord exists in users' collection to landlords' collection then update the value of isLandlord to true in users' collection",
                 "parameters": [
                     {
-                        "name": "user",
+                        "name": "landlord",
                         "in": "body",
-                        "description": "Landlord data that we want to add",
+                        "description": "Landlord data that we want to add(_id present in users & landlordUnits array to add)",
                         "schema": {
                             "$ref": "#/definitions/AddingNewLandlord"
                         }
@@ -584,20 +584,17 @@
                 "tags": [
                     "Landlords"
                 ],
-                "summary": "Update specific user data",
+                "summary": "Update landlord units",
                 "parameters": [
                     {
-                        "name": "user",
+                        "name": "landlordId needs to be updated, and landlordUnits needs to be added.",
                         "in": "body",
-                        "description": "User data that we want to update",
-                        "schema": {
-                            "$ref": "#/definitions/UpdateUser"
-                        }
+                        "description": "Landlord units that we want to add one or array"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "updated"
+                        "description": "landlord after adding new unit"
                     },
                     "500": {
                         "description": "Internal server error"
@@ -611,25 +608,144 @@
                 }
             }
         },
-        "/search": {
+        "/landlords/{id}": {
             "get": {
                 "tags": [
-                    "Search Cities"
+                    "Landlords"
                 ],
-                "summary": "Get cities that matches the entered string.",
+                "summary": "Get specific landlord data",
                 "parameters": [
                     {
-                        "name": "cityname",
-                        "in": "query",
-                        "description": "Letter or letters of city that we search about"
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of landlord that we want to get its data"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/City"
-                        }
+                        "description": "data of landlord"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Landlords"
+                ],
+                "summary": "Delete landlord data that matches the given id and update users' collection for this id to be landlord false.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Landlord id that we want to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted landlord"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/landlords/{id}/units": {
+            "delete": {
+                "tags": [
+                    "Landlords"
+                ],
+                "summary": "Delete specific landlord units",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of landlord that we want to delete unit from its units"
+                    },
+                    {
+                        "name": "landlordUnits",
+                        "in": "body",
+                        "description": "landlord unit (one only) that we want to delete "
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data describe deleting process"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/agents": {
+            "get": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Get array of agents objects containing agents that exist on the given page with limit 30 agents",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to display agents exist on it"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of agents"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Adding a new agent exists in users' collection to agents' collection then update the value of isAgent to true in users' collection",
+                "parameters": [
+                    {
+                        "name": "agent",
+                        "in": "body",
+                        "description": "Agent data that we want to add(_id present in users & AgentUnits array of objects each object contains unitId &numberOfRenting )"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "agent added"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/agents/{id}": {
+            "get": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Get specific agent data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of agent that we want to get its data"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data of agent"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -812,12 +928,52 @@
                 }
             }
         },
+        "/reviews": {
+            "post": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Adding new review to specific agent unit",
+                "parameters": [
+                    {
+                        "name": "review",
+                        "in": "body",
+                        "description": "unitId to add review,agentId that have this unit,comment,rating"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "information about update process adding review to unit reviews"
+                    }
+                }
+            }
+        },
+        "/units/reviews/{id}": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Getting specific unit reviews with total number of them and rating average",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "unitId that we want to get it reviews"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "average ratings of unit,number of reviews and reviews body"
+                    }
+                }
+            }
+        },
         "/recommendations": {
             "get": {
                 "tags": [
                     "Recommendations"
                 ],
-                "summary": "Get cities that matches the entered string.",
+                "summary": "Get number of cities data that matches the entered number.",
                 "parameters": [
                     {
                         "name": "citiesNumber",
@@ -827,7 +983,30 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "_id,name,cover of cities selected"
+                    }
+                }
+            }
+        },
+        "/search": {
+            "get": {
+                "tags": [
+                    "Search Cities"
+                ],
+                "summary": "Get cities that matches the entered string.",
+                "parameters": [
+                    {
+                        "name": "cityname",
+                        "in": "query",
+                        "description": "Letter or letters of city that we search about"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/City"
+                        }
                     }
                 }
             }
@@ -1379,15 +1558,7 @@
                     "type": "objectId"
                 },
                 "landlordUnits": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "unitId": {
-                                "type": "objectId"
-                            }
-                        }
-                    }
+                    "type": "array"
                 }
             }
         },

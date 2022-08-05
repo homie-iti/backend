@@ -115,7 +115,74 @@ module.exports = class EmailClient {
                     <h2>Password changed successfully</h2>
                     <p>Your password has been changed successfully... you can now try to login again.</p>
                     <p dir="rtl">إدارة هومي الموقّرة</p>
+                    `,
+                }
+                break
+
+            case 'book_unit':
+                this.#message = {
+                    subject: `Hola ${
+                        configs.name.split(' ')[0]
+                    }, Confirm booking a unit `,
+                    body: `
+                    <h2>Confirm booking a unit</h2>
+                    <p>Someone needs to book a unit of yours. Please see the contract details below and then confirm or cancel it.</P>
+                    <p>${configs.contractDetails.contractData}</p>
+
+                    <h3>For more details about the agent, you can contact him/her through</h3>
+                       
+                    <p>AgentName:${configs.contractDetails.agentName}</p>
+
+                    <p>AgentPhone:${configs.contractDetails.agentPhoneNumber}</p>
+
+                    <p>AgentEmail:${configs.contractDetails.agentEmail}</p>
+
+                    <button>Confirm</button>
+                    <button>Cancel</button>
+
+                    <p>Have a good day.</p>
+                    <p dir="rtl">إدارة هومي الموقّرة</p>
                             `,
+                }
+                break
+
+            case 'confirm_booking_unit':
+                this.#message = {
+                    subject: `Hola ${
+                        configs.name.split(' ')[0]
+                    }, Landlord Confirm your unit booking `,
+                    body: `
+                    <h2>Landlord Confirm your unit booking</h2>
+                    <p>Congratulations. The landlord of the unit you need to book has successfully confirmed the booking.</P>
+    
+                    <h3>For more details about the landlord, you can contact him/her through</h3>
+                           
+                    <p>LandlordName:${configs.agentDetails.landlordName}</p>
+    
+                    <p>LandlordPhone:${configs.agentDetails.landlordPhoneNumber}</p>
+    
+                    <p>LandlordEmail:${configs.agentDetails.landlordEmail}</p>
+    
+                    <p>Have a good day.</p>
+    
+                    <p dir="rtl">إدارة هومي الموقّرة</p>
+                    `,
+                }
+                break
+
+            case 'cancel_booking_unit':
+                this.#message = {
+                    subject: `Hola ${
+                        configs.name.split(' ')[0]
+                    }, Landlord Cancel your unit booking `,
+                    body: `
+                    <h2>Landlord Canceled your booking a unit</h2>
+                    <h3>Sorry, but the landlord has cancelled your reservation for a unit..</h3>
+        
+                    <h3>You can log in to our website and choose another unit that suits you.</h3>
+                    <p>Have a good day.</p>          
+                    <p dir="rtl">إدارة هومي الموقّرة</p>    
+                    `,  
                 }
                 break
             default:

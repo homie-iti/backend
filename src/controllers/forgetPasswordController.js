@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 const saltRounds = 10
-
+const { isValidObjectId } = require('mongoose')
 const User = require('../models/userModel')
 const EmailClient = require('../utilities/sendEmail')
-const { isValidObjectId } = require('mongoose')
+
 
 const emailNotifier = new EmailClient()
 function notifyUser(event, user) {
@@ -39,7 +39,8 @@ module.exports.forgetPassword = (request, response, next) => {
 
             console.log(user)
             user.updateOne({ resetLink: user._id }).then((updatedUser) => {
-                console.log(updatedUser, user)
+                // console.log(updatedUser, user)
+                console.log(user.resetLink)
                 if (updatedUser.modifiedCount === 0)
                     next(
                         new Error(
@@ -69,7 +70,7 @@ module.exports.resetPassword = (request, response, next) => {
     //                 .json({ error: 'Incorrect or expired link' })
     //         }
     if (!isValidObjectId(resetLink)) throw new Error('Not Valid reset Link ')
-    User.findOne({ _id: resetLink, resetLink: resetLink }).then((user) => {
+    User.findOne({ _id: resetLink, resetLink }).then((user) => {
         console.log(user)
         if (user == null) next(new Error("Expired link or user doesn't found "))
         else {
@@ -78,7 +79,7 @@ module.exports.resetPassword = (request, response, next) => {
             user.resetLink = ''
             console.log(user.password)
             user.save()
-            // notifyUser('password_changed', user)
+            notifyUser('password_changed', user)
             response.status(200).json('Your password has been changed')
         }
     })

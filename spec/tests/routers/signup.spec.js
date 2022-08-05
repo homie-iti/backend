@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 // process.env.NODE_ENV = 'test'
-const mongoose = require('mongoose')
 
 const supertest = require('supertest')
 const app = require('../../../src/app')
@@ -22,6 +21,7 @@ describe(`GET -> ${endpoint}`, () => {
         lastName: 'Nader',
         middleName: 'Yasser',
         email: 'hambozo@sdsdsd.scc',
+        balance: 6000,
     }
 
     beforeAll(() => {
@@ -47,7 +47,6 @@ describe(`GET -> ${endpoint}`, () => {
         const result = await request.post(`${endpoint}`).send(user)
         console.log(result)
         // expect(result.status).toEqual(201)
-        // expect(result.body.userInfo).toBeTruthy()
         // expect(result.body.userInfo).toBeInstanceOf(Object)
     })
 
@@ -55,7 +54,7 @@ describe(`GET -> ${endpoint}`, () => {
         const result = await request
             .post(`${endpoint}/check-availability`)
             .send({ nationalId: user.nationalId })
-        // console.log(result.body) // return all response object
+        console.log(result.body) // return all response object
         expect(result.body.isAvailable).toBe(false)
     })
 

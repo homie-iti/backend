@@ -297,32 +297,32 @@ module.exports.deleteUnitImages = (request, response, next) => {
 //         })
 // }
 
-module.exports.getUnitReviewsByPage = (request, response, next) => {
-    Review.paginate(
-        {},
-        {
-            page: request.query.page || 1,
-            // select: '',
-            // populate: {  },
-        }
-    )
-        .then((data) => {
-            console.log(data)
-            response.status(200).json({
-                currentPage: data.page,
-                previousPage: data.prevPage,
-                nextPage: data.nextPage,
-                totalPages: data.totalPages,
-                totalUnitReviews: data.totalDocs,
-                UnitReviewsDisplayed: data.docs.length,
-                remained: data.totalDocs - data.docs.length,
-                results: data.docs,
-            })
-        })
-        .catch((error) => {
-            next(error)
-        })
-}
+// module.exports.getUnitReviewsByPage = (request, response, next) => {
+//     Review.paginate(
+//         { unitId: request.params.id },
+//         {
+//             page: request.query.page || 1,
+//             // select: '',
+//             // populate: {  },
+//         }
+//     )
+//         .then((data) => {
+//             console.log(data)
+//             response.status(200).json({
+//                 currentPage: data.page,
+//                 previousPage: data.prevPage,
+//                 nextPage: data.nextPage,
+//                 totalPages: data.totalPages,
+//                 totalUnitReviews: data.totalDocs,
+//                 UnitReviewsDisplayed: data.docs.length,
+//                 remained: data.totalDocs - data.docs.length,
+//                 results: data.docs,
+//             })
+//         })
+//         .catch((error) => {
+//             next(error)
+//         })
+// }
 
 module.exports.getAllReviews = (request, response, next) => {
     Review.find({})
@@ -359,7 +359,7 @@ module.exports.addReview = (request, response, next) => {
                             {
                                 $push: { 'reviews.ratings': review.rating },
                                 $addToSet: {
-                                    'reviews.totalReviews': review._id,
+                                    'reviews.reviews': review._id,
                                 },
                             }
                         )
@@ -382,14 +382,14 @@ module.exports.addReview = (request, response, next) => {
 }
 
 // get unit average ratings (output:ratingsAverage,numberOfReviews,[reviews])
-module.exports.getUnitAverageRatings = (request, response, next) => {
+module.exports.getUnitReviews = (request, response, next) => {
     Unit.findOne(
         { _id: request.params.id },
-        { 'reviews.ratings': 1, 'reviews.totalReviews': 1 }
+        { 'reviews.ratings': 1, 'reviews.reviews': 1 }
     )
         .populate({
-            path: 'reviews.totalReviews',
-            select: { agentId: 1, comment: 1 },
+            path: 'reviews.reviews',
+            select: { agentId: 1, comment: 1, rating: 1, createdAt: 1 },
         })
         .then((data) => {
             console.log(data)
@@ -402,8 +402,8 @@ module.exports.getUnitAverageRatings = (request, response, next) => {
                     totalRatings.length
                 response.status(200).json({
                     RatingAverage: ratingAverage,
-                    reviewsCount: data.reviews.totalReviews.length,
-                    reviews: data.reviews.totalReviews,
+                    reviewsCount: data.reviews.reviews.length,
+                    reviews: data.reviews.reviews,
                 })
             }
         })
@@ -411,6 +411,10 @@ module.exports.getUnitAverageRatings = (request, response, next) => {
             next(error)
         })
 }
+
+
+
+
 
 // ! Things to think about it:
 //* Landlord upload new images in addition to the exist one.

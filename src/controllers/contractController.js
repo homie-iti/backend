@@ -35,7 +35,7 @@ module.exports.getContractsByPage = (request, response, next) => {
             populate: { path: 'landlordId agentId unitId' },
         }
     )
-        // ContractModel.find({}) // ! discuss with team about data we want to display
+        // ContractModel.find({})
         //     .populate({
         //         path: 'unitId',
         //         select: 'cover estateType unitInfo dailyPrice',
@@ -84,10 +84,10 @@ module.exports.addContract = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-module.exports.deleteUnitContract = (request, response, next) => {
-    ContractModel.deleteOne({ unitId: request.params.id })
+module.exports.getContract = (request, response, next) => {
+    ContractModel.findOne({ _id: request.params.id })
         .then((data) => {
-            if (data.deletedCount === 0) throw new Error('id Not Found')
+            if (data === null) throw new Error('Contract Not Found')
             response.status(200).json(data)
         })
         .catch((error) => next(error))

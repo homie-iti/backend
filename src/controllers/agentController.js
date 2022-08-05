@@ -141,12 +141,12 @@ exports.updateAgentUnits = async (request, response, next) => {
 exports.deleteAgent = async (request, response, next) => {
   try {
     const data = await Agent.deleteOne({
-      _id: request.body._id,
-    });
+      _id: request.params.id,
+    })
 
     if (data.deletedCount < 1) throw new Error("Agent  not found");
 
-    const filteruUser = request.body._id;
+    const filteruUser = request.params.id;
     const update = { isAgent: "false" };
 
     const userupdate = await User.findByIdAndUpdate(filteruUser, update);

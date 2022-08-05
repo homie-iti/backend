@@ -45,12 +45,13 @@ describe('POST & UPDATE & DELETE -> /landlords', () => {
         address: {
             city: 'Giza',
         },
+        balance: 5000,
     }
     beforeAll(async () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
         result = await request.post('/users').send(newUser)
         // console.log(result)
-        userId = result._body.data._id
+        userId = result._body.id
         // console.log(userId)
     })
 

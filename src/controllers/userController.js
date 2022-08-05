@@ -102,12 +102,13 @@ module.exports.createUser = (request, response, next) => {
         password: request.body.password,
         phone: request.body.phone,
         national_id: request.body.national_id,
+        balance: request.body.balance,
         // image,
     })
     object
         .save()
         .then((data) => {
-            response.status(201).json({ data })
+            response.status(201).json({ data: 'added', id: data._id })
             // return { name: data.fullName, email: data.email }
         })
         // .then(notifyUser)
