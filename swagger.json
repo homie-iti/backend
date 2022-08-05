@@ -852,7 +852,10 @@
                     {
                         "name": "help-question",
                         "in": "body",
-                        "description": "userId & adminId and data desired to be be updated"
+                        "description": "userId & adminId of the question and data desired to be be updated",
+                        "schema": {
+                            "$ref": "#/definitions/HelpQuestion"
+                        }
                     }
                 ],
                 "responses": {
@@ -941,7 +944,10 @@
                     {
                         "name": "review",
                         "in": "body",
-                        "description": "unitId to add review,agentId that have this unit,comment,rating"
+                        "description": "unitId to add review,agentId that have this unit,comment,rating",
+                        "schema": {
+                            "$ref": "#/definitions/addingReview"
+                        }
                     }
                 ],
                 "responses": {
@@ -1718,6 +1724,28 @@
                 "unitId": {
                     "type": "objectId",
                     "$ref": "#/definitions/Unit"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                }
+            }
+        },
+        "addingReview": {
+            "required": [
+                "agentId",
+                "unitId",
+                "comment",
+                "rating"
+            ],
+            "properties": {
+                "agentId": {
+                    "type": "objectId"
+                },
+                "unitId": {
+                    "type": "objectId"
                 },
                 "comment": {
                     "type": "string"
