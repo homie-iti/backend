@@ -8,24 +8,25 @@ const validationMW = require('../middlewares/validationMW')
 const {
     createContractValidations,
     updateContractValidations,
-} = require('../middlewares/contractValidations')
+} = require('./validations/contractValidations')
+const validateId = require('./validations/idValidations')
 
 router
     .route('/contracts/unit/:id')
     .get(
-        [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
+        validateId('Unit', param),
         validationMW,
         contractController.getUnitContracts
     )
     .delete(
-        [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
+        validateId('Unit', param),
         validationMW,
         contractController.deleteUnitContract
     )
 
 router.get(
     '/contracts/landlord/:id',
-    [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
+    validateId('Landlord', param),
     validationMW,
     contractController.getLandlordContracts
 )

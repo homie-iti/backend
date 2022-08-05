@@ -1,14 +1,15 @@
 const express = require('express')
 
 const router = express.Router()
-const { query } = require('express-validator')
+const { query, param } = require('express-validator')
 
 const validationMW = require('../middlewares/validationMW')
 const {
     userPostValidation,
     userUpdateValidation,
-    userDeleteValidation,
-} = require('../middlewares/validtion')
+} = require('./validations/userValidations')
+const validateId = require('./validations/idValidations')
+
 const userController = require('../controllers/userController')
 const upload = require('../middlewares/uploadImagesMW')
 
@@ -38,6 +39,8 @@ router
 router
     .route('/users/profileImage/:id')
     .post(
+        validateId('User', param),
+        validationMW,
         upload('users/profileImage').single('profile'),
         userController.uploadUserImage
     )
@@ -46,15 +49,21 @@ router
 router
     .route('/users/:id')
 
-    .get(userController.getUserById)
+    .get(validateId('User', param), validationMW, userController.getUserById)
 
-    .delete(userDeleteValidation, validationMW, userController.deleteUser)
+    .delete(validateId('User', param), validationMW, userController.deleteUser)
 
 router
     .route('/users/myFavourite/:id')
-    .get(userController.getAllFavUnits)
-    .put(userController.updateFavUnit)
+    .get(validateId('User', param), validationMW, userController.getAllFavUnits)
+    .put(validateId('User', param), validationMW, userController.updateFavUnit)
 
-router.route('/users/myFavourite/:id/unit').delete(userController.removeFavUnit)
+router
+    .route('/users/myFavourite/:id/unit')
+    .delete(
+        validateId('User', param),
+        validationMW,
+        userController.removeFavUnit
+    )
 
 module.exports = router

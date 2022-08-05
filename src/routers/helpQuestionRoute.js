@@ -1,13 +1,15 @@
 const express = require('express')
-const { query } = require('express-validator')
+const { query, param, body } = require('express-validator')
 
 const router = express.Router()
 const validationMW = require('../middlewares/validationMW')
 const {
     helpQuestionPostValidation,
     helpQuestionUpdateValidation,
-    helpQuestionDeleteValidation,
-} = require('../middlewares/validtion')
+} = require('./validations/helpQuestionValidations')
+
+const validateId = require('./validations/idValidations')
+
 const helpController = require('../controllers/helpQuestionController')
 
 router
@@ -43,7 +45,11 @@ router.route('/helpQuestion/many').delete(helpController.deleteManyQuestion)
 
 router
     .route('/helpQuestion/:id')
-    .get(helpController.getQuestionById)
+    .get(
+        validateId('HelpQuestion', param),
+        validationMW,
+        helpController.getQuestionById
+    )
     .put(
         helpQuestionUpdateValidation,
         validationMW,
@@ -51,7 +57,7 @@ router
     )
 
     .delete(
-        helpQuestionDeleteValidation,
+        validateId('HelpQuestion', param),
         validationMW,
         helpController.deleteQuestion
     )
