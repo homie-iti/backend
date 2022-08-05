@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 // process.env.NODE_ENV = 'test'
-const mongoose = require('mongoose')
 
 const { isValidObjectId } = require('mongoose')
 const supertest = require('supertest')
@@ -14,6 +13,7 @@ describe('GET -> /cities', () => {
     beforeAll(async () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
         result = await request.get('/cities')
+        console.log(result)
     })
 
     it('expected to respond with status code 200', async () => {
@@ -46,7 +46,7 @@ describe('POST -> /cities', () => {
         expect(newCity.name).toBeTruthy()
         expect(newCity.name).toBeInstanceOf(String)
         expect(newCity.cover).toMatch(coverMatch)
-        // console.log(result)
+        console.log(result)
     })
 
     it('expected to respond with status code 201 and type of "application/json"', async () => {

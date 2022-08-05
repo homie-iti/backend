@@ -41,12 +41,13 @@ describe('POST & UPDATE & DELETE -> /users', () => {
         address: {
             city: 'Giza',
         },
+        balance: 2500,
     }
     beforeAll(async () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
         result = await request.post('/users').send(createUser)
         console.log(result)
-        userId = result._body.data._id
+        userId = result._body.id
         console.log(userId)
     })
 
@@ -58,8 +59,9 @@ describe('POST & UPDATE & DELETE -> /users', () => {
                 password: 'Asdqwe@12',
                 age: 20,
                 fullName: 'billa',
+                balance: 4000,
             })
-            console.log(newUser)
+            // console.log(newUser)
             expect(newUser.status).toEqual(422)
         })
 
@@ -81,8 +83,9 @@ describe('POST & UPDATE & DELETE -> /users', () => {
                 address: {
                     city: 'Alex',
                 },
+                balance: 4000,
             })
-            console.log(newUser)
+            // console.log(newUser)
             expect(newUser.status).toEqual(500)
             expect(newUser._body.details).toBe(
                 'users validation failed: national_id: user national_id is required'
@@ -102,13 +105,14 @@ describe('POST & UPDATE & DELETE -> /users', () => {
                 address: {
                     city: 'Alex',
                 },
+                balance: 4000,
             })
             console.log(newUser)
             expect(newUser.status).toEqual(201)
         })
 
-        it('expected to respond with object containing the data of user added', () => {
-            expect(newUser._body.data).toBeInstanceOf(Object)
+        it('expected to respond with object containing the id of user added', () => {
+            expect(newUser._body).toBeInstanceOf(Object)
         })
 
         it('expected to respond with status code 500 ', async () => {
@@ -124,8 +128,9 @@ describe('POST & UPDATE & DELETE -> /users', () => {
                 address: {
                     city: 'Alex',
                 },
+                balance: 4000,
             })
-            console.log(newUser)
+            // console.log(newUser)
             expect(newUser.status).toEqual(500)
         })
 

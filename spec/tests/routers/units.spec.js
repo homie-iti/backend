@@ -1,13 +1,14 @@
 /* eslint-disable no-undef */
 // process.env.NODE_ENV = 'test'
 
+const { isValidObjectId } = require('mongoose')
 const supertest = require('supertest')
 const app = require('../../../src/app')
+
 const UserModel = require('../../../src/models/userModel')
 const LandlordModel = require('../../../src/models/landlordModel')
 const CityModel = require('../../../src/models/cityModel')
 const UnitModel = require('../../../src/models/unitModel')
-const { isValidObjectId } = require('mongoose')
 
 const request = supertest(app) // initiated new app connection and ran it
 
@@ -29,11 +30,9 @@ describe('GET -> /units', () => {
 })
 
 describe('POST & UPDATE & DELETE -> /units', () => {
-    let result
     let newUser
     let newCity
     let newLandlord
-    let updateUnit
     let deleteUnit
     let cityId
     let userId
@@ -52,6 +51,7 @@ describe('POST & UPDATE & DELETE -> /units', () => {
             city: 'Giza',
         },
         isLandlord: true,
+        balance: 9000,
     }
     const city = {
         name: 'Cairo',
@@ -62,7 +62,7 @@ describe('POST & UPDATE & DELETE -> /units', () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
         newUser = await request.post('/users').send(user)
         // console.log(`User:${newUser}`)
-        userId = newUser._body.data._id
+        userId = newUser._body.id
         console.log(`UU:${userId}`)
         newCity = await request.post('/cities').send(city)
         // console.log(`City:${newCity}`)
@@ -108,7 +108,7 @@ describe('POST & UPDATE & DELETE -> /units', () => {
         it('expected to respond with status code 500', async () => {
             // console.log(userId)
             newUnit = await request.post('/units').send({
-                landlordId: 'ff9f0bc310cd98ffae58d930',
+                landlordId: '62d82455860e63074a799acb',
                 cityId: '9b1a2f4d37c8b74028ded97b',
                 estateType: 'single-room',
                 address: {
@@ -130,7 +130,7 @@ describe('POST & UPDATE & DELETE -> /units', () => {
                     streetName: '14safgrgg',
                 },
             })
-            // console.log(newUnit)
+            console.log(newUnit)
             expect(newUnit.status).toEqual(500)
         })
 
@@ -145,7 +145,7 @@ describe('POST & UPDATE & DELETE -> /units', () => {
                 cityId,
                 estateType: 'single-room',
                 address: {
-                    city: 'Damietta',
+                    city: 'Cairo',
                 },
                 numberOfResidents: 4,
                 unitInfo: {
