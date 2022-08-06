@@ -4,7 +4,7 @@ const LandlordModel = require('../models/landlordModel')
 // let Unit = require("./../models/unitModel");
 
 module.exports.getLandlordContracts = (request, response, next) => {
-    ContractModel.findOne({ landlordId: request.params.id })
+    ContractModel.find({ landlordId: request.params.id })
         .then((data) => {
             if (data == null) {
                 throw new Error('No Contracts For Entered Landlord')
@@ -15,7 +15,7 @@ module.exports.getLandlordContracts = (request, response, next) => {
 }
 
 module.exports.getUnitContracts = (request, response, next) => {
-    ContractModel.findOne({ unitId: request.params.id })
+    ContractModel.find({ unitId: request.params.id })
         .then((data) => {
             console.log(data)
             if (data == null) throw new Error("Unit Doesn't Exist")
