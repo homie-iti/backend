@@ -120,6 +120,7 @@ module.exports = class EmailClient {
                 break
 
             case 'book_unit':
+                const unitLink = 'https://homie-iti.vercel.com/units/'
                 this.#message = {
                     subject: `Hola ${
                         configs.name.split(' ')[0]
@@ -127,15 +128,19 @@ module.exports = class EmailClient {
                     body: `
                     <h2>Confirm booking a unit</h2>
                     <p>Someone needs to book a unit of yours. Please see the contract details below and then confirm or cancel it.</P>
-                    <p>${configs.contractDetails.contractData}</p>
+                    <h2>Unit:${unitLink}${configs.contractDetails.contractData.unitId}</h2>
+                    <h2>Rental Start:${configs.contractDetails.contractData.rentalStart}</h2>
+                    <h2>Rental End:${configs.contractDetails.contractData.rentalEnd}</h2>
+                    <h2>Total Amount:${configs.contractDetails.contractData.totalAmount}</h2>
+                    <h2>Payment Method:${configs.contractDetails.contractData.paymentMethod}</h2>
 
                     <h3>For more details about the agent, you can contact him/her through</h3>
                        
-                    <p>AgentName:${configs.contractDetails.agentName}</p>
+                    <h4>AgentName:${configs.contractDetails.agentName}</h4>
 
-                    <p>AgentPhone:${configs.contractDetails.agentPhoneNumber}</p>
+                    <h4>AgentPhone:${configs.contractDetails.agentPhoneNumber}</h4>
 
-                    <p>AgentEmail:${configs.contractDetails.agentEmail}</p>
+                    <h4>AgentEmail:${configs.contractDetails.agentEmail}</h4>
 
                     <button>Confirm</button>
                     <button>Cancel</button>
@@ -182,7 +187,7 @@ module.exports = class EmailClient {
                     <h3>You can log in to our website and choose another unit that suits you.</h3>
                     <p>Have a good day.</p>          
                     <p dir="rtl">إدارة هومي الموقّرة</p>    
-                    `,  
+                    `,
                 }
                 break
             default:
