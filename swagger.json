@@ -308,10 +308,7 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/City"
-                        }
+                        "description": "unit is added to city"
                     },
                     "500": {
                         "description": "Internal server error"
@@ -337,14 +334,14 @@
                         "name": "units",
                         "in": "body",
                         "description": "units that we want to delete from the city.",
-                        "type": [
-                            "objectId"
-                        ]
+                        "schema": {
+                            "$ref": "#/definitions/addingUnitToCity"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "units are deleted from city"
                     },
                     "500": {
                         "description": "Internal server error"
@@ -591,7 +588,7 @@
                         "in": "body",
                         "description": "Landlord units that we want to add one or array",
                         "schema": {
-                            "$ref": "#/definitions/UpdateLandlordUnits"
+                            "$ref": "#/definitions/LandlordUnits"
                         }
                     }
                 ],
@@ -673,7 +670,10 @@
                     {
                         "name": "landlordUnits",
                         "in": "body",
-                        "description": "landlord unit (one only) that we want to delete "
+                        "description": "landlord unit (one only) that we want to delete ",
+                        "schema": {
+                            "$ref": "#/definitions/LandlordUnits"
+                        }
                     }
                 ],
                 "responses": {
@@ -938,6 +938,20 @@
             }
         },
         "/reviews": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get array of reviews objects containing all reviews that exist on the daatbase",
+                "responses": {
+                    "200": {
+                        "description": "Array of reviews ",
+                        "schema": {
+                            "$ref": "#/definitions/addingReview"
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Reviews"
@@ -1407,7 +1421,8 @@
                 "gender",
                 "password",
                 "phone",
-                "national_id"
+                "national_id",
+                "balance"
             ],
             "properties": {
                 "fullName": {
@@ -1459,6 +1474,9 @@
                             "type": "number"
                         }
                     }
+                },
+                "balance": {
+                    "type": "number"
                 }
             }
         },
@@ -1487,6 +1505,9 @@
                 },
                 "image": {
                     "type": "string"
+                },
+                "balance": {
+                    "type": "number"
                 },
                 "isAgent": {
                     "type": "boolean"
@@ -1643,7 +1664,7 @@
                 }
             }
         },
-        "UpdateLandlordUnits": {
+        "LandlordUnits": {
             "required": [
                 "landlordUnits",
                 "id"
@@ -1659,201 +1680,201 @@
                     }
                 }
             }
-        }
-    },
-    "AddingNewLandlord": {
-        "properties": {
-            "_id": {
-                "type": "objectId"
-            },
-            "landlordUnits": {
-                "type": "array",
-                "items": {
+        },
+        "AddingNewLandlord": {
+            "properties": {
+                "_id": {
                     "type": "objectId"
+                },
+                "landlordUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "objectId"
+                    }
                 }
             }
-        }
-    },
-    "AddingNewAgent": {
-        "properties": {
-            "_id": {
-                "type": "objectId"
-            },
-            "agentUnits": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "unitId": {
-                            "type": "objectId"
-                        },
-                        "numberOfRenting": {
-                            "type": "number"
+        },
+        "AddingNewAgent": {
+            "properties": {
+                "_id": {
+                    "type": "objectId"
+                },
+                "agentUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId"
+                            },
+                            "numberOfRenting": {
+                                "type": "number"
+                            }
                         }
                     }
                 }
             }
-        }
-    },
-    "HelpQuestion": {
-        "required": [
-            "userId",
-            "adminId",
-            "question",
-            "answer"
-        ],
-        "properties": {
-            "userId": {
-                "type": "objectId"
-            },
-            "adminId": {
-                "type": "objectId"
-            },
-            "question": {
-                "type": "string"
-            },
-            "answer": {
-                "type": "string"
-            }
-        }
-    },
-    "Reviews": {
-        "required": [
-            "agentId",
-            "unitId",
-            "comment",
-            "rating"
-        ],
-        "properties": {
-            "agentId": {
-                "type": "objectId",
-                "$ref": "#/definitions/Agent"
-            },
-            "unitId": {
-                "type": "objectId",
-                "$ref": "#/definitions/Unit"
-            },
-            "comment": {
-                "type": "string"
-            },
-            "rating": {
-                "type": "number"
-            }
-        }
-    },
-    "addingReview": {
-        "required": [
-            "agentId",
-            "unitId",
-            "comment",
-            "rating"
-        ],
-        "properties": {
-            "agentId": {
-                "type": "objectId"
-            },
-            "unitId": {
-                "type": "objectId"
-            },
-            "comment": {
-                "type": "string"
-            },
-            "rating": {
-                "type": "number"
-            }
-        }
-    },
-    "Contract": {
-        "required": [
-            "landlordId",
-            "agentId",
-            "unitId",
-            "rentalStart",
-            "rentalEnd",
-            "paymentAmount",
-            "paymentMethod",
-            "totalAmount",
-            "offerPercentage"
-        ],
-        "properties": {
-            "landlordId": {
-                "type": "objectId"
-            },
-            "agentId": {
-                "type": "objectId"
-            },
-            "unitId": {
-                "type": "objectId"
-            },
-            "rentalStart": {
-                "type": "Date"
-            },
-            "rentalEnd": {
-                "type": "Date"
-            },
-            "paymentAmount": {
-                "type": "number"
-            },
-            "totalAmount": {
-                "type": "number"
-            },
-            "paymentMethod": {
-                "type": "string"
-            },
-            "offerPercentage": {
-                "type": "number"
-            }
-        }
-    },
-    "addingUnitToCity": {
-        "properties": {
-            "units": {
-                "type": "array",
-                "items": {
+        },
+        "HelpQuestion": {
+            "required": [
+                "userId",
+                "adminId",
+                "question",
+                "answer"
+            ],
+            "properties": {
+                "userId": {
                     "type": "objectId"
+                },
+                "adminId": {
+                    "type": "objectId"
+                },
+                "question": {
+                    "type": "string"
+                },
+                "answer": {
+                    "type": "string"
                 }
             }
-        }
-    },
-    "deleteMany": {
-        "properties": {
-            "ids": {
-                "type": "array",
-                "items": {
-                    "type": "objectId"
+        },
+        "Reviews": {
+            "required": [
+                "agentId",
+                "unitId",
+                "comment",
+                "rating"
+            ],
+            "properties": {
+                "agentId": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/Agent"
+                },
+                "unitId": {
+                    "type": "objectId",
+                    "$ref": "#/definitions/Unit"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
                 }
             }
-        }
-    },
-    "bookingUnit": {
-        "properties": {
-            "id": {
-                "type": "objectId"
-            },
-            "rentalStart": {
-                "type": "string"
-            },
-            "rentalEnd": {
-                "type": "string"
-            },
-            "days": {
-                "type": "number"
-            },
-            "paymentMethod": {
-                "type": "string",
-                "enum": [
-                    "paypal",
-                    "bank",
-                    "cash"
-                ]
-            },
-            "state": {
-                "type": "string",
-                "enum": [
-                    "active",
-                    "canceled",
-                    "proposed"
-                ]
+        },
+        "addingReview": {
+            "required": [
+                "agentId",
+                "unitId",
+                "comment",
+                "rating"
+            ],
+            "properties": {
+                "agentId": {
+                    "type": "objectId"
+                },
+                "unitId": {
+                    "type": "objectId"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                }
+            }
+        },
+        "Contract": {
+            "required": [
+                "landlordId",
+                "agentId",
+                "unitId",
+                "rentalStart",
+                "rentalEnd",
+                "paymentAmount",
+                "paymentMethod",
+                "totalAmount",
+                "offerPercentage"
+            ],
+            "properties": {
+                "landlordId": {
+                    "type": "objectId"
+                },
+                "agentId": {
+                    "type": "objectId"
+                },
+                "unitId": {
+                    "type": "objectId"
+                },
+                "rentalStart": {
+                    "type": "Date"
+                },
+                "rentalEnd": {
+                    "type": "Date"
+                },
+                "paymentAmount": {
+                    "type": "number"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "paymentMethod": {
+                    "type": "string"
+                },
+                "offerPercentage": {
+                    "type": "number"
+                }
+            }
+        },
+        "addingUnitToCity": {
+            "properties": {
+                "units": {
+                    "type": "array",
+                    "items": {
+                        "type": "objectId"
+                    }
+                }
+            }
+        },
+        "deleteMany": {
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "objectId"
+                    }
+                }
+            }
+        },
+        "bookingUnit": {
+            "properties": {
+                "id": {
+                    "type": "objectId"
+                },
+                "rentalStart": {
+                    "type": "string"
+                },
+                "rentalEnd": {
+                    "type": "string"
+                },
+                "days": {
+                    "type": "number"
+                },
+                "paymentMethod": {
+                    "type": "string",
+                    "enum": [
+                        "paypal",
+                        "bank",
+                        "cash"
+                    ]
+                },
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "active",
+                        "canceled",
+                        "proposed"
+                    ]
+                }
             }
         }
     }
