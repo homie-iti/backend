@@ -477,14 +477,14 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Delete more than one user data that matches the given array",
+                "summary": "Delete one or more than one user data that matches the given array",
                 "parameters": [
                     {
                         "name": "userIds",
                         "in": "body",
                         "description": "userIds that we want to delete",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/deleteMany"
                         }
                     }
                 ],
@@ -589,7 +589,10 @@
                     {
                         "name": "landlordId needs to be updated, and landlordUnits needs to be added.",
                         "in": "body",
-                        "description": "Landlord units that we want to add one or array"
+                        "description": "Landlord units that we want to add one or array",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateLandlordUnits"
+                        }
                     }
                 ],
                 "responses": {
@@ -907,15 +910,15 @@
                 "tags": [
                     "Help Questions"
                 ],
-                "summary": "Delete more than one help question data that match the given ids.",
+                "summary": "Delete one or more than one help question data that match the given ids.",
                 "parameters": [
                     {
                         "name": "ids",
                         "in": "body",
                         "description": "Array of ids of help questions that we want to delete",
-                        "type": [
-                            "ids"
-                        ]
+                        "schema": {
+                            "$ref": "#/definitions/deleteMany"
+                        }
                     }
                 ],
                 "responses": {
@@ -1014,7 +1017,7 @@
                 }
             }
         },
-        "/confirm-booking": {
+        "/confirm-booking/{id}": {
             "put": {
                 "tags": [
                     "Payment"
@@ -1022,12 +1025,9 @@
                 "summary": "When the landlord confirms the booking of the unit, the contract state changes to active, the unit data(isAvailable:false)and set agentId property, then add the totalAmount in the contract to the landlord balance and subtract it from the agent balance, and set the unit in agent units.",
                 "parameters": [
                     {
-                        "name": "contractId",
-                        "in": "body",
-                        "description": "id of the contract that has been send to landlord",
-                        "schema": {
-                            "$ref": "#/definitions/confirmBookingUnit"
-                        }
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of the contract that has been send to landlord"
                     }
                 ],
                 "responses": {
@@ -1046,7 +1046,7 @@
                 }
             }
         },
-        "/cancel-booking": {
+        "/cancel-booking/{id}": {
             "put": {
                 "tags": [
                     "Payment"
@@ -1054,12 +1054,9 @@
                 "summary": "When the landlord cancels the booking of the unit,we set the contract state to cancelled and send an email to the agent to notify them that the landlord has cancelled the booking of the unit.",
                 "parameters": [
                     {
-                        "name": "contractId",
-                        "in": "body",
-                        "description": "id of the contract that has been send to landlord",
-                        "schema": {
-                            "$ref": "#/definitions/confirmBookingUnit"
-                        }
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of the contract that has been send to landlord"
                     }
                 ],
                 "responses": {
@@ -1636,26 +1633,6 @@
             ],
             "properties": {
                 "_id": {
-                    "type": "objectId",
-                    "$ref": "#/definitions/User"
-                },
-                "landlordUnits": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "unitId": {
-                                "type": "objectId",
-                                "$ref": "#/definitions/Unit"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "AddingNewLandlord": {
-            "properties": {
-                "_id": {
                     "type": "objectId"
                 },
                 "landlordUnits": {
@@ -1666,184 +1643,217 @@
                 }
             }
         },
-        "AddingNewAgent": {
-            "properties": {
-                "_id": {
-                    "type": "objectId"
-                },
-                "agentUnits": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "unitId": {
-                                "type": "objectId"
-                            },
-                            "numberOfRenting": {
-                                "type": "number"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "HelpQuestion": {
+        "UpdateLandlordUnits": {
             "required": [
-                "userId",
-                "adminId",
-                "question",
-                "answer"
+                "landlordUnits",
+                "id"
             ],
             "properties": {
-                "userId": {
+                "id": {
                     "type": "objectId"
                 },
-                "adminId": {
-                    "type": "objectId"
-                },
-                "question": {
-                    "type": "string"
-                },
-                "answer": {
-                    "type": "string"
-                }
-            }
-        },
-        "Reviews": {
-            "required": [
-                "agentId",
-                "unitId",
-                "comment",
-                "rating"
-            ],
-            "properties": {
-                "agentId": {
-                    "type": "objectId",
-                    "$ref": "#/definitions/Agent"
-                },
-                "unitId": {
-                    "type": "objectId",
-                    "$ref": "#/definitions/Unit"
-                },
-                "comment": {
-                    "type": "string"
-                },
-                "rating": {
-                    "type": "number"
-                }
-            }
-        },
-        "addingReview": {
-            "required": [
-                "agentId",
-                "unitId",
-                "comment",
-                "rating"
-            ],
-            "properties": {
-                "agentId": {
-                    "type": "objectId"
-                },
-                "unitId": {
-                    "type": "objectId"
-                },
-                "comment": {
-                    "type": "string"
-                },
-                "rating": {
-                    "type": "number"
-                }
-            }
-        },
-        "Contract": {
-            "required": [
-                "landlordId",
-                "agentId",
-                "unitId",
-                "rentalStart",
-                "rentalEnd",
-                "paymentAmount",
-                "paymentMethod",
-                "totalAmount",
-                "offerPercentage"
-            ],
-            "properties": {
-                "landlordId": {
-                    "type": "objectId"
-                },
-                "agentId": {
-                    "type": "objectId"
-                },
-                "unitId": {
-                    "type": "objectId"
-                },
-                "rentalStart": {
-                    "type": "Date"
-                },
-                "rentalEnd": {
-                    "type": "Date"
-                },
-                "paymentAmount": {
-                    "type": "number"
-                },
-                "totalAmount": {
-                    "type": "number"
-                },
-                "paymentMethod": {
-                    "type": "string"
-                },
-                "offerPercentage": {
-                    "type": "number"
-                }
-            }
-        },
-        "addingUnitToCity": {
-            "properties": {
-                "units": {
+                "landlordUnits": {
                     "type": "array",
                     "items": {
                         "type": "objectId"
                     }
                 }
             }
-        },
-        "confirmBookingUnit": {
-            "properties": {
-                "id": {
+        }
+    },
+    "AddingNewLandlord": {
+        "properties": {
+            "_id": {
+                "type": "objectId"
+            },
+            "landlordUnits": {
+                "type": "array",
+                "items": {
                     "type": "objectId"
                 }
             }
-        },
-        "bookingUnit": {
-            "properties": {
-                "id": {
-                    "type": "objectId"
-                },
-                "rentalStart": {
-                    "type": "string"
-                },
-                "rentalEnd": {
-                    "type": "string"
-                },
-                "days": {
-                    "type": "number"
-                },
-                "paymentMethod": {
-                    "type": "string",
-                    "enum": [
-                        "paypal",
-                        "bank",
-                        "cash"
-                    ]
-                },
-                "state": {
-                    "type": "string",
-                    "enum": [
-                        "active",
-                        "canceled",
-                        "proposed"
-                    ]
+        }
+    },
+    "AddingNewAgent": {
+        "properties": {
+            "_id": {
+                "type": "objectId"
+            },
+            "agentUnits": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "unitId": {
+                            "type": "objectId"
+                        },
+                        "numberOfRenting": {
+                            "type": "number"
+                        }
+                    }
                 }
+            }
+        }
+    },
+    "HelpQuestion": {
+        "required": [
+            "userId",
+            "adminId",
+            "question",
+            "answer"
+        ],
+        "properties": {
+            "userId": {
+                "type": "objectId"
+            },
+            "adminId": {
+                "type": "objectId"
+            },
+            "question": {
+                "type": "string"
+            },
+            "answer": {
+                "type": "string"
+            }
+        }
+    },
+    "Reviews": {
+        "required": [
+            "agentId",
+            "unitId",
+            "comment",
+            "rating"
+        ],
+        "properties": {
+            "agentId": {
+                "type": "objectId",
+                "$ref": "#/definitions/Agent"
+            },
+            "unitId": {
+                "type": "objectId",
+                "$ref": "#/definitions/Unit"
+            },
+            "comment": {
+                "type": "string"
+            },
+            "rating": {
+                "type": "number"
+            }
+        }
+    },
+    "addingReview": {
+        "required": [
+            "agentId",
+            "unitId",
+            "comment",
+            "rating"
+        ],
+        "properties": {
+            "agentId": {
+                "type": "objectId"
+            },
+            "unitId": {
+                "type": "objectId"
+            },
+            "comment": {
+                "type": "string"
+            },
+            "rating": {
+                "type": "number"
+            }
+        }
+    },
+    "Contract": {
+        "required": [
+            "landlordId",
+            "agentId",
+            "unitId",
+            "rentalStart",
+            "rentalEnd",
+            "paymentAmount",
+            "paymentMethod",
+            "totalAmount",
+            "offerPercentage"
+        ],
+        "properties": {
+            "landlordId": {
+                "type": "objectId"
+            },
+            "agentId": {
+                "type": "objectId"
+            },
+            "unitId": {
+                "type": "objectId"
+            },
+            "rentalStart": {
+                "type": "Date"
+            },
+            "rentalEnd": {
+                "type": "Date"
+            },
+            "paymentAmount": {
+                "type": "number"
+            },
+            "totalAmount": {
+                "type": "number"
+            },
+            "paymentMethod": {
+                "type": "string"
+            },
+            "offerPercentage": {
+                "type": "number"
+            }
+        }
+    },
+    "addingUnitToCity": {
+        "properties": {
+            "units": {
+                "type": "array",
+                "items": {
+                    "type": "objectId"
+                }
+            }
+        }
+    },
+    "deleteMany": {
+        "properties": {
+            "ids": {
+                "type": "array",
+                "items": {
+                    "type": "objectId"
+                }
+            }
+        }
+    },
+    "bookingUnit": {
+        "properties": {
+            "id": {
+                "type": "objectId"
+            },
+            "rentalStart": {
+                "type": "string"
+            },
+            "rentalEnd": {
+                "type": "string"
+            },
+            "days": {
+                "type": "number"
+            },
+            "paymentMethod": {
+                "type": "string",
+                "enum": [
+                    "paypal",
+                    "bank",
+                    "cash"
+                ]
+            },
+            "state": {
+                "type": "string",
+                "enum": [
+                    "active",
+                    "canceled",
+                    "proposed"
+                ]
             }
         }
     }
