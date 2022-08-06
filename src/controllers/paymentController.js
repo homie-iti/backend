@@ -121,15 +121,13 @@ module.exports.confirmBookingUnit = (request, response, next) => {
     let agentData
     let landlordData
 
-    ContractModel.findOne({ _id: request.body.id })
+    ContractModel.findOne({ _id: request.params.id })
         .then((contract) => {
             // console.log(contract)
             if (!contract) throw new Error(`Contract not found`)
             contractData = contract
             contractData.state = 'active'
             // console.log(contractData)
-            // console.log(contractData.unitId)
-            // console.log(contractData.agentId)
 
             return UnitModel.findOneAndUpdate(
                 { _id: contractData.unitId },
@@ -208,7 +206,7 @@ module.exports.confirmBookingUnit = (request, response, next) => {
 
 module.exports.cancelBookingUnit = (request, response, next) => {
     let contractData
-    ContractModel.findOne({ _id: request.body.id })
+    ContractModel.findOne({ _id: request.params.id })
         .then((contract) => {
             // console.log(contract)
             if (!contract) throw new Error(`Contract not found`)
