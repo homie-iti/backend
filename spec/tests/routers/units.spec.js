@@ -111,9 +111,6 @@ describe('POST & UPDATE & DELETE -> /units', () => {
                 landlordId: '62d82455860e63074a799acb',
                 cityId: '9b1a2f4d37c8b74028ded97b',
                 estateType: 'single-room',
-                address: {
-                    city: 'Damietta',
-                },
                 numberOfResidents: 4,
                 unitInfo: {
                     description: 'this unit is very gooood.',
@@ -144,9 +141,6 @@ describe('POST & UPDATE & DELETE -> /units', () => {
                 landlordId,
                 cityId,
                 estateType: 'single-room',
-                address: {
-                    city: 'Cairo',
-                },
                 numberOfResidents: 4,
                 unitInfo: {
                     description: 'this unit is very gooood.',
@@ -160,7 +154,7 @@ describe('POST & UPDATE & DELETE -> /units', () => {
                 address: {
                     city: 'cairo',
                     buildingNumber: 452,
-                    streetName: '14safgrgg',
+                    streetName: '14-aliStreet',
                 },
             })
             console.log(newUnit)
@@ -185,7 +179,7 @@ describe('POST & UPDATE & DELETE -> /units', () => {
             deleteUnit = await request.delete('/units/12348')
             console.log(deleteUnit)
             expect(deleteUnit.status).toEqual(422)
-            expect(deleteUnit._body.details).toBe('Unit Id Must Be ObjectId.')
+            expect(deleteUnit._body.details).toBe('unit id must be an objectId.')
         })
 
         it('expected to respond with status code 200 ', async () => {

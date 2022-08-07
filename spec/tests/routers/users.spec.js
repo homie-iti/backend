@@ -193,12 +193,12 @@ describe('POST & UPDATE & DELETE -> /users', () => {
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
         })
 
-        it('expected to respond with status code 500 with message"Cast to ObjectId failed for value "12348" (type string) at path "_id" for model "users"', async () => {
+        it('expected to respond with status code 500 with message"user id must be an objectId.', async () => {
             deleteUser = await request.delete('/users/12348')
             console.log(deleteUser)
-            expect(deleteUser.status).toEqual(500)
+            expect(deleteUser.status).toEqual(422)
             expect(deleteUser._body.details).toBe(
-                'Cast to ObjectId failed for value "12348" (type string) at path "_id" for model "users"'
+                'user id must be an objectId.'
             )
         })
 

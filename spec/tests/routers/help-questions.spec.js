@@ -89,15 +89,15 @@ describe('POST -> /help-questions', () => {
         expect(result._body.details).toBe('Question should be characters.')
     })
 
-    it('expected to respond with status code 500 with message"Cast to ObjectId failed for value "dc7daf3e33"" ', async () => {
+    it('expected to respond with status code 500 with message"userId must be objectId / adminId must be objectId. ', async () => {
         // console.log(userId)
         result = await request
             .post('/help-questions')
             .send({ userId: 'dc7daf3e33', question: 'hello', answer: 'ok' })
         // console.log(result)
-        expect(result.status).toEqual(500)
+        expect(result.status).toEqual(422)
         expect(result._body.details).toBe(
-            'Cast to ObjectId failed for value "dc7daf3e33" (type string) at path "_id" for model "users"'
+            'userId must be objectId /  adminId must be objectId.'
         )
     })
 
@@ -105,6 +105,7 @@ describe('POST -> /help-questions', () => {
         // console.log(userId)
         result = await request.post('/help-questions').send({
             userId: 'dc7daf3e33aec47b4ceed945',
+            adminId,
             question: 'hello',
             answer: 'ok',
         })
@@ -159,22 +160,20 @@ describe('UPDATE -> /helpQuestion', () => {
         console.log(questionId)
     })
 
-    it('expected to respond with status code 422 with message "Question name should be characters." ', async () => {
+    it('expected to respond with status code 422 with message "userId must be objectId/adminId must be objectId/Question name should be characters." ', async () => {
         updateResult = await request.put(`/helpQuestion/${questionId}`).send({})
         expect(updateResult.status).toEqual(422)
         expect(updateResult._body.details).toEqual(
-            'Question name should be characters.'
+            'userId must be objectId /  adminId must be objectId / Question name should be characters.'
         )
     })
 
-    it('expected to respond with status code 500 with message "userId is not available in users collection" ', async () => {
+    it('expected to respond with status code 500 with message "userId must be objectId." ', async () => {
         updateResult = await request
             .put(`/helpQuestion/${questionId}`)
             .send({ adminId, question: 'what' })
-        expect(updateResult.status).toEqual(500)
-        expect(updateResult._body.details).toEqual(
-            'userId is not available in users collection'
-        )
+        expect(updateResult.status).toEqual(422)
+        expect(updateResult._body.details).toEqual('userId must be objectId.')
     })
 
     it('expected to respond with status code 200 with data of type "application/json" ', async () => {
@@ -241,7 +240,7 @@ describe('DELETE -> /helpQuestion', () => {
         // console.log(deleteResult)
         expect(deleteResult.status).toEqual(422)
         expect(deleteResult._body.details).toEqual(
-            'helpQuestion id is not valid.'
+            'HelpQuestion id must be an objectId.'
         )
     })
 
