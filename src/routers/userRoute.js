@@ -1,26 +1,25 @@
 const express = require('express')
 
 const router = express.Router()
-const { query, param } = require('express-validator')
+const { param } = require('express-validator')
 
 const validationMW = require('../middlewares/validationMW')
 const {
     userPostValidation,
     userUpdateValidation,
-    userDeleteValidation,
-} = require('../middlewares/validations/usersValidations')
+} = require( '../middlewares/validations/usersValidations' )
+
+const {
+    validateId,
+    pageValidations,
+} = require('../middlewares/validations/generalValidations')
 const userController = require('../controllers/userController')
 const upload = require('../middlewares/uploadImagesMW')
 
 router
     .route('/users')
     .get(
-        [
-            query('page')
-                .optional()
-                .isNumeric()
-                .withMessage('Page number should number'),
-        ],
+        pageValidations,
         validationMW,
         userController.getUsersByPage
     )
@@ -38,7 +37,7 @@ router
 router
     .route('/users/profileImage/:id')
     .post(
-        validateId('User', param),
+        validateId('user', param),
         validationMW,
         upload('users/profileImage').single('profile'),
         userController.uploadUserImage
@@ -48,19 +47,19 @@ router
 router
     .route('/users/:id')
 
-    .get(validateId('User', param), validationMW, userController.getUserById)
+    .get(validateId('user', param), validationMW, userController.getUserById)
 
-    .delete(validateId('User', param), validationMW, userController.deleteUser)
+    .delete(validateId('user', param), validationMW, userController.deleteUser)
 
 router
     .route('/users/myFavourite/:id')
-    .get(validateId('User', param), validationMW, userController.getAllFavUnits)
-    .put(validateId('User', param), validationMW, userController.updateFavUnit)
+    .get(validateId('user', param), validationMW, userController.getAllFavUnits)
+    .put(validateId('user', param), validationMW, userController.updateFavUnit)
 
 router
     .route('/users/myFavourite/:id/unit')
     .delete(
-        validateId('User', param),
+        validateId('user', param),
         validationMW,
         userController.removeFavUnit
     )

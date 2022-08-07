@@ -1,7 +1,7 @@
 const express = require('express')
 
 const router = express.Router()
-const { param, query } = require('express-validator')
+const { param } = require('express-validator')
 
 const unitController = require('../controllers/unitController')
 
@@ -11,20 +11,15 @@ const {
     updateUnitValidations,
 } = require('../middlewares/validations/unitValidations')
 
+const {
+    validateId,
+    pageValidations,
+} = require('../middlewares/validations/generalValidations')
 const uploadImage = require('../middlewares/uploadImagesMW')
 
 router
     .route('/units')
-    .get(
-        [
-            query('page')
-                .optional()
-                .isNumeric()
-                .withMessage('Page number should number'),
-        ],
-        validationMW,
-        unitController.getUnitsByPage
-    )
+    .get(pageValidations, validationMW, unitController.getUnitsByPage)
 
     .post(
         uploadImage('units/unitsImages').fields([
@@ -39,19 +34,19 @@ router
 
 router
     .route('/units/:id')
-    .get(validateId('Unit', param), validationMW, unitController.getUnitById)
-    .delete(validateId('Unit', param), validationMW, unitController.deleteUnit)
+    .get(validateId('unit', param), validationMW, unitController.getUnitById)
+    .delete(validateId('unit', param), validationMW, unitController.deleteUnit)
 
 router
     .route('/units/cover/:id')
     .post(
-        validateId('Unit', param),
+        validateId('unit', param),
         validationMW,
         uploadImage('units/cover').single('cover'),
         unitController.uploadUnitCover
     )
     .put(
-        validateId('Unit', param),
+        validateId('unit', param),
         validationMW,
         uploadImage('units/cover').single('cover'),
         unitController.updateUnitCover
@@ -60,13 +55,13 @@ router
 router
     .route('/units/images/:id')
     .post(
-        validateId('Unit', param),
+        validateId('unit', param),
         validationMW,
         uploadImage('units/unitsImages').array('unitImages', 4),
         unitController.uploadUnitImages
     )
     .delete(
-        validateId('Unit', param),
+        validateId('unit', param),
         validationMW,
         unitController.deleteUnitImages
     )
@@ -92,10 +87,18 @@ router
 
 router
     .route('/units/reviews/:id')
-    .get(unitController.getUnitReviews)
-    .delete(unitController.deleteUnitReviews)
+    .get(validateId('unit', param), validationMW, unitController.getUnitReviews)
+    .delete(
+        validateId('unit', param),
+        validationMW,
+        unitController.deleteUnitReviews
+    )
 
-// router.get('/agents', unitController.getAllAgents)
-router.get('/reviews/:id', unitController.getReviewById)
+router.get(
+    '/reviews/:id',
+    validateId('review', param),
+    validationMW,
+    unitController.getReviewById
+)
 
 module.exports = router
