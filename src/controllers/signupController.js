@@ -22,17 +22,18 @@ function notifyUser(event, userInfo) {
 }
 
 module.exports.checkAvailability = (request, response, next) => {
-    ;(async function validateFilter() {
-        let filterObj = {}
-        if (request.body.nationalId)
-            filterObj = { national_id: request.body.nationalId }
-        else if (request.body.email) filterObj = { email: request.body.email }
-        else if (request.body.phone) filterObj = { phone: request.body.phone }
+    // ;(async function validateFilter() {
+    let filterObj = {}
+    if (request.body.nationalId)
+        filterObj = { national_id: request.body.nationalId }
+    else if (request.body.email) filterObj = { email: request.body.email }
+    else if (request.body.phone) filterObj = { phone: request.body.phone }
 
-        // console.log(filterObj)
-        return filterObj
-    })()
-        .then((filterObj) => User.exists(filterObj))
+    // console.log(filterObj)
+    // return filterObj
+    // })()
+    // .then((filterObj) => User.exists(filterObj))
+    User.exists(filterObj)
         .then((data) => {
             response.status(200).json({ isAvailable: !data })
         })
@@ -51,11 +52,24 @@ module.exports.signup = (request, response, next) => {
         email: request.body.email,
         phone: request.body.phone,
         national_id: request.body.nationalId,
-        balance: request.body.balance,
+        // balance: request.body.balance,
     }
 
-    bcrypt
-        .hash(request.body.password, saltRounds)
+    User.exists({
+        $or: [
+            { email: user.email },
+            { phone: user.phone },
+            { national_id: user.national_id },
+        ],
+    })
+        .then((data) => {
+            console.log(data)
+            if (data)
+                throw new Error('email or phone or nationalId is duplicated')
+
+            return bcrypt.hash(request.body.password, saltRounds)
+        })
+
         .then((hash) => {
             user.password = hash
         })
