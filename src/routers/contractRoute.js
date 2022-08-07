@@ -8,7 +8,7 @@ const validationMW = require('../middlewares/validationMW')
 const {
     createContractValidations,
     updateContractValidations,
-} = require('../middlewares/contractValidations')
+} = require('../middlewares/validations/contractValidations')
 
 router
     .route('/contracts/unit/:id')

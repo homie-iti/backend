@@ -7,7 +7,7 @@ const {
     helpQuestionPostValidation,
     helpQuestionUpdateValidation,
     helpQuestionDeleteValidation,
-} = require('../middlewares/validtion')
+} = require('../middlewares/validations/helpQuestionsValidations')
 const helpController = require('../controllers/helpQuestionController')
 
 router

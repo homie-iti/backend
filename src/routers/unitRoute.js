@@ -9,7 +9,7 @@ const validationMW = require('../middlewares/validationMW')
 const {
     addUnitValidations,
     updateUnitValidations,
-} = require('../middlewares/unitValidations')
+} = require('../middlewares/validations/unitValidations')
 
 const uploadImage = require('../middlewares/uploadImagesMW')
 

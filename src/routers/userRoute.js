@@ -8,7 +8,7 @@ const {
     userPostValidation,
     userUpdateValidation,
     userDeleteValidation,
-} = require('../middlewares/validtion')
+} = require('../middlewares/validations/usersValidations')
 const userController = require('../controllers/userController')
 const upload = require('../middlewares/uploadImagesMW')
 
