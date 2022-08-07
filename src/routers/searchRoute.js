@@ -9,7 +9,11 @@ const router = express.Router()
 router
     .route('/search')
     .get(
-        [query('cityname').isAlpha().withMessage('cityname should be string')],
+        [
+            query('cityname')
+                .isAlpha('en-US', { ignore: 's-.,;?' })
+                .withMessage('cityname should be string'),
+        ],
         validationMW,
         search.getCityByName
     )

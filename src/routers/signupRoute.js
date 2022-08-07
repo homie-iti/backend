@@ -49,17 +49,17 @@ router.route('/signup').post(
         body('firstName')
             .exists()
             .withMessage("firstName field isn't provided")
-            .isAlpha()
+            .isAlpha('en-US', { ignore: 's-.,;?' })
             .withMessage("firstName value isn't valid"),
         body('middleName')
             .exists()
             .withMessage("middleName field isn't provided")
-            .isAlpha()
+            .isAlpha('en-US', { ignore: 's-.,;?' })
             .withMessage("middleName value isn't valid"),
         body('lastName')
             .exists()
             .withMessage("lastName field isn't provided")
-            .isAlpha()
+            .isAlpha('en-US', { ignore: 's-.,;?' })
             .withMessage("lastName value isn't valid"),
         body('gender')
             .exists()

@@ -14,7 +14,7 @@ const addUnitValidations = [
 
     body('address').isObject().withMessage('Unit Address should be object '),
     body('address.city')
-        .isAlpha()
+        .isAlpha('en-US', { ignore: 's-.,;?' })
         .withMessage('Unit City should be characters'),
 
     body('address.streetName')
@@ -74,11 +74,14 @@ const updateUnitValidations = [
         .withMessage('Unit Address should be object ')
         .optional(),
     body('address.city')
-        .isAlpha()
+        .isAlpha('en-US', { ignore: 's-.,;?' })
         .withMessage('Unit City should be characters')
         .optional(),
 
-    body('address.streetName').optional().isAlpha().withMessage('Unit Street '),
+    body('address.streetName')
+        .optional()
+        .isAlpha('en-US', { ignore: 's-.,;?' })
+        .withMessage('Unit Street '),
 
     body('address.buildingNumber')
         .optional()
