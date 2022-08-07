@@ -33,8 +33,6 @@
             "application/json"
         ]
     },
-    "host": "localhost:8080",
-    "basePath": "/",
     "tags": [
         {
             "name": "Units",
@@ -749,6 +747,66 @@
                 "responses": {
                     "200": {
                         "description": "data of agent"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/agents/agentUnits": {
+            "put": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Update specific agent units",
+                "parameters": [
+                    {
+                        "name": "_id of agent,agentUnits",
+                        "in": "body",
+                        "description": "id of agent that we want to update its units",
+                        "schema": {
+                            "$ref": "#/definitions/AddingNewAgent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "agent data after updating"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/agents/agentUnits/{id}": {
+            "delete": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Delete specific agent units",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of agent that we want to delete its units",
+                        "schema": {
+                            "$ref": "#/definitions/deleteAgentUnit"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "body",
+                        "description": "id of agent that we want to update its units",
+                        "schema": {
+                            "$ref": "#/definitions/deleteAgentUnits"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "agent data after updating"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -1880,6 +1938,24 @@
                 "_id": {
                     "type": "objectId"
                 },
+                "agentUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId"
+                            },
+                            "numberOfRenting": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "deleteAgentUnits": {
+            "properties": {
                 "agentUnits": {
                     "type": "array",
                     "items": {
