@@ -62,11 +62,11 @@ module.exports.getContractsByPage = (request, response, next) => {
 }
 
 module.exports.addContract = (request, response, next) => {
-    LandlordModel.exists({ _id: request.body._id })
+    LandlordModel.exists({ _id: request.body.landlordId })
         .then((data) => {
             if (!data)
                 throw new Error(`_id isn't available in landlords collection`)
-            return AgentModel.exists({ _id: request.body._id })
+            return AgentModel.exists({ _id: request.body.agentId })
         })
         .then((data) => {
             // console.log(data)
@@ -84,7 +84,7 @@ module.exports.addContract = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-module.exports.getContract = (request, response, next) => {
+module.exports.getContractById = (request, response, next) => {
     ContractModel.findOne({ _id: request.params.id })
         .then((data) => {
             if (data === null) throw new Error('Contract Not Found')
@@ -94,7 +94,10 @@ module.exports.getContract = (request, response, next) => {
 }
 
 module.exports.deleteUnitContract = (request, response, next) => {
-    ContractModel.deleteOne({ unitId: request.params.id })
+    ContractModel.deleteOne({
+        unitId: request.params.id,
+        _id: request.params.contractId,
+    })
         .then((data) => {
             if (data.deletedCount === 0) next(new Error('Contract Not Found'))
             else {
