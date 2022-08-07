@@ -5,10 +5,39 @@ require('../../../models/adminModel')
 
 const { generateAvatarImage } = require('../apiDataGrabber')
 
+async function getAdminImages(numberOfDocuments) {
+    const apiImagesMaximum = 30
+    const numberOfNeededRequests = Math.ceil(
+        numberOfDocuments / apiImagesMaximum
+    )
+    const requestsArray = new Array(numberOfNeededRequests)
+        .fill(1)
+        .map((_, index) => generateAvatarImage(index + 1, 'computer matrices'))
+    // console.log({ requestsArray })
+
+    const response = await Promise.allSettled(requestsArray)
+    // console.log({ response })
+
+    const imagesArray = response
+        .reduce((acc, curr, index) => {
+            // if (!curr.value) console.log({ curr, index })
+            acc = [...acc, ...curr.value]
+            return acc
+        }, [])
+        .map((curr) => curr.urls.small_s3)
+
+    // console.log(imagesArray)
+    // console.log(imagesArray.length)
+
+    return imagesArray
+}
+
 async function seedAdmin(numberOfDocuments) {
     const collection = mongoose.model('admins')
     // await mongoose.connection.db.dropCollection('admins')
     await collection.deleteMany({})
+
+    const avatars = await getAdminImages(numberOfDocuments)
 
     const data = []
     const ids = []
@@ -32,7 +61,7 @@ async function seedAdmin(numberOfDocuments) {
         const password = '1234@aBcD'
         const phone = faker.phone.number('012########')
         const national_id = parseInt(faker.phone.number('##############'))
-        const image = await generateAvatarImage()
+        const image = avatars[i]
 
         ids.push(_id)
         data.push({

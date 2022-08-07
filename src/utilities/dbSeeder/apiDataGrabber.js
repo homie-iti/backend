@@ -7,10 +7,20 @@ async function getData(url, options = {}) {
     return data
 }
 
-async function generateAvatarImage() {
-    const apiURL = 'https://this-person-does-not-exist.com/en?new='
-    const imageSrc = (await getData(apiURL)).src
-    return `https://this-person-does-not-exist.com${imageSrc}`
+async function generateAvatarImage(page = 1, query = '') {
+    // https://api.unsplash.com/search/photos?page=1&query=human&content_filter=high&orientation=squarish&per_page=30
+    const apiURL = `https://api.unsplash.com/search/photos?per_page=30&content_filter=high&orientation=squarish&page=${page}&query=${query}`
+    // console.log(apiURL)
+    const options = {
+        headers: {
+            Authorization: appConfig.unsplashKey,
+            'Accept-Version': 'v1',
+        },
+    }
+    // console.log(options)
+    const { results } = await getData(apiURL, options)
+    // console.log(results)
+    return results
 }
 
 async function generateApartmentImage(page = 1, query = '') {
