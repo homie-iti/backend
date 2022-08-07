@@ -1,9 +1,4 @@
-<<<<<<<< HEAD:src/routers/validations/userValidations.js
 const { body } = require('express-validator')
-========
-const { body, param } = require('express-validator')
-
->>>>>>>> origin/main:src/middlewares/validations/usersValidations.js
 
 const userPostValidation = [
     // body("id").isMongoId().withMessage("user id should be a number"),
@@ -64,11 +59,6 @@ const userUpdateValidation = [
 ]
 
 module.exports = {
-<<<<<<<< HEAD:src/routers/validations/userValidations.js
-========
-
-    userDeleteValidation,
->>>>>>>> origin/main:src/middlewares/validations/usersValidations.js
     userUpdateValidation,
     userPostValidation,
 }

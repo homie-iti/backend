@@ -1,4 +1,4 @@
-const { body, param, query } = require('express-validator')
+const { body, param } = require('express-validator')
 
 const createContractValidations = [
     body('landlordId').isMongoId().withMessage('LandlordId should be ObjectId'),
@@ -48,7 +48,12 @@ const updateContractValidations = [
         .optional(),
 ]
 
+const deleteUnitContractValidations = [
+    param('contractId').isMongoId().withMessage('ContractId must be objectId.'),
+    param('id').isMongoId().withMessage('UnitId must be objectId.'),
+]
 module.exports = {
     createContractValidations,
     updateContractValidations,
+    deleteUnitContractValidations,
 }
