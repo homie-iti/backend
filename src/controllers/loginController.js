@@ -26,30 +26,28 @@ module.exports.loginUser = (request, response, next) => {
                 error.status = 401
                 throw error
                 // loginError()
-            } else {
-                bcrypt
-                    .compare(request.body.password, data.password)
-                    .then((result) => {
-                        if (!result) {
-                            const error = new Error(
-                                'email or password incorrect'
-                            )
-                            error.status = 401
-                            throw error
-                        }
-
-                        const token = jwt.sign(
-                            {
-                                id: data._id,
-                                role: 'User',
-                            },
-                            appConfig.jwtSecret,
-                            // process.env.secret,
-                            { expiresIn: '1h' }
-                        )
-                        response.status(200).json({ token, message: 'login' })
-                    })
             }
+            bcrypt
+                .compare(request.body.password, data.password)
+                .then((result) => {
+                    if (!result) {
+                        const error = new Error('email or password incorrect')
+                        error.status = 401
+                        throw error
+                    }
+
+                    const token = jwt.sign(
+                        {
+                            id: data._id,
+                            role: 'aser',
+                        },
+                        appConfig.jwtSecret,
+                        // process.env.secret,
+                        { expiresIn: '24h' }
+                    )
+                    response.status(200).json({ token, message: 'login' })
+                })
+                .catch((error) => next(error))
         })
         .catch((error) => next(error))
 }
@@ -67,29 +65,27 @@ module.exports.loginAdmin = (request, response, next) => {
                 const error = new Error('email or password incorrect')
                 error.status = 401
                 throw error
-            } else {
-                bcrypt
-                    .compare(request.body.password, data.password)
-                    .then((result) => {
-                        if (!result) {
-                            const error = new Error(
-                                'email or password incorrect'
-                            )
-                            error.status = 401
-                            throw error
-                        }
-
-                        const token = jwt.sign(
-                            {
-                                id: data._id,
-                                role: 'Admin',
-                            },
-                            appConfig.jwtSecret,
-                            { expiresIn: '1h' }
-                        )
-                        response.status(200).json({ token, message: 'login' })
-                    })
             }
+            bcrypt
+                .compare(request.body.password, data.password)
+                .then((result) => {
+                    if (!result) {
+                        const error = new Error('email or password incorrect')
+                        error.status = 401
+                        throw error
+                    }
+
+                    const token = jwt.sign(
+                        {
+                            id: data._id,
+                            role: 'admin',
+                        },
+                        appConfig.jwtSecret,
+                        { expiresIn: '24h' }
+                    )
+                    response.status(200).json({ token, message: 'login' })
+                })
+                .catch((error) => next(error))
         })
         .catch((error) => next(error))
 }
