@@ -50,6 +50,7 @@ const schema = new mongoose.Schema(
         state: {
             type: String,
             enum: ['active', 'canceled', 'proposed'],
+            default: 'proposed',
             required: [true, 'contract state is required'],
         },
     },
