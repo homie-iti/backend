@@ -7,7 +7,7 @@ module.exports.getHelpQuestionsByPage = (request, response, next) => {
         {},
         {
             page: request.query.page || 1,
-            // select: '',
+            populate: { path: 'userId' },
         }
     )
         .then((data) => {

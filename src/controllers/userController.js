@@ -127,6 +127,7 @@ module.exports.updateUser = (request, response, next) => {
         'image',
         'address',
         'national_id',
+        'balance'
     ]
     console.log(allowed)
     const requested = Object.keys(request.body)

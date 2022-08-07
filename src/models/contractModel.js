@@ -22,11 +22,11 @@ const schema = new mongoose.Schema(
         },
 
         rentalStart: {
-            type: String,
+            type: Date,
             required: [true, 'contract rentalStart is required'],
         },
         rentalEnd: {
-            type: String,
+            type: Date,
             required: [true, 'contract rentalEnd is required'],
         },
         paymentAmount: {
@@ -50,6 +50,7 @@ const schema = new mongoose.Schema(
         state: {
             type: String,
             enum: ['active', 'canceled', 'proposed'],
+            default: 'proposed',
             required: [true, 'contract state is required'],
         },
     },

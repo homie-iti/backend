@@ -30,6 +30,7 @@ async function getUnitsImages(numberOfDocuments, numberOfImagesPerUnit) {
     const imagesArray = response
         .reduce((acc, curr, index) => {
             // if (!curr.value) console.log({ curr, index })
+            console.log(curr)
             acc = [...acc, ...curr.value]
             return acc
         }, [])

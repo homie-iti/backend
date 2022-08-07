@@ -10,11 +10,40 @@ function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+async function getUsersImages(numberOfDocuments) {
+    const apiImagesMaximum = 30
+    const numberOfNeededRequests = Math.ceil(
+        numberOfDocuments / apiImagesMaximum
+    )
+    const requestsArray = new Array(numberOfNeededRequests)
+        .fill(1)
+        .map((_, index) => generateAvatarImage(index + 1, 'human'))
+    // console.log({ requestsArray })
+
+    const response = await Promise.allSettled(requestsArray)
+    // console.log({ response })
+
+    const imagesArray = response
+        .reduce((acc, curr, index) => {
+            // if (!curr.value) console.log({ curr, index })
+            acc = [...acc, ...curr.value]
+            return acc
+        }, [])
+        .map((curr) => curr.urls.small_s3)
+
+    // console.log(imagesArray)
+    // console.log(imagesArray.length)
+
+    return imagesArray
+}
+
 async function seedUsers(numberOfDocuments) {
     const collection = mongoose.model('users')
     // await mongoose.connection.db.dropCollection('users')
     // collection.drop();
     await collection.deleteMany({})
+
+    const avatars = await getUsersImages(numberOfDocuments)
 
     const data = []
     const ids = []
@@ -31,7 +60,7 @@ async function seedUsers(numberOfDocuments) {
         const password = '1234@aBcD'
         const phone = faker.phone.number('01#########')
         const national_id = faker.phone.number('##############')
-        const image = await generateAvatarImage()
+        const image = avatars[i]
         const address = {
             city: faker.address.cityName(),
             streetName: faker.address.street(),

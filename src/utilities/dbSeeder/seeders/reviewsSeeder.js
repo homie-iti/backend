@@ -49,7 +49,7 @@ async function seedReview(numberOfDocuments, agentsIds, unitsIds) {
         })
     }
 
-    addReviewToUnit(data)
+    await addReviewToUnit(data)
 
     await collection.insertMany(data)
     return ids

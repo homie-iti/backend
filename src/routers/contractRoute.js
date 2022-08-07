@@ -8,8 +8,7 @@ const validationMW = require('../middlewares/validationMW')
 const {
     createContractValidations,
     updateContractValidations,
-} = require('./validations/contractValidations')
-const validateId = require('./validations/idValidations')
+} = require('../middlewares/validations/contractValidations')
 
 router
     .route('/contracts/unit/:id')
@@ -18,6 +17,8 @@ router
         validationMW,
         contractController.getUnitContracts
     )
+router
+    .route('/contracts/:contractId/unit/:id')
     .delete(
         validateId('Unit', param),
         validationMW,
@@ -55,5 +56,9 @@ router
         contractController.updateContractData
     )
 
-router.get('/contracts/:id', contractController.getContract)
+router
+    .route('/contracts/:id')
+    .get(contractController.getContractById)
+    // .delete(contractController.deleteContractById)
+
 module.exports = router

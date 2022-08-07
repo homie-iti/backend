@@ -55,7 +55,7 @@ module.exports.getUnitById = (request, response, next) => {
         })
 
         .then((data) => {
-            if (data == null) next(new Error("Unit Doesn't Exist"))
+            if (data == null) throw new Error("Unit Doesn't Exist")
             else {
                 response.status(200).json(data)
             }
@@ -134,7 +134,7 @@ module.exports.updateUnitData = (request, response, next) => {
     Unit.findOne({ _id: request.body.id })
         .then((data) => {
             // console.log(data);
-            if (data == null) next(new Error("Unit Doesn't Exist"))
+            if (data == null) throw new Error("Unit Doesn't Exist")
             else {
                 const updates = request.body
                 // console.log(updates);
@@ -188,7 +188,7 @@ module.exports.deleteUnit = (request, response, next) => {
         .then((data) => {
             console.log(data)
             if (data[0].deletedCount === 0) {
-                next(new Error('Unit Not Found'))
+                throw new Error('Unit Not Found')
             }
             response.status(200).json('Unit Deleted')
         })
@@ -203,7 +203,7 @@ module.exports.uploadUnitCover = (request, response, next) => {
     Unit.findOne({ _id: request.params.id })
         .then((data) => {
             console.log(data)
-            if (data == null) next(new Error("Unit Doesn't Exist"))
+            if (data == null) throw new Error("Unit Doesn't Exist")
             data.cover = request.file.path
             data.save()
             response.status(201).json('Cover Image Uploaded')
@@ -227,7 +227,7 @@ module.exports.updateUnitCover = (request, response, next) => {
             // console.log(data);
             // console.log(data.cover);
             unlinkAsync(data.cover) // ! for removing image from uploads file(works well,but check if it is the suitable way)
-            if (data == null) next(new Error("Unit Doesn't Exist"))
+            if (data == null) throw new Error("Unit Doesn't Exist")
             // data.cover = request.file.path;
             response.status(201).json('Unit Cover Image has been updated')
         })
@@ -243,7 +243,7 @@ module.exports.uploadUnitImages = (request, response, next) => {
             console.log(data)
             // console.log(data.images);
 
-            if (data == null) next(new Error("Unit Doesn't Exist"))
+            if (data == null) throw new Error("Unit Doesn't Exist")
 
             request.files.forEach((image) => {
                 console.log(image.path)
@@ -273,7 +273,7 @@ module.exports.deleteUnitImages = (request, response, next) => {
                 unlinkAsync(image)
             })
 
-            if (data.matchedCount === 0) next(new Error('Unit Not Found'))
+            if (data.matchedCount === 0) throw new Error('Unit Not Found')
             else {
                 response.status(200).json(data)
             }
@@ -287,7 +287,7 @@ module.exports.deleteUnitImages = (request, response, next) => {
 //         .populate({ path: 'agentId', select: 'fullName image' })
 //         .then((data) => {
 //             console.log(data)
-//             if (data == null) next(new Error("This Unit Haven't Reviews Yet."))
+//             if (data == null) throw new Error("This Unit Haven't Reviews Yet.")
 //             else {
 //                 response.status(200).json(data)
 //             }
@@ -332,11 +332,24 @@ module.exports.getAllReviews = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-// TODO needs enhancement (try,catch to avoid callback hells)
+module.exports.getReviewById = (request, response, next) => {
+    Review.findOne({ _id: request.params.id })
+
+        .then((data) => {
+            if (data == null) next(new Error("Review Doesn't Exist"))
+            else {
+                response.status(200).json(data)
+            }
+        })
+        .catch((error) => {
+            next(error)
+        })
+}
+
 module.exports.addReview = (request, response, next) => {
     Unit.findOne({ _id: request.body.unitId })
         .then((unit) => {
-            if (unit == null) next(new Error("Unit Doesn't Found."))
+            if (unit == null) throw new Error("Unit Doesn't Found.")
             else {
                 Agent.findOne({
                     _id: request.body.agentId,
@@ -344,7 +357,7 @@ module.exports.addReview = (request, response, next) => {
                 }).then((agent) => {
                     console.log(`"agent" ${agent}`)
                     if (agent == null)
-                        next(new Error("Agent has this unit doesn't found."))
+                        throw new Error("Agent has this unit doesn't found.")
                     // console.log('this agent has this unit')
                     const newReview = new Review({
                         unitId: request.body.unitId,
@@ -369,7 +382,7 @@ module.exports.addReview = (request, response, next) => {
                                     data.modifiedCount === 0 ||
                                     data.matchedCount === 0
                                 )
-                                    next(new Error("Can't modified unit data."))
+                                    throw new Error("Can't modified unit data.")
                                 response.status(200).json(data)
                             })
                             .catch((error) => next(error))
@@ -394,7 +407,7 @@ module.exports.getUnitReviews = (request, response, next) => {
         .then((data) => {
             console.log(data)
             console.log(data.reviews.ratings)
-            if (data == null) next(new Error("Unit Doesn't Found"))
+            if (data == null) throw new Error("Unit Doesn't Found")
             else {
                 const totalRatings = data.reviews.ratings
                 const ratingAverage =
@@ -404,6 +417,7 @@ module.exports.getUnitReviews = (request, response, next) => {
                     RatingAverage: ratingAverage,
                     reviewsCount: data.reviews.reviews.length,
                     reviews: data.reviews.reviews,
+                    unitId: data._id,
                 })
             }
         })
@@ -412,9 +426,32 @@ module.exports.getUnitReviews = (request, response, next) => {
         })
 }
 
+module.exports.deleteUnitReviews = (request, response, next) => {
+    Unit.updateOne(
+        { _id: request.params.id },
+        { $pull: { 'reviews.reviews': request.body.reviewId } }
+    )
 
+        .then((data) => {
+            console.log(data)
+            if (data.modifiedCount === 0)
+                throw new Error(`Review not found in unit reviews`)
+            return Review.deleteOne({ _id: request.body.reviewId })
+        })
+        .then((data) => {
+            if (data.deletedCount === 0)
+                throw new Error(`Review not found in reviews collection`)
 
-
+            response
+                .status(200)
+                .json(
+                    'Review deleted from unit reviews and reviews collection successfully'
+                )
+        })
+        .catch((error) => {
+            next(error)
+        })
+}
 
 // ! Things to think about it:
 //* Landlord upload new images in addition to the exist one.

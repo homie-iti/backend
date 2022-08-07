@@ -9,8 +9,7 @@ const validationMW = require('../middlewares/validationMW')
 const {
     addUnitValidations,
     updateUnitValidations,
-} = require('./validations/unitValidations')
-const validateId = require('./validations/idValidations')
+} = require('../middlewares/validations/unitValidations')
 
 const uploadImage = require('../middlewares/uploadImagesMW')
 
@@ -91,14 +90,12 @@ router
     .get(unitController.getAllReviews)
     .post(unitController.addReview)
 
-router.get(
-    '/units/reviews/:id',
-    validateId('unit', param),
-    validationMW,
-    unitController.getUnitReviews
-)
+router
+    .route('/units/reviews/:id')
+    .get(unitController.getUnitReviews)
+    .delete(unitController.deleteUnitReviews)
 
 // router.get('/agents', unitController.getAllAgents)
-// router.get('/agents/:id', unitController.getAgentById)
+router.get('/reviews/:id', unitController.getReviewById)
 
 module.exports = router

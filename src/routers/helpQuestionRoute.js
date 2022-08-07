@@ -6,10 +6,8 @@ const validationMW = require('../middlewares/validationMW')
 const {
     helpQuestionPostValidation,
     helpQuestionUpdateValidation,
-} = require('./validations/helpQuestionValidations')
-
-const validateId = require('./validations/idValidations')
-
+    helpQuestionDeleteValidation,
+} = require('../middlewares/validations/helpQuestionsValidations')
 const helpController = require('../controllers/helpQuestionController')
 
 router
