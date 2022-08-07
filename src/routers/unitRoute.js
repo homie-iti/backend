@@ -98,9 +98,12 @@ router
     .get(unitController.getAllReviews)
     .post(unitController.addReview)
 
-router.get('/units/reviews/:id', unitController.getUnitReviews)
+router
+    .route('/units/reviews/:id')
+    .get(unitController.getUnitReviews)
+    .delete(unitController.deleteUnitReviews)
 
 // router.get('/agents', unitController.getAllAgents)
-// router.get('/agents/:id', unitController.getAgentById)
+router.get('/reviews/:id', unitController.getReviewById)
 
 module.exports = router
