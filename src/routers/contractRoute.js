@@ -17,6 +17,8 @@ router
         validationMW,
         contractController.getUnitContracts
     )
+router
+    .route('/contracts/:contractId/unit/:id')
     .delete(
         [param('id').isMongoId().withMessage('Unit Id Must Be ObjectId')],
         validationMW,
@@ -54,5 +56,9 @@ router
         contractController.updateContractData
     )
 
-router.get('/contracts/:id', contractController.getContract)
+router
+    .route('/contracts/:id')
+    .get(contractController.getContractById)
+    // .delete(contractController.deleteContractById)
+
 module.exports = router

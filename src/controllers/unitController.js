@@ -332,7 +332,20 @@ module.exports.getAllReviews = (request, response, next) => {
         .catch((error) => next(error))
 }
 
-// TODO needs enhancement (try,catch to avoid callback hells)
+module.exports.getReviewById = (request, response, next) => {
+    Review.findOne({ _id: request.params.id })
+
+        .then((data) => {
+            if (data == null) next(new Error("Review Doesn't Exist"))
+            else {
+                response.status(200).json(data)
+            }
+        })
+        .catch((error) => {
+            next(error)
+        })
+}
+
 module.exports.addReview = (request, response, next) => {
     Unit.findOne({ _id: request.body.unitId })
         .then((unit) => {
@@ -404,8 +417,36 @@ module.exports.getUnitReviews = (request, response, next) => {
                     RatingAverage: ratingAverage,
                     reviewsCount: data.reviews.reviews.length,
                     reviews: data.reviews.reviews,
+                    unitId: data._id,
                 })
             }
+        })
+        .catch((error) => {
+            next(error)
+        })
+}
+
+module.exports.deleteUnitReviews = (request, response, next) => {
+    Unit.updateOne(
+        { _id: request.params.id },
+        { $pull: { 'reviews.reviews': request.body.reviewId } }
+    )
+
+        .then((data) => {
+            console.log(data)
+            if (data.modifiedCount === 0)
+                throw new Error(`Review not found in unit reviews`)
+            return Review.deleteOne({ _id: request.body.reviewId })
+        })
+        .then((data) => {
+            if (data.deletedCount === 0)
+                throw new Error(`Review not found in reviews collection`)
+
+            response
+                .status(200)
+                .json(
+                    'Review deleted from unit reviews and reviews collection successfully'
+                )
         })
         .catch((error) => {
             next(error)

@@ -942,13 +942,10 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Get array of reviews objects containing all reviews that exist on the daatbase",
+                "summary": "Get all reviews present in database",
                 "responses": {
                     "200": {
-                        "description": "Array of reviews ",
-                        "schema": {
-                            "$ref": "#/definitions/addingReview"
-                        }
+                        "description": "Array of reviews data"
                     }
                 }
             },
@@ -974,6 +971,26 @@
                 }
             }
         },
+        "/reviews/{id}": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get specific review data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of the review that we want to display"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "review data"
+                    }
+                }
+            }
+        },
         "/units/reviews/{id}": {
             "get": {
                 "tags": [
@@ -990,6 +1007,170 @@
                 "responses": {
                     "200": {
                         "description": "average ratings of unit,number of reviews and reviews body"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Delete specific unit review",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "unitId that we want to delete its review"
+                    },
+                    {
+                        "name": "reviewId",
+                        "in": "body",
+                        "description": "reviewId that we want to delete from unit reviews ",
+                        "schema": {
+                            "$ref": "#/definitions/deleteUnitReview"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review deleted from unit reviews and reviews collection successfully"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/contracts/unit/{id}": {
+            "get": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Getting specific unit contracts",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "unitId that we want to get its contracts"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of contracts of specific unit"
+                    }
+                }
+            }
+        },
+        "/contracts/landlord/{id}": {
+            "get": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Getting specific landlord contracts",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "landlordId that we want to get its contracts"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of contracts of specific landlord"
+                    }
+                }
+            }
+        },
+        "/contracts/{contractId}/unit/{id}": {
+            "delete": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Delete specific unit contract",
+                "parameters": [
+                    {
+                        "name": "contractId",
+                        "in": "path",
+                        "description": "contractId that we want to delete its contracts"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "unitId that we want to delete its contracts"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "information about delete process"
+                    }
+                }
+            }
+        },
+        "/contracts": {
+            "get": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Get array of contracts objects containing contracts that exist on the given page with limit 30 unit",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to display contracts exist on it"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Contract"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Adding new contract to specific unit and specific agent & landlord",
+                "parameters": [
+                    {
+                        "name": "contract",
+                        "in": "body",
+                        "description": "unitId to add review,agentId that have this unit,comment,rating",
+                        "schema": {
+                            "$ref": "#/definitions/Contract"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "added, and id of added contract"
+                    }
+                }
+            }
+        },
+        "/contracts/{id}": {
+            "get": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Get specific contract data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of the contract that we want to display"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "contract data"
                     }
                 }
             }
@@ -1822,6 +2003,14 @@
                 },
                 "offerPercentage": {
                     "type": "number"
+                },
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "active",
+                        "canceled",
+                        "proposed"
+                    ]
                 }
             }
         },
@@ -1842,6 +2031,13 @@
                     "items": {
                         "type": "objectId"
                     }
+                }
+            }
+        },
+        "deleteUnitReview": {
+            "properties": {
+                "reviewId": {
+                    "type": "objectId"
                 }
             }
         },

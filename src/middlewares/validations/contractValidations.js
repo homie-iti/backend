@@ -7,6 +7,7 @@ const createContractValidations = [
     body('rentalStart').isDate().withMessage('Rental Start Should Be Date.'),
     body('rentalEnd').isDate().withMessage('Rental End Should Be Date.'),
     body('paymentAmount')
+        .optional()
         .isNumeric()
         .withMessage('paymentAmount Should be Number'),
     body('paymentMethod')
@@ -14,6 +15,7 @@ const createContractValidations = [
         .withMessage('Payment Method Must Be (paypal||bank||cash)'),
     body('totalAmount').isNumeric().withMessage('Total Amount Must Be Number'),
     body('offerPercentage')
+        .optional()
         .isNumeric()
         .withMessage('Offer Percentage Must Be Number'),
 ]

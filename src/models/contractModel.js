@@ -22,11 +22,11 @@ const schema = new mongoose.Schema(
         },
 
         rentalStart: {
-            type: String,
+            type: Date,
             required: [true, 'contract rentalStart is required'],
         },
         rentalEnd: {
-            type: String,
+            type: Date,
             required: [true, 'contract rentalEnd is required'],
         },
         paymentAmount: {
