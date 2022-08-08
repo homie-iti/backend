@@ -103,6 +103,7 @@ module.exports.createUser = (request, response, next) => {
         phone: request.body.phone,
         national_id: request.body.national_id,
         balance: request.body.balance,
+        address: request.body.address,
         // image,
     })
     object
@@ -127,7 +128,7 @@ module.exports.updateUser = (request, response, next) => {
         'image',
         'address',
         'national_id',
-        'balance'
+        'balance',
     ]
     console.log(allowed)
     const requested = Object.keys(request.body)

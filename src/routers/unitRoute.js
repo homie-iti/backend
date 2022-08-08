@@ -1,7 +1,7 @@
 const express = require('express')
 
 const router = express.Router()
-const { param } = require('express-validator')
+
 
 const unitController = require('../controllers/unitController')
 
@@ -34,19 +34,19 @@ router
 
 router
     .route('/units/:id')
-    .get(validateId('unit', param), validationMW, unitController.getUnitById)
-    .delete(validateId('unit', param), validationMW, unitController.deleteUnit)
+    .get(validateId('unit'), validationMW, unitController.getUnitById)
+    .delete(validateId('unit'), validationMW, unitController.deleteUnit)
 
 router
     .route('/units/cover/:id')
     .post(
-        validateId('unit', param),
+        validateId('unit'),
         validationMW,
         uploadImage('units/cover').single('cover'),
         unitController.uploadUnitCover
     )
     .put(
-        validateId('unit', param),
+        validateId('unit'),
         validationMW,
         uploadImage('units/cover').single('cover'),
         unitController.updateUnitCover
@@ -55,16 +55,12 @@ router
 router
     .route('/units/images/:id')
     .post(
-        validateId('unit', param),
+        validateId('unit'),
         validationMW,
         uploadImage('units/unitsImages').array('unitImages', 4),
         unitController.uploadUnitImages
     )
-    .delete(
-        validateId('unit', param),
-        validationMW,
-        unitController.deleteUnitImages
-    )
+    .delete(validateId('unit'), validationMW, unitController.deleteUnitImages)
 
 // router.get(
 //     '/units/reviews/:id',
@@ -87,16 +83,12 @@ router
 
 router
     .route('/units/reviews/:id')
-    .get(validateId('unit', param), validationMW, unitController.getUnitReviews)
-    .delete(
-        validateId('unit', param),
-        validationMW,
-        unitController.deleteUnitReviews
-    )
+    .get(validateId('unit'), validationMW, unitController.getUnitReviews)
+    .delete(validateId('unit'), validationMW, unitController.deleteUnitReviews)
 
 router.get(
     '/reviews/:id',
-    validateId('review', param),
+    validateId('review'),
     validationMW,
     unitController.getReviewById
 )

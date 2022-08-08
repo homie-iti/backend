@@ -1,13 +1,29 @@
 const express = require('express')
-const { body, param } = require('express-validator')
+const { param } = require('express-validator')
 
 const router = express.Router()
 const validationMW = require('../middlewares/validationMW')
+const { validateId } = require('../middlewares/validations/generalValidations')
 const paymentController = require('../controllers/paymentController')
 
-router.post('/book-unit/:id', paymentController.bookUnit)
-router.put('/confirm-booking/:id', paymentController.confirmBookingUnit)
+router.post(
+    '/book-unit/:id',
+    validateId('unit'),
+    validationMW,
+    paymentController.bookUnit
+)
+router.put(
+    '/confirm-booking/:id',
+    validateId('contract'),
+    validationMW,
+    paymentController.confirmBookingUnit
+)
 
-router.put('/cancel-booking/:id', paymentController.cancelBookingUnit)
+router.put(
+    '/cancel-booking/:id',
+    validateId('contract'),
+    validationMW,
+    paymentController.cancelBookingUnit
+)
 
 module.exports = router

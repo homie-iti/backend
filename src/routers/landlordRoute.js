@@ -1,42 +1,29 @@
 const express = require('express')
-const { body, param, query } = require('express-validator')
 const validationMW = require('../middlewares/validationMW')
+const {
+    validateId,
+    pageValidations,
+} = require('../middlewares/validations/generalValidations')
+const {
+    addLandlordValidations,
+    updateLandlordValidations,
+    removeLandlordUnitsValidations,
+} = require('../middlewares/validations/landlordValidations')
 const landlordController = require('../controllers/landlordController')
 
 const router = express.Router()
 
 router
     .route('/landlords')
-    .get(
-        [
-            query('page')
-                .optional()
-                .isNumeric()
-                .withMessage('Page number should number'),
-        ],
-        validationMW,
-        landlordController.getLandlordsByPage
-    )
+    .get(pageValidations, validationMW, landlordController.getLandlordsByPage)
     .post(
-        [
-            body('_id')
-                .isMongoId()
-                .withMessage('landlord id should be MongoId'),
-            body('landlordUnits')
-                .isArray()
-                .withMessage('landlord Units should be an Array'),
-        ],
+        addLandlordValidations,
         validationMW,
         landlordController.CreateLandLord
     )
 
     .put(
-        [
-            body('id').isMongoId().withMessage('landlord id should be MongoId'),
-            body('landlordUnits')
-                .isMongoId()
-                .withMessage('landlord Units should be MongoId'),
-        ],
+        updateLandlordValidations,
         validationMW,
         landlordController.updateLandlordUnits
     )
@@ -44,24 +31,22 @@ router
 router
     .route('/landlords/:id')
     .get(
-        [param('id').isMongoId().withMessage('landlord id should be objectID')],
+        validateId('landlord'),
         validationMW,
         landlordController.getLandLordById
     )
     .delete(
-        [param('id').isMongoId().withMessage('landlord id should be objectID')],
+        validateId('landlord'),
         validationMW,
         landlordController.deleteLandlordById
     )
 
-router.route('/landlords/:id/units').delete(
-    [param('id').isMongoId().withMessage('landlord id should be objectID')],
-    body('landlordUnits')
-        .isMongoId()
-        .withMessage('landlord Units should be MongoId'),
-
-    validationMW,
-    landlordController.RemoveLandlordUnits
-)
+router
+    .route('/landlords/:id/units')
+    .delete(
+        removeLandlordUnitsValidations,
+        validationMW,
+        landlordController.RemoveLandlordUnits
+    )
 
 module.exports = router

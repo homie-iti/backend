@@ -1,13 +1,13 @@
-const fs = require("fs");
-const { promisify } = require("util");
+const fs = require("fs")
+const { promisify } = require("util")
 
-const unlinkAsync = promisify(fs.unlink);
+const unlinkAsync = promisify(fs.unlink)
 
-const Unit = require("../models/unitModel");
-const Review = require("../models/reviewModel");
-const Landlord = require("../models/landlordModel");
-const City = require("../models/cityModel");
-const Agent = require("../models/agentModel");
+const Unit = require("../models/unitModel")
+const Review = require("../models/reviewModel")
+const Landlord = require("../models/landlordModel") 
+const City = require("../models/cityModel") 
+const Agent = require("../models/agentModel") 
 
 // Get Units using page number
 module.exports.getUnitsByPage = (request, response, next) => {
@@ -21,7 +21,7 @@ module.exports.getUnitsByPage = (request, response, next) => {
     }
   )
     .then((data) => {
-      console.log(data);
+      console.log(data) 
       response.status(200).json({
         currentPage: data.page,
         previousPage: data.prevPage,
@@ -31,12 +31,12 @@ module.exports.getUnitsByPage = (request, response, next) => {
         unitsDisplayed: data.docs.length,
         remained: data.totalDocs - data.docs.length,
         results: data.docs,
-      });
+      }) 
     })
     .catch((error) => {
-      next(error);
-    });
-};
+      next(error) 
+    }) 
+} 
 
 // Get Specific Unit By Id
 module.exports.getUnitById = (request, response, next) => {
@@ -56,34 +56,34 @@ module.exports.getUnitById = (request, response, next) => {
     })
 
     .then((data) => {
-      if (data == null) throw new Error("Unit Doesn't Exist");
+      if (data == null) throw new Error("Unit Doesn't Exist") 
       else {
-        response.status(200).json(data);
+        response.status(200).json(data) 
       }
     })
     .catch((error) => {
-      next(error);
-    });
-};
+      next(error) 
+    }) 
+} 
 
 // Create/Add New Unit
 module.exports.createUnit = (request, response, next) => {
-  const { cityId } = request.body;
-  const { landlordId } = request.body;
+  const { cityId } = request.body 
+  const { landlordId } = request.body 
   Landlord.exists({ _id: landlordId })
     .then((data) => {
-      if (!data) throw new Error("landlordId is not in db");
-      return City.exists({ _id: cityId });
+      if (!data) throw new Error("landlordId is not in db") 
+      return City.exists({ _id: cityId }) 
     })
     .then((data) => {
-      if (!data) throw new Error("cityId is not in db");
-      return data;
+      if (!data) throw new Error("cityId is not in db") 
+      return data 
     })
     .catch((error) => {
-      next(error);
-    });
+      next(error) 
+    }) 
 
-  let UnitImagesPaths = [];
+  let UnitImagesPaths = [] 
   //  console.log(UnitImagesPaths)
 
   const unit = {
@@ -96,18 +96,18 @@ module.exports.createUnit = (request, response, next) => {
     numberOfResidents: request.body.numberOfResidents,
     unitInfo: request.body.unitInfo,
     allowedGender: request.body.allowedGender,
-  };
+  } 
 
   if (request.files && request.files.unitCover) {
-    unit.cover = request.files.unitCover[0].path;
+    unit.cover = request.files.unitCover[0].path 
   }
 
   if (request.files && request.files.unitImages) {
-    const unitImagesArray = request.files.unitImages;
-    UnitImagesPaths = unitImagesArray.map((image) => image.path);
-    unit.images = UnitImagesPaths;
+    const unitImagesArray = request.files.unitImages 
+    UnitImagesPaths = unitImagesArray.map((image) => image.path) 
+    unit.images = UnitImagesPaths 
   }
-  const newUnit = new Unit(unit);
+  const newUnit = new Unit(unit) 
 
   Promise.all([
     newUnit.save(),
@@ -125,51 +125,51 @@ module.exports.createUnit = (request, response, next) => {
     ),
   ])
     .then((data) => {
-      response.status(201).json({ data: "added", id: newUnit._id });
+      response.status(201).json({ data: "added", id: newUnit._id }) 
     })
-    .catch((error) => next(error));
-};
+    .catch((error) => next(error)) 
+} 
 
 // Update Unit Data
 module.exports.updateUnitData = (request, response, next) => {
   Unit.findOne({ _id: request.body.id })
     .then((data) => {
-      // console.log(data);
-      if (data == null) throw new Error("Unit Doesn't Exist");
+      // console.log(data) 
+      if (data == null) throw new Error("Unit Doesn't Exist") 
       else {
-        const updates = request.body;
-        // console.log(updates);
+        const updates = request.body 
+        // console.log(updates) 
         for (const property in updates) {
           // if (property in data === false) {
-          //   console.log(property);
-          //   console.log(updates[property]);
+          //   console.log(property) 
+          //   console.log(updates[property]) 
 
           //   Unit.updateOne(
           //     { _id: request.body.id },
           //     { $set: { property: updates[property] } }
           //   ).then((data) => {
-          //     console.log(data);
-          //   });
-          //   //data.property = updates[property];
+          //     console.log(data) 
+          //   }) 
+          //   //data.property = updates[property] 
           // }
-          data[property] = updates[property] || data[property];
+          data[property] = updates[property] || data[property] 
           if (typeof updates[property] === "object") {
-            console.log("updateObject");
+            console.log("updateObject") 
           }
         }
         data.save().then((data) => {
-          console.log(data);
-          response.status(201).json({ data: "Unit Data Updated" });
-        });
+          console.log(data) 
+          response.status(201).json({ data: "Unit Data Updated" }) 
+        }) 
       }
     })
-    .catch((error) => next(error));
-};
+    .catch((error) => next(error)) 
+} 
 
 // delete specific unit
 module.exports.deleteUnit = (request, response, next) => {
-  const { cityId } = request.body;
-  const { landlordId } = request.body;
+  const { cityId } = request.body 
+  const { landlordId } = request.body 
   // !Promise.all needs to be checked (!Important)
   Promise.all([
     Unit.deleteOne({ _id: request.params.id }),
@@ -187,37 +187,37 @@ module.exports.deleteUnit = (request, response, next) => {
     ),
   ])
     .then((data) => {
-      console.log(data);
+      console.log(data) 
       if (data[0].deletedCount === 0) {
-        throw new Error("Unit Not Found");
+        throw new Error("Unit Not Found") 
       }
-      response.status(200).json("Unit Deleted");
+      response.status(200).json("Unit Deleted") 
     })
-    .catch((error) => next(error));
-};
+    .catch((error) => next(error)) 
+} 
 
 // Upload Unit Cover //? Think, Do we need this route or not??
 module.exports.uploadUnitCover = (request, response, next) => {
-  console.log(request.file);
-  console.log(request.file.path);
+  console.log(request.file) 
+  console.log(request.file.path) 
 
   Unit.findOne({ _id: request.params.id })
     .then((data) => {
-      console.log(data);
-      if (data == null) throw new Error("Unit Doesn't Exist");
-      data.cover = request.file.path;
-      data.save();
-      response.status(201).json("Cover Image Uploaded");
+      console.log(data) 
+      if (data == null) throw new Error("Unit Doesn't Exist") 
+      data.cover = request.file.path 
+      data.save() 
+      response.status(201).json("Cover Image Uploaded") 
     })
-    .catch((error) => next(error));
-};
+    .catch((error) => next(error)) 
+} 
 
 // update cover image
 // TODO Try to update the image without entering new one.
 //* (user want to delete it )
 module.exports.updateUnitCover = (request, response, next) => {
-  console.log(request.file);
-  console.log(request.file.path);
+  console.log(request.file) 
+  console.log(request.file.path) 
 
   Unit.findOneAndUpdate(
     { _id: request.params.id },
@@ -225,36 +225,36 @@ module.exports.updateUnitCover = (request, response, next) => {
   )
 
     .then((data) => {
-      // console.log(data);
-      // console.log(data.cover);
-      unlinkAsync(data.cover); // ! for removing image from uploads file(works well,but check if it is the suitable way)
-      if (data == null) throw new Error("Unit Doesn't Exist");
-      // data.cover = request.file.path;
-      response.status(201).json("Unit Cover Image has been updated");
+      // console.log(data) 
+      // console.log(data.cover) 
+      unlinkAsync(data.cover)  // ! for removing image from uploads file(works well,but check if it is the suitable way)
+      if (data == null) throw new Error("Unit Doesn't Exist") 
+      // data.cover = request.file.path 
+      response.status(201).json("Unit Cover Image has been updated") 
     })
-    .catch((error) => next(error));
-};
+    .catch((error) => next(error)) 
+} 
 
 // Upload Unit Images
 module.exports.uploadUnitImages = (request, response, next) => {
-  // console.log(request.files);
-  // console.log(request.files.path);
+  // console.log(request.files) 
+  // console.log(request.files.path) 
   Unit.findOne({ _id: request.params.id })
     .then((data) => {
-      console.log(data);
-      // console.log(data.images);
+      console.log(data) 
+      // console.log(data.images) 
 
-      if (data == null) throw new Error("Unit Doesn't Exist");
+      if (data == null) throw new Error("Unit Doesn't Exist") 
 
       request.files.forEach((image) => {
-        console.log(image.path);
-        data.images.push(image.path);
-      });
-      data.save();
-      response.status(201).json("Unit Images Uploaded");
+        console.log(image.path) 
+        data.images.push(image.path) 
+      }) 
+      data.save() 
+      response.status(201).json("Unit Images Uploaded") 
     })
-    .catch((error) => next(error));
-};
+    .catch((error) => next(error)) 
+} 
 
 // TODO Delete Unit Images (check it again)
 // !
@@ -268,19 +268,19 @@ module.exports.deleteUnitImages = (request, response, next) => {
     }
   )
     .then((data) => {
-      console.log(request.body.images);
-      const deletedImages = request.body.images;
+      console.log(request.body.images) 
+      const deletedImages = request.body.images 
       deletedImages.forEach((image) => {
-        unlinkAsync(image);
-      });
+        unlinkAsync(image) 
+      }) 
 
-      if (data.matchedCount === 0) throw new Error("Unit Not Found");
+      if (data.matchedCount === 0) throw new Error("Unit Not Found") 
       else {
-        response.status(200).json(data);
+        response.status(200).json(data) 
       }
     })
-    .catch((error) => next(error));
-};
+    .catch((error) => next(error)) 
+} 
 
 // module.exports.getUnitReviews = (request, response, next) => {
 //     Review.find({ unitId: request.params.id }, 'rating comment')
@@ -328,49 +328,49 @@ module.exports.deleteUnitImages = (request, response, next) => {
 module.exports.getAllReviews = (request, response, next) => {
   Review.find({})
     .then((data) => {
-      response.status(200).json(data);
+      response.status(200).json(data) 
     })
-    .catch((error) => next(error));
-};
+    .catch((error) => next(error)) 
+} 
 
 module.exports.getReviewById = (request, response, next) => {
   Review.findOne({ _id: request.params.id })
 
     .then((data) => {
-      if (data == null) next(new Error("Review Doesn't Exist"));
+      if (data == null) next(new Error("Review Doesn't Exist")) 
       else {
-        response.status(200).json(data);
+        response.status(200).json(data) 
       }
     })
     .catch((error) => {
-      next(error);
-    });
-};
+      next(error) 
+    }) 
+} 
 
 module.exports.addReview = (request, response, next) => {
   Unit.findOne({ _id: request.body.unitId })
     .then((unit) => {
-      if (unit == null) throw new Error("Unit Doesn't Found.");
+      if (unit == null) throw new Error("Unit Doesn't Found.") 
 
       return Agent.findOne({
         _id: request.body.agentId,
         "agentUnits.unitId": request.body.unitId,
-      });
+      }) 
     })
     .then((agent) => {
-      console.log(`"agent" ${agent}`);
-      if (agent == null) throw new Error("Agent has this unit doesn't found.");
+      console.log(`"agent" ${agent}`) 
+      if (agent == null) throw new Error("Agent has this unit doesn't found.") 
       // console.log('this agent has this unit')
       const newReview = new Review({
         unitId: request.body.unitId,
         agentId: request.body.agentId,
         comment: request.body.comment,
         rating: request.body.rating,
-      });
-      return newReview.save();
+      }) 
+      return newReview.save() 
     })
     .then((review) => {
-      console.log(review);
+      console.log(review) 
       return Unit.updateOne(
         { _id: request.body.unitId },
         {
@@ -379,16 +379,16 @@ module.exports.addReview = (request, response, next) => {
             "reviews.reviews": review._id,
           },
         }
-      );
+      ) 
     })
     .then((data) => {
-      console.log(data);
+      console.log(data) 
       if (data.modifiedCount === 0 || data.matchedCount === 0)
-        throw new Error("Can't modified unit data.");
-      response.status(200).json(data);
+        throw new Error("Can't modified unit data.") 
+      response.status(200).json(data) 
     })
-    .catch((error) => next(error));
-};
+    .catch((error) => next(error)) 
+} 
 
 // get unit average ratings (output:ratingsAverage,numberOfReviews,[reviews])
 module.exports.getUnitReviews = (request, response, next) => {
@@ -401,25 +401,25 @@ module.exports.getUnitReviews = (request, response, next) => {
       select: { agentId: 1, comment: 1, rating: 1, createdAt: 1 },
     })
     .then((data) => {
-      console.log(data);
-      console.log(data.reviews.ratings);
-      if (data == null) throw new Error("Unit Doesn't Found");
+      console.log(data) 
+      console.log(data.reviews.ratings) 
+      if (data == null) throw new Error("Unit Doesn't Found") 
       else {
-        const totalRatings = data.reviews.ratings;
+        const totalRatings = data.reviews.ratings 
         const ratingAverage =
-          totalRatings.reduce((a, b) => a + b, 0) / totalRatings.length;
+          totalRatings.reduce((a, b) => a + b, 0) / totalRatings.length 
         response.status(200).json({
           RatingAverage: ratingAverage,
           reviewsCount: data.reviews.reviews.length,
           reviews: data.reviews.reviews,
           unitId: data._id,
-        });
+        }) 
       }
     })
     .catch((error) => {
-      next(error);
-    });
-};
+      next(error) 
+    }) 
+} 
 
 module.exports.deleteUnitReviews = (request, response, next) => {
   Unit.updateOne(
@@ -428,25 +428,25 @@ module.exports.deleteUnitReviews = (request, response, next) => {
   )
 
     .then((data) => {
-      console.log(data);
+      console.log(data) 
       if (data.modifiedCount === 0)
-        throw new Error(`Review not found in unit reviews`);
-      return Review.deleteOne({ _id: request.body.reviewId });
+        throw new Error(`Review not found in unit reviews`) 
+      return Review.deleteOne({ _id: request.body.reviewId }) 
     })
     .then((data) => {
       if (data.deletedCount === 0)
-        throw new Error(`Review not found in reviews collection`);
+        throw new Error(`Review not found in reviews collection`) 
 
       response
         .status(200)
         .json(
           "Review deleted from unit reviews and reviews collection successfully"
-        );
+        ) 
     })
     .catch((error) => {
-      next(error);
-    });
-};
+      next(error) 
+    }) 
+} 
 
 // ! Things to think about it:
 //* Landlord upload new images in addition to the exist one.

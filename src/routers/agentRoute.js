@@ -44,9 +44,9 @@ router
 
 router
     .route('/agents/:id')
-    .get(validateId('agent', param), validationMW, agentController.getAgentByID)
+    .get(validateId('agent'), validationMW, agentController.getAgentByID)
     .delete(
-        validateId('agent', param),
+        validateId('agent'),
         validationMW,
         agentController.deleteAgent
     )
@@ -73,7 +73,7 @@ router
     )
 
     .delete(
-        validateId('agent', param),
+        validateId('agent'),
         validationMW,
         agentController.RemoveAgentUnits
     )

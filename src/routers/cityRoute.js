@@ -1,8 +1,8 @@
 const express = require('express')
 
 const router = express.Router()
-const { param } = require('express-validator')
-const validateMW = require('../middlewares/validationMW')
+
+const validationMW = require('../middlewares/validationMW')
 const { validateId } = require('../middlewares/validations/generalValidations')
 const {
     addCityValidations,
@@ -15,45 +15,49 @@ const cityController = require('../controllers/cityController')
 router.route('/cities').get(cityController.getAllCities).post(
     // classValidator.creationValidator,
     addCityValidations,
-    validateMW,
+    validationMW,
     cityController.createCity
 )
 
 // .put(
 // 	classValidator.updatingValidator,
-// 	validateMW,
+// 	 validationMW,
 // 	classController.updateClass
 // )
 
 router
     .route('/cities/:id')
-    .get(validateId('city', param), validateMW, cityController.getCityById)
-    .put(updateCityValidations, validateMW, cityController.updateCityProperties)
+    .get(validateId('city'), validationMW, cityController.getCityById)
+    .put(
+        updateCityValidations,
+        validationMW,
+        cityController.updateCityProperties
+    )
     .delete(
-        validateId('city', param),
+        validateId('city'),
         // classValidator.idBodyValidator,
-        validateMW,
+        validationMW,
         cityController.deleteCity
     )
 
 router
     .route('/cities/:id/units')
-    .post(addUnitToCityValidations, validateMW, cityController.addUnitToCity)
+    .post(addUnitToCityValidations, validationMW, cityController.addUnitToCity)
     // .put(cityController.updateUnitsOfCity) // replace existing units
     .delete(
         deleteUnitFromCityValidations,
-        validateMW,
+        validationMW,
         cityController.deleteUnitFromCity
     ) // adding unit to city
 // 	.delete(
 // 		classValidator.idParamValidator,
 // 		childValidator.idBodyValidator,
-// 		validateMW,
+// 		 validationMW,
 // 		classController.deleteChildFromClass
 // 	);
 
 router
     .route('/cities/:id/:prop')
-    .get(validateId('city', param), validateMW, cityController.getCityProperty)
+    .get(validateId('city'), validationMW, cityController.getCityProperty)
 
 module.exports = router

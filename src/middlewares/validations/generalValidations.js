@@ -1,8 +1,8 @@
-const { query } = require('express-validator')
+const { query, param } = require('express-validator')
 
-function validateId(model, type) {
+function validateId(model) {
     return [
-        type('id')
+        param('id')
             .exists()
             .withMessage(`${model} id is required`)
             .isMongoId()
