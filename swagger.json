@@ -971,7 +971,7 @@
                 "tags": [
                     "Favorites"
                 ],
-                "summary": "",
+                "summary": "update specific agent favorite units ",
                 "parameters": [
                     {
                         "name": "id",
@@ -1005,7 +1005,7 @@
                 "tags": [
                     "Favorites"
                 ],
-                "summary": "",
+                "summary": "delete specific favorite unit from agentunits of specific agent",
                 "parameters": [
                     {
                         "name": "id",
