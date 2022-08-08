@@ -1,9 +1,10 @@
 const Agent = require('../models/agentModel')
 
+
 module.exports.getAllFavUnits = (request, response, next) => {
     Agent.find({ _id: request.params.id })
         .select({ favoriteUnits: 1, _id: 1 })
-        .populate({ path: 'favoriteUnits' })
+        // .populate({ path: 'favoriteUnits' })
         .then((data) => {
             if (data == null) {
                 next(new Error('Agent Fav Unit is not defined'))
@@ -28,7 +29,6 @@ module.exports.updateFavUnit = (request, response, next) => {
             next(error)
         })
 }
-
 
 module.exports.removeFavUnit = (request, response, next) => {
     Agent.updateOne(
