@@ -29,7 +29,6 @@ module.exports.updateFavUnit = (request, response, next) => {
         })
 }
 
-//
 
 module.exports.removeFavUnit = (request, response, next) => {
     Agent.updateOne(
