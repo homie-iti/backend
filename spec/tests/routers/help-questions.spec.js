@@ -14,11 +14,13 @@ const newUser = {
     age: 20,
     email: 'noorali01@gmail.com',
     gender: 'female',
-    password: 'noor@123',
+    password: 'Noor@123',
     phone: '01001512136447',
     national_id: 142515657844154,
     address: {
         city: 'Cairo',
+        streetName: 'elbadry',
+        buildingNumber: 125,
     },
     balance: 2000,
 }
@@ -80,7 +82,7 @@ describe('POST -> /help-questions', () => {
     })
 
     it('expected to respond with status code 422 with message"Question should be characters. ', async () => {
-        // console.log(userId)
+        console.log(userId)
         result = await request
             .post('/help-questions')
             .send({ userId, adminId, question: 123, answer: 'ok' })
@@ -97,7 +99,7 @@ describe('POST -> /help-questions', () => {
         // console.log(result)
         expect(result.status).toEqual(422)
         expect(result._body.details).toBe(
-            'userId must be objectId /  adminId must be objectId.'
+            'userId must be objectId / adminId must be objectId.'
         )
     })
 
@@ -139,10 +141,6 @@ describe('POST -> /help-questions', () => {
         expect(result.status).toEqual(201)
         expect(result.type).toBe('application/json')
     })
-
-    // afterAll(async () => {
-    //     await helpQuestionModel.deleteMany({})
-    // })
 })
 
 describe('UPDATE -> /helpQuestion', () => {

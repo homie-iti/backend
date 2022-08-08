@@ -35,11 +35,13 @@ describe('POST & UPDATE & DELETE -> /users', () => {
         age: 20,
         email: 'hayaali01@gmail.com',
         gender: 'female',
-        password: 'haya@123',
+        password: 'Haya@123',
         phone: '01001512136417',
         national_id: 142515657744154,
         address: {
             city: 'Giza',
+            streetName: 'elbadry',
+            buildingNumber: 125,
         },
         balance: 2500,
     }
@@ -65,9 +67,9 @@ describe('POST & UPDATE & DELETE -> /users', () => {
             expect(newUser.status).toEqual(422)
         })
 
-        it('expected to respond with message "user gender is not valid / userAddress is not valid / userEmail is not valid / userPhone should be characters." ', async () => {
+        it('expected to respond with message "user gender is not valid / Unit Address should be object  / City should be characters / userEmail is not valid / userPhone should be characters / user national_id  is not valid." ', async () => {
             expect(newUser._body.details).toBe(
-                'user gender is not valid / userAddress is not valid / userEmail is not valid / userPhone should be characters.'
+                'user gender is not valid / Unit Address should be object  / City should be characters / userEmail is not valid / userPhone should be characters / user national_id  is not valid.'
             )
         })
 
@@ -82,13 +84,15 @@ describe('POST & UPDATE & DELETE -> /users', () => {
                 phone: '01211483907',
                 address: {
                     city: 'Alex',
+                    streetName: 'elbadry',
+                    buildingNumber: 125,
                 },
                 balance: 4000,
             })
             // console.log(newUser)
-            expect(newUser.status).toEqual(500)
+            expect(newUser.status).toEqual(422)
             expect(newUser._body.details).toBe(
-                'users validation failed: national_id: user national_id is required'
+                'user national_id  is not valid.'
             )
         })
 
@@ -104,6 +108,8 @@ describe('POST & UPDATE & DELETE -> /users', () => {
                 national_id: 142515657722154,
                 address: {
                     city: 'Alex',
+                    streetName: 'elbadry',
+                    buildingNumber: 125,
                 },
                 balance: 4000,
             })

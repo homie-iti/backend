@@ -39,11 +39,13 @@ describe('POST & UPDATE & DELETE -> /landlords', () => {
         age: 20,
         email: 'hayaali01@gmail.com',
         gender: 'female',
-        password: 'haya@123',
+        password: 'Haya@123',
         phone: '01001512136417',
         national_id: 142515657744154,
         address: {
             city: 'Giza',
+            streetName: 'mohamedali',
+            buildingNumber: 35,
         },
         balance: 5000,
     }
@@ -71,7 +73,7 @@ describe('POST & UPDATE & DELETE -> /landlords', () => {
         it('expected to respond with status code 422 with message"landlord Units should be an Array.', async () => {
             console.log(userId)
             newLandlord = await request.post('/landlords').send({ _id: userId })
-            // console.log(newLandlord)
+            console.log(newLandlord)
             expect(newLandlord.status).toEqual(422)
             expect(newLandlord._body.details).toBe(
                 'landlord Units should be an Array.'
@@ -163,7 +165,7 @@ describe('POST & UPDATE & DELETE -> /landlords', () => {
             // console.log(deleteLandlord)
             expect(deleteLandlord.status).toEqual(422)
             expect(deleteLandlord._body.details).toBe(
-                'landlord id should be objectID.'
+                'landlord id must be an objectId.'
             )
         })
 
