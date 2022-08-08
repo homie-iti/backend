@@ -2,7 +2,6 @@ const express = require('express')
 
 const router = express.Router()
 
-
 const unitController = require('../controllers/unitController')
 
 const validationMW = require('../middlewares/validationMW')
@@ -84,7 +83,9 @@ router
 router
     .route('/units/reviews/:id')
     .get(validateId('unit'), validationMW, unitController.getUnitReviews)
-    .delete(validateId('unit'), validationMW, unitController.deleteUnitReviews)
+router
+    .route('/units/:unitId/reviews/:reviewId')
+    .delete(unitController.deleteUnitReviews)
 
 router.get(
     '/reviews/:id',
