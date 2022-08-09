@@ -3,19 +3,15 @@ const express = require('express')
 const router = express.Router()
 const validationMW = require('../middlewares/validationMW')
 const { validateId } = require('../middlewares/validations/generalValidations')
-const favouriteController = require('../controllers/favouriteController')
+const favoriteController = require('../controllers/favouriteController')
 
 router
-    .route('/myFavourite/:id')
-    .get(validateId('agent'), validationMW, favouriteController.getAllFavUnits)
-    .put(validateId('agent'), validationMW, favouriteController.updateFavUnit)
+    .route('/users/:userId/favorites')
+    .get(favoriteController.getUserFavUnits)
+    .post(favoriteController.addUnitToFavorite)
 
 router
-    .route('/myFavourite/:id/unit')
-    .delete(
-        validateId('agent'),
-        validationMW,
-        favouriteController.removeFavUnit
-    )
+    .route('/users/:userId/favorites/:unitId')
+    .delete(favoriteController.deleteUnitFromFavorites)
 
 module.exports = router
