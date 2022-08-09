@@ -139,6 +139,41 @@
                     }
                 }
             },
+            "put": {
+                "tags": [
+                    "Units"
+                ],
+                "summary": "Update unit data that matches the given id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of unit that we want to update"
+                    },
+                    {
+                        "name": "unit data needs to be updated",
+                        "in": "body",
+                        "description": "choose unit data you want to update",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateUnit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unit data updated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "Units"
@@ -1769,6 +1804,56 @@
                 "cityId": {
                     "type": "objectId"
                 },
+                "unitInfo": {
+                    "type": "object",
+                    "properties": {
+                        "description": {
+                            "type": "string"
+                        },
+                        "rooms": {
+                            "type": "number"
+                        },
+                        "bathrooms": {
+                            "type": "number"
+                        },
+                        "floor": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string"
+                        },
+                        "streetName": {
+                            "type": "number"
+                        },
+                        "buildingNumber": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "estateType": {
+                    "type": "string"
+                },
+                "isAvailable": {
+                    "type": "boolean"
+                },
+                "isPetsAllowed": {
+                    "type": "boolean"
+                },
+                "numberOfResidents": {
+                    "type": "number"
+                },
+                "dailyPrice": {
+                    "type": "number"
+                }
+            }
+        },
+        "UpdateUnit": {
+            "properties": {
                 "unitInfo": {
                     "type": "object",
                     "properties": {
