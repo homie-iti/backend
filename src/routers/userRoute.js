@@ -25,8 +25,6 @@ router
         userController.createUser
     )
 
-    .put(userUpdateValidation, validationMW, userController.updateUser)
-
     .delete(userController.deleteManyUser)
 
 router
@@ -45,6 +43,13 @@ router
     .get(validateId('user'), validationMW, userController.getUserById)
 
     .delete(validateId('user'), validationMW, userController.deleteUser)
+
+    .put(
+        validateId('user'),
+        userUpdateValidation,
+        validationMW,
+        userController.updateUser
+    )
 
 router
     .route('/users/myFavourite/:id')

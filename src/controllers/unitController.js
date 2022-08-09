@@ -131,36 +131,24 @@ module.exports.createUnit = (request, response, next) => {
 
 // Update Unit Data
 module.exports.updateUnitData = (request, response, next) => {
-    Unit.findOne({ _id: request.body.id })
+    Unit.findOne({ _id: request.params.id })
         .then((data) => {
             // console.log(data)
             if (data == null) throw new Error("Unit Doesn't Exist")
-            else {
-                const updates = request.body
-                // console.log(updates)
-                for (const property in updates) {
-                    // if (property in data === false) {
-                    //   console.log(property)
-                    //   console.log(updates[property])
 
-                    //   Unit.updateOne(
-                    //     { _id: request.body.id },
-                    //     { $set: { property: updates[property] } }
-                    //   ).then((data) => {
-                    //     console.log(data)
-                    //   })
-                    //   //data.property = updates[property]
-                    // }
-                    data[property] = updates[property] || data[property]
-                    if (typeof updates[property] === 'object') {
-                        console.log('updateObject')
+            const updates = request.body
+            console.log(updates)
+            for (const key in updates) {
+                if (typeof updates[key] === 'object') {
+                    for (let update in updates[key]) {
+                        data[key][update] = updates[key][update]
                     }
-                }
-                data.save().then((data) => {
-                    console.log(data)
-                    response.status(201).json({ data: 'Unit Data Updated' })
-                })
+                } else data[key] = updates[key]
             }
+            data.save()
+        })
+        .then(() => {
+            response.status(201).json({ data: 'Unit data updated' })
         })
         .catch((error) => next(error))
 }

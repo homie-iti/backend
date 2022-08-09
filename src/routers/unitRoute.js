@@ -29,12 +29,12 @@ router
         validationMW,
         unitController.createUnit
     )
-    .put(updateUnitValidations, validationMW, unitController.updateUnitData)
 
 router
     .route('/units/:id')
     .get(validateId('unit'), validationMW, unitController.getUnitById)
     .delete(validateId('unit'), validationMW, unitController.deleteUnit)
+    .put(updateUnitValidations, validationMW, unitController.updateUnitData)
 
 router
     .route('/units/cover/:id')
