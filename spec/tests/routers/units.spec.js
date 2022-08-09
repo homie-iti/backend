@@ -108,8 +108,8 @@ describe('POST & UPDATE & DELETE -> /units', () => {
         it('expected to respond with status code 500', async () => {
             // console.log(userId)
             newUnit = await request.post('/units').send({
-                landlordId: '62d82455860e63074a799acb',
-                cityId: '9b1a2f4d37c8b74028ded97b',
+                landlordId: '62d751094efe2e06cb7cc16d',
+                cityId: '62d751094efe2e06cb7cc16d',
                 estateType: 'single-room',
                 numberOfResidents: 4,
                 unitInfo: {
