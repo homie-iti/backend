@@ -241,8 +241,4 @@ describe('DELETE -> /helpQuestion', () => {
             'HelpQuestion id must be an objectId.'
         )
     })
-
-    // afterAll(async () => {
-    //     await helpQuestionModel.deleteMany({})
-    // })
 })

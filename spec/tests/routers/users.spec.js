@@ -145,33 +145,38 @@ describe('POST & UPDATE & DELETE -> /users', () => {
         })
     })
 
-    describe('UPDATE -> /users', () => {
+    describe('UPDATE -> /users/:id', () => {
         beforeAll(async () => {
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
         })
 
-        it('expected to respond with status code 500 with message"User not allowed', async () => {
-            updateUser = await request.put('/users').send({ id: '1235588' })
+        it('expected to respond with status code 500 with message"user id must be an objectId.', async () => {
+            updateUser = await request.put('/users/1235588')
             // console.log(updateUser)
-            expect(updateUser.status).toEqual(500)
-            expect(updateUser._body.details).toBe('User not allowed')
+            expect(updateUser.status).toEqual(422)
+            expect(updateUser._body.details).toBe(
+                'user id must be an objectId.'
+            )
         })
 
         it('expected to respond with status code 500 with message"Cast to ObjectId failed for value "1235588" (type string) at path "_id" for model "users"', async () => {
             console.log(userId)
-            updateUser = await request.put('/users').send({ _id: '1235588' })
+            updateUser = await request
+                .put(`/users/${userId}`)
+                .send({ password: 'asdqwe@123' })
             expect(updateUser.status).toEqual(500)
             expect(updateUser._body.details).toBe(
-                'Cast to ObjectId failed for value "1235588" (type string) at path "_id" for model "users"'
+                'User not allowed'
             )
         })
 
         it('expected to respond with status code 500 ', async () => {
             console.log(userId)
-            updateUser = await request.put('/users').send({
-                _id: 'dc7daf3e33aec47b4ceed988',
-                fullName: 'loooka',
-            })
+            updateUser = await request
+                .put('/users/dc7daf3e33aec47b4ceed988')
+                .send({
+                    fullName: 'loooka',
+                })
             console.log(updateUser)
             expect(updateUser.status).toEqual(500)
         })
@@ -183,8 +188,8 @@ describe('POST & UPDATE & DELETE -> /users', () => {
         it('expected to respond with status code 200 ', async () => {
             console.log(userId)
             updateUser = await request
-                .put('/users')
-                .send({ _id: userId, fullName: 'biko hiko' })
+                .put(`/users/${userId}`)
+                .send({ fullName: 'biko hiko' })
             // console.log(updateUser)
             expect(updateUser.status).toEqual(200)
         })

@@ -82,8 +82,8 @@ describe('POST & UPDATE & DELETE -> /units', () => {
         it('expected to respond with status code 422', async () => {
             console.log(userId)
             newUnit = await request.post('/units').send({
-                landlordId: '62d770acdadee613aec82405',
-                cityId: '62d751094efe2e06cb7cc16d',
+                landlordId: cityId,
+                cityId: landlordId,
                 estateType: 'single-room',
                 address: {
                     city: 'Damietta',
@@ -106,32 +106,32 @@ describe('POST & UPDATE & DELETE -> /units', () => {
             )
         })
         it('expected to respond with status code 500', async () => {
-            // console.log(userId)
-            // newUnit = await request.post('/units').send({
-            //     landlordId: '62d751094efe2e06cb7cc16d',
-            //     cityId: '62d751094efe2e06cb7cc16d',
-            //     estateType: 'single-room',
-            //     numberOfResidents: 4,
-            //     unitInfo: {
-            //         description: 'this unit is very gooood.',
-            //         rooms: 4,
-            //         bathrooms: 1,
-            //         floor: 1,
-            //     },
-            //     allowedGender: 'female',
-            //     dailyPrice: 100,
-            //     isAvailable: true,
-            //     address: {
-            //         city: 'cairo',
-            //         buildingNumber: 452,
-            //         streetName: '14safgrgg',
-            //     },
-            // })
-            // console.log(newUnit)
-            // expect(newUnit.status).toEqual(500)
+            console.log(userId)
+            newUnit = await request.post('/units').send({
+                landlordId: cityId,
+                cityId: landlordId ,
+                estateType: 'single-room',
+                numberOfResidents: 4,
+                unitInfo: {
+                    description: 'this unit is very gooood.',
+                    rooms: 4,
+                    bathrooms: 1,
+                    floor: 1,
+                },
+                allowedGender: 'female',
+                dailyPrice: 100,
+                isAvailable: true,
+                address: {
+                    city: 'cairo',
+                    buildingNumber: 452,
+                    streetName: '14safgrgg',
+                },
+            })
+            console.log(newUnit)
+            expect(newUnit.status).toEqual(500)
         })
         it('expected to respond with message "landlordId is not in db"', () => {
-            // expect(newUnit._body.details).toBe('landlordId is not in db')
+            expect(newUnit._body.details).toBe('landlordId is not in db')
         })
         it('expected to respond with status code 201 ', async () => {
             // console.log(userId)
