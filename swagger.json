@@ -948,48 +948,48 @@
                 }
             }
         },
-        "/myFavourite/{id}": {
+        "/users/{userId}/favorites": {
             "get": {
                 "tags": [
                     "Favorites"
                 ],
-                "summary": "Get array of Favorite agent units objectsId ",
+                "summary": "Get array of Favorite units of specific user",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "userId",
                         "in": "path",
-                        "description": "agent id that we want to get its favorite units"
+                        "description": "user id that we want to get its favorite units"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Array of agent favorite units and _id of agent"
+                        "description": "Array of user favorite units and _id of user"
                     }
                 }
             },
-            "put": {
+            "post": {
                 "tags": [
                     "Favorites"
                 ],
-                "summary": "update specific agent favorite units ",
+                "summary": "add unit to favorite units of specific agent",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "userId",
                         "in": "path",
-                        "description": "agent id that we want to get its favorite units"
+                        "description": "user id that we want to add unit to its favorite units"
                     },
                     {
-                        "name": "agentFavoriteUnit",
+                        "name": "unitId",
                         "in": "body",
-                        "description": "",
+                        "description": "id of the unit we want to add to favorite units",
                         "schema": {
-                            "$ref": "#/definitions/updateAgentFavoriteUnits"
+                            "$ref": "#/definitions/AddUserFavoriteUnits"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "agent data"
+                        "description": "The unit has been added to user favorite units."
                     },
                     "500": {
                         "description": "Internal server error"
@@ -1000,25 +1000,22 @@
                 }
             }
         },
-        "/myFavourite/{id}/unit": {
+        "/users/{userId}/favorites/{unitId}": {
             "delete": {
                 "tags": [
                     "Favorites"
                 ],
-                "summary": "delete specific favorite unit from agentunits of specific agent",
+                "summary": "delete specific favorite unit from favorite units of specific user",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "userId",
                         "in": "path",
-                        "description": "agent id that we want to delete its favorite units"
+                        "description": "user id that we want to delete unit from its favorite units"
                     },
                     {
-                        "name": "agentFavoriteUnit",
-                        "in": "body",
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/updateAgentFavoriteUnits"
-                        }
+                        "name": "unitId",
+                        "in": "path",
+                        "description": "id of the unit we want to delete from favorite units"
                     }
                 ],
                 "responses": {
@@ -2357,9 +2354,9 @@
                 }
             }
         },
-        "updateAgentFavoriteUnits": {
+        "AddUserFavoriteUnits": {
             "properties": {
-                "favoriteUnits": {
+                "unitId": {
                     "type": "objectId"
                 }
             }
