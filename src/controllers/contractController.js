@@ -32,7 +32,11 @@ module.exports.getContractsByPage = (request, response, next) => {
         {
             page: request.query.page || 1,
             // select: '',
-            populate: { path: 'landlordId agentId unitId' },
+            populate: {
+                path: 'agentId landlordId',
+                select: '_id',
+                populate: { path: '_id', select: 'fullName phone' },
+            },
         }
     )
         // ContractModel.find({})
