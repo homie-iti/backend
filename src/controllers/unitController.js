@@ -3,15 +3,15 @@ const { promisify } = require('util')
 
 const unlinkAsync = promisify(fs.unlink)
 
-const Unit = require('../models/unitModel')
-const Review = require('../models/reviewModel')
-const Landlord = require('../models/landlordModel')
-const City = require('../models/cityModel')
-const Agent = require('../models/agentModel')
+const UnitModel = require('../models/unitModel')
+const ReviewModel = require('../models/reviewModel')
+const LandlordModel = require('../models/landlordModel')
+const CityModel = require('../models/cityModel')
+const AgentModel = require('../models/agentModel')
 
 // Get Units using page number
 module.exports.getUnitsByPage = (request, response, next) => {
-    Unit.paginate(
+    UnitModel.paginate(
         {},
         {
             page: request.query.page || 1,
@@ -39,7 +39,7 @@ module.exports.getUnitsByPage = (request, response, next) => {
 
 // Get Specific Unit By Id
 module.exports.getUnitById = (request, response, next) => {
-    Unit.findOne(
+    UnitModel.findOne(
         { _id: request.params.id },
         'estateType images unitInfo isAvailable isPetsAllowed gender address dailyPrice cover geoLocation reviews'
     )
@@ -69,10 +69,10 @@ module.exports.getUnitById = (request, response, next) => {
 module.exports.createUnit = (request, response, next) => {
     const { cityId } = request.body
     const { landlordId } = request.body
-    Landlord.exists({ _id: landlordId })
+    LandlordModel.exists({ _id: landlordId })
         .then((data) => {
             if (!data) throw new Error('landlordId is not in db')
-            return City.exists({ _id: cityId })
+            return CityModel.exists({ _id: cityId })
         })
         .then((data) => {
             if (!data) throw new Error('cityId is not in db')
@@ -83,6 +83,7 @@ module.exports.createUnit = (request, response, next) => {
         })
 
     let UnitImagesPaths = []
+    let unitData
     //  console.log(UnitImagesPaths)
 
     const unit = {
@@ -106,32 +107,40 @@ module.exports.createUnit = (request, response, next) => {
         UnitImagesPaths = unitImagesArray.map((image) => image.path)
         unit.images = UnitImagesPaths
     }
-    const newUnit = new Unit(unit)
+    const newUnit = new UnitModel(unit)
 
-    Promise.all([
-        newUnit.save(),
-        City.findByIdAndUpdate(
-            cityId,
-            { $push: { units: newUnit._id } },
-            { new: true }
-        ),
-        Landlord.findByIdAndUpdate(
-            landlordId,
-            {
-                $push: { landlordUnits: newUnit._id },
-            },
-            { new: true }
-        ),
-    ])
+    newUnit
+        .save()
         .then((data) => {
-            response.status(201).json({ data: 'added', id: newUnit._id })
+            console.log(data)
+            unitData = data
+            return LandlordModel.findByIdAndUpdate(
+                landlordId,
+                {
+                    $push: { landlordUnits: newUnit._id },
+                },
+                { new: true }
+            )
+        })
+        .then(() =>
+            CityModel.findByIdAndUpdate(
+                cityId,
+                { $push: { units: newUnit._id } },
+                { new: true }
+            )
+        )
+        .then(() => {
+            response.status(201).json({
+                data: 'unit added to units collection,landlord units and city units',
+                id: unitData._id,
+            })
         })
         .catch((error) => next(error))
 }
 
 // Update Unit Data
 module.exports.updateUnitData = (request, response, next) => {
-    Unit.findOne({ _id: request.params.id })
+    UnitModel.findOne({ _id: request.params.id })
         .then((data) => {
             // console.log(data)
             if (data == null) throw new Error("Unit Doesn't Exist")
@@ -155,30 +164,34 @@ module.exports.updateUnitData = (request, response, next) => {
 
 // delete specific unit
 module.exports.deleteUnit = (request, response, next) => {
-    const { cityId } = request.body
-    const { landlordId } = request.body
-    // !Promise.all needs to be checked (!Important)
-    Promise.all([
-        Unit.deleteOne({ _id: request.params.id }),
-        City.findByIdAndUpdate(
-            cityId,
-            { $pull: { units: request.params.id } },
-            { new: true }
-        ),
-        Landlord.findByIdAndUpdate(
-            landlordId,
-            {
-                $pull: { landlordUnits: request.params.id },
-            },
-            { new: true }
-        ),
-    ])
+    let unitData
+    UnitModel.findOneAndDelete({ _id: request.params.id })
+
         .then((data) => {
-            console.log(data)
-            if (data[0].deletedCount === 0) {
-                throw new Error('Unit Not Found')
-            }
-            response.status(200).json('Unit Deleted')
+            console.log(`unitData:${data}`)
+            if (!data) throw new Error('unitId is not in db')
+            unitData = data
+            return CityModel.findByIdAndUpdate(
+                { _id: unitData.cityId },
+                { $pull: { units: unitData._id } },
+                { new: true }
+            )
+        })
+        .then(() =>
+            LandlordModel.findByIdAndUpdate(
+                { _id: unitData.landlordId },
+                {
+                    $pull: { landlordUnits: unitData._id },
+                },
+                { new: true }
+            )
+        )
+        .then(() => {
+            response
+                .status(200)
+                .json(
+                    'unit deleted from units collection,landlord units and city units'
+                )
         })
         .catch((error) => next(error))
 }
@@ -188,7 +201,7 @@ module.exports.uploadUnitCover = (request, response, next) => {
     console.log(request.file)
     console.log(request.file.path)
 
-    Unit.findOne({ _id: request.params.id })
+    UnitModel.findOne({ _id: request.params.id })
         .then((data) => {
             console.log(data)
             if (data == null) throw new Error("Unit Doesn't Exist")
@@ -206,7 +219,7 @@ module.exports.updateUnitCover = (request, response, next) => {
     console.log(request.file)
     console.log(request.file.path)
 
-    Unit.findOneAndUpdate(
+    UnitModel.findOneAndUpdate(
         { _id: request.params.id },
         { cover: request.file.path }
     )
@@ -226,7 +239,7 @@ module.exports.updateUnitCover = (request, response, next) => {
 module.exports.uploadUnitImages = (request, response, next) => {
     // console.log(request.files)
     // console.log(request.files.path)
-    Unit.findOne({ _id: request.params.id })
+    UnitModel.findOne({ _id: request.params.id })
         .then((data) => {
             console.log(data)
             // console.log(data.images)
@@ -246,7 +259,7 @@ module.exports.uploadUnitImages = (request, response, next) => {
 // TODO Delete Unit Images (check it again)
 // !
 module.exports.deleteUnitImages = (request, response, next) => {
-    Unit.updateMany(
+    UnitModel.updateMany(
         { _id: request.params.id },
         {
             $pullAll: {
@@ -313,7 +326,7 @@ module.exports.deleteUnitImages = (request, response, next) => {
 // }
 
 module.exports.getAllReviews = (request, response, next) => {
-    Review.find({})
+    ReviewModel.find({})
         .then((data) => {
             response.status(200).json(data)
         })
@@ -321,7 +334,7 @@ module.exports.getAllReviews = (request, response, next) => {
 }
 
 module.exports.getReviewById = (request, response, next) => {
-    Review.findOne({ _id: request.params.id })
+    ReviewModel.findOne({ _id: request.params.id })
 
         .then((data) => {
             if (data == null) next(new Error("Review Doesn't Exist"))
@@ -335,11 +348,11 @@ module.exports.getReviewById = (request, response, next) => {
 }
 
 module.exports.addReview = (request, response, next) => {
-    Unit.findOne({ _id: request.body.unitId })
+    UnitModel.findOne({ _id: request.body.unitId })
         .then((unit) => {
             if (unit == null) throw new Error("Unit Doesn't Found.")
 
-            return Agent.findOne({
+            return AgentModel.findOne({
                 _id: request.body.agentId,
                 'agentUnits.unitId': request.body.unitId,
             })
@@ -349,7 +362,7 @@ module.exports.addReview = (request, response, next) => {
             if (agent == null)
                 throw new Error("Agent has this unit doesn't found.")
             // console.log('this agent has this unit')
-            const newReview = new Review({
+            const newReview = new ReviewModel({
                 unitId: request.body.unitId,
                 agentId: request.body.agentId,
                 comment: request.body.comment,
@@ -359,7 +372,7 @@ module.exports.addReview = (request, response, next) => {
         })
         .then((review) => {
             console.log(review)
-            return Unit.updateOne(
+            return UnitModel.updateOne(
                 { _id: request.body.unitId },
                 {
                     $push: { 'reviews.ratings': review.rating },
@@ -380,7 +393,7 @@ module.exports.addReview = (request, response, next) => {
 
 // get unit average ratings (output:ratingsAverage,numberOfReviews,[reviews])
 module.exports.getUnitReviews = (request, response, next) => {
-    Unit.findOne(
+    UnitModel.findOne(
         { _id: request.params.id },
         { 'reviews.ratings': 1, 'reviews.reviews': 1 }
     )
@@ -411,7 +424,7 @@ module.exports.getUnitReviews = (request, response, next) => {
 }
 
 module.exports.deleteUnitReviews = (request, response, next) => {
-    Unit.updateOne(
+    UnitModel.updateOne(
         { _id: request.params.unitId },
         { $pull: { 'reviews.reviews': request.params.reviewId } }
     )
@@ -419,7 +432,7 @@ module.exports.deleteUnitReviews = (request, response, next) => {
         .then((data) => {
             console.log(data)
             if (data.modifiedCount === 0) throw new Error(`Unit not found`)
-            return Review.deleteOne({ _id: request.params.reviewId })
+            return ReviewModel.deleteOne({ _id: request.params.reviewId })
         })
         .then((data) => {
             if (data.deletedCount === 0)
