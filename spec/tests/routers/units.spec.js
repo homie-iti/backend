@@ -109,7 +109,7 @@ describe('POST & UPDATE & DELETE -> /units', () => {
             console.log(userId)
             newUnit = await request.post('/units').send({
                 landlordId: cityId,
-                cityId: landlordId ,
+                cityId: landlordId,
                 estateType: 'single-room',
                 numberOfResidents: 4,
                 unitInfo: {
@@ -160,9 +160,11 @@ describe('POST & UPDATE & DELETE -> /units', () => {
             console.log(unitId)
             expect(newUnit.status).toEqual(201)
         })
-        it('expected to respond with object containing message "added" and id of added unit', () => {
+        it('expected to respond with object containing message "unit added to units collection,landlord units and city units" and id of added unit', () => {
             expect(newUnit._body).toBeInstanceOf(Object)
-            expect(newUnit._body.data).toBe('added')
+            expect(newUnit._body.data).toBe(
+                'unit added to units collection,landlord units and city units'
+            )
             expect(true).toBe(isValidObjectId(newUnit._body.id))
         })
     })
@@ -187,8 +189,10 @@ describe('POST & UPDATE & DELETE -> /units', () => {
             expect(deleteUnit.status).toEqual(200)
         })
 
-        it('expected to respond with message "Unit Deleted"', () => {
-            expect(deleteUnit._body).toBe('Unit Deleted')
+        it('expected to respond with message "unit deleted from units collection,landlord units and city units"', () => {
+            expect(deleteUnit._body).toBe(
+                'unit deleted from units collection,landlord units and city units'
+            )
         })
 
         it('expected to respond with status code 500', async () => {
@@ -197,8 +201,8 @@ describe('POST & UPDATE & DELETE -> /units', () => {
             expect(deleteUnit.status).toEqual(500)
         })
 
-        it('expected to respond with message "Unit Not Found"', () => {
-            expect(deleteUnit._body.details).toBe('Unit Not Found')
+        it('expected to respond with message "unitId is not in db"', () => {
+            expect(deleteUnit._body.details).toBe('unitId is not in db')
         })
     })
 
