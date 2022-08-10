@@ -15,7 +15,7 @@ module.exports.getUnitsByPage = (request, response, next) => {
         {},
         {
             page: request.query.page || 1,
-            select: 'estateType images unitInfo isAvailable gender dailyPrice address',
+            select: 'estateType images unitInfo isAvailable gender dailyPrice address numberOfResidents allowedGender',
             populate: { path: 'landlordId', select: 'fullName phone image' },
         }
     )
