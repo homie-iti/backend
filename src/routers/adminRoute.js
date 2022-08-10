@@ -1,5 +1,4 @@
 const express = require('express')
-const { body, param } = require('express-validator')
 const validationMW = require('../middlewares/validationMW')
 const {
     validateId,
