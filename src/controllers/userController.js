@@ -349,12 +349,19 @@ module.exports.uploadUserImage = (request, response, next) => {
 // TODO Needs to be enhanced(user can delete his image,user can update it but when choose update he should upload image)
 module.exports.updateUserImage = (request, response, next) => {
     console.log(request.file)
-
-    const newUserImage = request.file ? request.file.path : ''
+    let imagePath
+    if (request.file) {
+        let newPath = request.file.path.split('\\')
+        console.log(newPath)
+        newPath.shift()
+        imagePath = newPath.join('/')
+        console.log(newPath, imagePath)
+    }
+    const newUserImage = request.file ? imagePath : ''
     User.findOneAndUpdate({ _id: request.params.id }, { image: newUserImage })
 
         .then((data) => {
-            // unlinkAsync(data.image);
+            unlinkAsync(data.image)
             if (data == null) next(new Error("User Doesn't Exist"))
             response.status(201).json('User Image has been updated')
         })

@@ -35,7 +35,12 @@ router
         upload('users/profileImage').single('profile'),
         userController.uploadUserImage
     )
-    .put(userController.updateUserImage)
+    .put(
+        validateId('user'),
+        validationMW,
+        upload('users/profileImage').single('profile'),
+        userController.updateUserImage
+    )
 
 router
     .route('/users/:id')
