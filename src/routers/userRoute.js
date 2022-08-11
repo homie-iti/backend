@@ -28,7 +28,7 @@ router
     .delete(userController.deleteManyUser)
 
 router
-    .route('/users/:id/profileImage')
+    .route('/users/profileImage/:id')
     .post(
         validateId('user'),
         validationMW,
