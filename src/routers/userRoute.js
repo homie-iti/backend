@@ -1,29 +1,23 @@
 const express = require('express')
 
 const router = express.Router()
-const { query } = require('express-validator')
 
 const validationMW = require('../middlewares/validationMW')
 const {
     userPostValidation,
     userUpdateValidation,
-    userDeleteValidation,
 } = require('../middlewares/validations/usersValidations')
+
+const {
+    validateId,
+    pageValidations,
+} = require('../middlewares/validations/generalValidations')
 const userController = require('../controllers/userController')
 const upload = require('../middlewares/uploadImagesMW')
 
 router
     .route('/users')
-    .get(
-        [
-            query('page')
-                .optional()
-                .isNumeric()
-                .withMessage('Page number should number'),
-        ],
-        validationMW,
-        userController.getUsersByPage
-    )
+    .get(pageValidations, validationMW, userController.getUsersByPage)
     .post(
         userPostValidation,
         validationMW,
@@ -31,13 +25,13 @@ router
         userController.createUser
     )
 
-    .put(userUpdateValidation, validationMW, userController.updateUser)
-
     .delete(userController.deleteManyUser)
 
 router
     .route('/users/profileImage/:id')
     .post(
+        validateId('user'),
+        validationMW,
         upload('users/profileImage').single('profile'),
         userController.uploadUserImage
     )
@@ -46,15 +40,24 @@ router
 router
     .route('/users/:id')
 
-    .get(userController.getUserById)
+    .get(validateId('user'), validationMW, userController.getUserById)
 
-    .delete(userDeleteValidation, validationMW, userController.deleteUser)
+    .delete(validateId('user'), validationMW, userController.deleteUser)
+
+    .put(
+        validateId('user'),
+        userUpdateValidation,
+        validationMW,
+        userController.updateUser
+    )
 
 router
     .route('/users/myFavourite/:id')
-    .get(userController.getAllFavUnits)
-    .put(userController.updateFavUnit)
+    .get(validateId('user'), validationMW, userController.getAllFavUnits)
+    .put(validateId('user'), validationMW, userController.updateFavUnit)
 
-router.route('/users/myFavourite/:id/unit').delete(userController.removeFavUnit)
+router
+    .route('/users/myFavourite/:id/unit')
+    .delete(validateId('user'), validationMW, userController.removeFavUnit)
 
 module.exports = router

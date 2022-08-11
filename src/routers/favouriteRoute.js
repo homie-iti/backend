@@ -1,14 +1,17 @@
 const express = require('express')
 
 const router = express.Router()
-const { body, param, query } = require('express-validator')
-const favouriteController = require('../controllers/favouriteController')
+const validationMW = require('../middlewares/validationMW')
+const { validateId } = require('../middlewares/validations/generalValidations')
+const favoriteController = require('../controllers/favouriteController')
 
 router
-    .route('/myFavourite/:id')
-    .get(favouriteController.getAllFavUnits)
-    .put(favouriteController.updateFavUnit)
+    .route('/users/:userId/favorites')
+    .get(favoriteController.getUserFavUnits)
+    .post(favoriteController.addUnitToFavorite)
 
-router.route('/myFavourite/:id/unit').delete(favouriteController.removeFavUnit)
+router
+    .route('/users/:userId/favorites/:unitId')
+    .delete(favoriteController.deleteUnitFromFavorites)
 
 module.exports = router

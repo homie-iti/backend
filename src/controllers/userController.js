@@ -13,45 +13,6 @@ const Contract = require('../models/contractModel')
 const Review = require('../models/reviewModel')
 const Unit = require('../models/unitModel')
 
-// const agentController = require('./ControlingFunctions')
-// const landlordController = require('../controllers/landlordController')
-
-// const EmailClient = require('../utilities/sendEmail')
-
-// const emailNotifier = new EmailClient()
-// async function notifyUser(userInfo) {
-//     const msgState = await emailNotifier.sendMessage(
-//         'user_creation',
-//         userInfo.name,
-//         userInfo.email
-//     )
-
-//     console.log(msgState)
-
-//     return msgState
-// }
-
-// module.exports.getAllUsers = (request, response, next) => {
-//     User.find({})
-//         .then((data) => {
-//             if (data == null) next(new Error('User not Found'))
-//             // if (data.isLandlord == true) {
-//             //   Landlord.findone({ _id: request.params.id }).populate({ path: "isLandlord", select: { _id: 0, landlordUnits: 1 } })
-//             // }
-//             // if (data.isAgent) {
-//             //   Agent.findone({ _id: request.body.id }).populate({ path: "isAgent", select: { _id: 0, agentUnits: 1 } })
-//             // }
-//             // else if (data.isLandlord == true && data.isAgent == true) {
-//             //   Agent.findone({ _id: request.body.id }).populate({ path: "isAgent", select: { _id: 0, agentUnits: 1 } })
-//             //   Landlord.findone({ _id: request.body.id }).populate({ path: "isLandlord", select: { _id: 0, landlordUnits: 1 } })
-//             // }
-//             response.status(200).json(data)
-//         })
-//         .catch((error) => {
-//             next(error)
-//         })
-// }
-
 module.exports.getUsersByPage = (request, response, next) => {
     User.paginate(
         {},
@@ -103,6 +64,7 @@ module.exports.createUser = (request, response, next) => {
         phone: request.body.phone,
         national_id: request.body.national_id,
         balance: request.body.balance,
+        address: request.body.address,
         // image,
     })
     object
@@ -117,17 +79,16 @@ module.exports.createUser = (request, response, next) => {
 
 module.exports.updateUser = (request, response, next) => {
     const allowed = [
-        '_id',
         'fullName',
         'age',
         'email',
         'gender',
-        'password',
         'phone',
         'image',
         'address',
-        'national_id',
-        'balance'
+        'balance',
+        'isAgent',
+        'isLandlord',
     ]
     console.log(allowed)
     const requested = Object.keys(request.body)
@@ -139,7 +100,7 @@ module.exports.updateUser = (request, response, next) => {
     } else {
         const newUser = request.body
         User.findOneAndUpdate(
-            { _id: request.body._id },
+            { _id: request.params.id },
             { $set: newUser },
             { new: false, runValidators: true }
         )

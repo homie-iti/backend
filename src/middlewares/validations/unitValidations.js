@@ -19,8 +19,8 @@ const addUnitValidations = [
 
     body('address.streetName')
         .optional()
-        .isAlphanumeric()
-        .withMessage('Unit Street '),
+        .isAlphanumeric('en-US', { ignore: 's-.,;?' })
+        .withMessage('Unit Street should be characters'),
 
     body('address.buildingNumber')
         .optional()

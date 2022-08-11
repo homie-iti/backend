@@ -1,28 +1,23 @@
 const express = require('express')
-const { query } = require('express-validator')
+const { param } = require('express-validator')
 
 const router = express.Router()
 const validationMW = require('../middlewares/validationMW')
 const {
     helpQuestionPostValidation,
     helpQuestionUpdateValidation,
-    helpQuestionDeleteValidation,
 } = require('../middlewares/validations/helpQuestionsValidations')
+
+const {
+    validateId,
+    pageValidations,
+} = require('../middlewares/validations/generalValidations')
 const helpController = require('../controllers/helpQuestionController')
 
 router
     .route('/help-questions')
 
-    .get(
-        [
-            query('page')
-                .optional()
-                .isNumeric()
-                .withMessage('Page number should number'),
-        ],
-        validationMW,
-        helpController.getHelpQuestionsByPage
-    )
+    .get(pageValidations, validationMW, helpController.getHelpQuestionsByPage)
 
     .post(
         helpQuestionPostValidation,
@@ -43,7 +38,11 @@ router.route('/helpQuestion/many').delete(helpController.deleteManyQuestion)
 
 router
     .route('/helpQuestion/:id')
-    .get(helpController.getQuestionById)
+    .get(
+        validateId('HelpQuestion', param),
+        validationMW,
+        helpController.getQuestionById
+    )
     .put(
         helpQuestionUpdateValidation,
         validationMW,
@@ -51,7 +50,7 @@ router
     )
 
     .delete(
-        helpQuestionDeleteValidation,
+        validateId('HelpQuestion', param),
         validationMW,
         helpController.deleteQuestion
     )

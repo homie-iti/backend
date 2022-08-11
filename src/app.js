@@ -28,6 +28,7 @@ const forgetPasswordRoute = require('./routers/forgetPasswordRoute')
 const signupRoute = require('./routers/signupRoute')
 const filterandsort = require('./routers/filtringandsortingRoute')
 const paymentRoute = require('./routers/paymentRoute')
+const favouriteRoute = require('./routers/favouriteRoute')
 
 // require('./models/addressModel')
 // require('./models/adminModel')
@@ -95,7 +96,7 @@ app.use(helpRoute)
 app.use(forgetPasswordRoute)
 app.use(filterandsort)
 app.use(paymentRoute)
-
+app.use(favouriteRoute)
 // not-found middleware
 app.use((request, response, next) => {
     // throw new Error("very big error"); //throwing an error causes the error handling middleware to work

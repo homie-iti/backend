@@ -25,6 +25,7 @@ const schema = new mongoose.Schema(
         },
         fullName: {
             type: String,
+            minlength: 3,
             required: [true, 'user fullName is required'],
         },
         age: {

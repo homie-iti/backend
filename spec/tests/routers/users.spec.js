@@ -35,11 +35,13 @@ describe('POST & UPDATE & DELETE -> /users', () => {
         age: 20,
         email: 'hayaali01@gmail.com',
         gender: 'female',
-        password: 'haya@123',
+        password: 'Haya@123',
         phone: '01001512136417',
         national_id: 142515657744154,
         address: {
             city: 'Giza',
+            streetName: 'elbadry',
+            buildingNumber: 125,
         },
         balance: 2500,
     }
@@ -65,9 +67,9 @@ describe('POST & UPDATE & DELETE -> /users', () => {
             expect(newUser.status).toEqual(422)
         })
 
-        it('expected to respond with message "user gender is not valid / userAddress is not valid / userEmail is not valid / userPhone should be characters." ', async () => {
+        it('expected to respond with message "user gender is not valid / Unit Address should be object  / City should be characters / userEmail is not valid / userPhone should be characters / user national_id  is not valid." ', async () => {
             expect(newUser._body.details).toBe(
-                'user gender is not valid / userAddress is not valid / userEmail is not valid / userPhone should be characters.'
+                'user gender is not valid / Unit Address should be object  / City should be characters / userEmail is not valid / userPhone should be characters / user national_id  is not valid.'
             )
         })
 
@@ -82,13 +84,15 @@ describe('POST & UPDATE & DELETE -> /users', () => {
                 phone: '01211483907',
                 address: {
                     city: 'Alex',
+                    streetName: 'elbadry',
+                    buildingNumber: 125,
                 },
                 balance: 4000,
             })
             // console.log(newUser)
-            expect(newUser.status).toEqual(500)
+            expect(newUser.status).toEqual(422)
             expect(newUser._body.details).toBe(
-                'users validation failed: national_id: user national_id is required'
+                'user national_id  is not valid.'
             )
         })
 
@@ -104,6 +108,8 @@ describe('POST & UPDATE & DELETE -> /users', () => {
                 national_id: 142515657722154,
                 address: {
                     city: 'Alex',
+                    streetName: 'elbadry',
+                    buildingNumber: 125,
                 },
                 balance: 4000,
             })
@@ -139,33 +145,38 @@ describe('POST & UPDATE & DELETE -> /users', () => {
         })
     })
 
-    describe('UPDATE -> /users', () => {
+    describe('UPDATE -> /users/:id', () => {
         beforeAll(async () => {
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
         })
 
-        it('expected to respond with status code 500 with message"User not allowed', async () => {
-            updateUser = await request.put('/users').send({ id: '1235588' })
+        it('expected to respond with status code 500 with message"user id must be an objectId.', async () => {
+            updateUser = await request.put('/users/1235588')
             // console.log(updateUser)
-            expect(updateUser.status).toEqual(500)
-            expect(updateUser._body.details).toBe('User not allowed')
+            expect(updateUser.status).toEqual(422)
+            expect(updateUser._body.details).toBe(
+                'user id must be an objectId.'
+            )
         })
 
         it('expected to respond with status code 500 with message"Cast to ObjectId failed for value "1235588" (type string) at path "_id" for model "users"', async () => {
             console.log(userId)
-            updateUser = await request.put('/users').send({ _id: '1235588' })
+            updateUser = await request
+                .put(`/users/${userId}`)
+                .send({ password: 'asdqwe@123' })
             expect(updateUser.status).toEqual(500)
             expect(updateUser._body.details).toBe(
-                'Cast to ObjectId failed for value "1235588" (type string) at path "_id" for model "users"'
+                'User not allowed'
             )
         })
 
         it('expected to respond with status code 500 ', async () => {
             console.log(userId)
-            updateUser = await request.put('/users').send({
-                _id: 'dc7daf3e33aec47b4ceed988',
-                fullName: 'loooka',
-            })
+            updateUser = await request
+                .put('/users/dc7daf3e33aec47b4ceed988')
+                .send({
+                    fullName: 'loooka',
+                })
             console.log(updateUser)
             expect(updateUser.status).toEqual(500)
         })
@@ -177,8 +188,8 @@ describe('POST & UPDATE & DELETE -> /users', () => {
         it('expected to respond with status code 200 ', async () => {
             console.log(userId)
             updateUser = await request
-                .put('/users')
-                .send({ _id: userId, fullName: 'biko hiko' })
+                .put(`/users/${userId}`)
+                .send({ fullName: 'biko hiko' })
             // console.log(updateUser)
             expect(updateUser.status).toEqual(200)
         })
@@ -193,12 +204,12 @@ describe('POST & UPDATE & DELETE -> /users', () => {
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
         })
 
-        it('expected to respond with status code 500 with message"Cast to ObjectId failed for value "12348" (type string) at path "_id" for model "users"', async () => {
+        it('expected to respond with status code 500 with message"user id must be an objectId.', async () => {
             deleteUser = await request.delete('/users/12348')
             console.log(deleteUser)
-            expect(deleteUser.status).toEqual(500)
+            expect(deleteUser.status).toEqual(422)
             expect(deleteUser._body.details).toBe(
-                'Cast to ObjectId failed for value "12348" (type string) at path "_id" for model "users"'
+                'user id must be an objectId.'
             )
         })
 

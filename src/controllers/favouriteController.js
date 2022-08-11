@@ -1,27 +1,14 @@
-const Agent = require('../models/agentModel')
+const User = require('../models/userModel')
+const Unit = require('../models/unitModel')
 
-module.exports.getAllFavUnits = (request, response, next) => {
-    Agent.find({ _id: request.params.id })
-        .select({ favoriteUnits: 1, _id: 1 })
+module.exports.getUserFavUnits = (request, response, next) => {
+    User.find({ _id: request.params.userId }, { _id: 1, favoriteUnits: 1 })
         .populate({ path: 'favoriteUnits' })
         .then((data) => {
-            if (data == null) {
-                next(new Error('Agent Fav Unit is not defined'))
-            } else {
-                response.status(200).json(data)
-            }
-        })
-        .catch((error) => {
-            next(error)
-        })
-}
+            console.log(data)
+            if (!data.length)
+                throw new Error('This user has no favorite units yet.')
 
-module.exports.updateFavUnit = (request, response, next) => {
-    Agent.findByIdAndUpdate(
-        { _id: request.params.id },
-        { $addToSet: { favoriteUnits: request.body.favoriteUnits } }
-    )
-        .then((data) => {
             response.status(200).json(data)
         })
         .catch((error) => {
@@ -29,18 +16,66 @@ module.exports.updateFavUnit = (request, response, next) => {
         })
 }
 
-//
+module.exports.addUnitToFavorite = (request, response, next) => {
+    let userData
+    User.findOne({ _id: request.params.userId }, { _id: 1, favoriteUnits: 1 })
+        .then((data) => {
+            if (!data) throw new Error('User is not in db')
+            if (data.favoriteUnits.includes(request.body.unitId))
+                throw new Error('Unit exists already in favoriteUnits.')
+            userData = data
+            return Unit.findOne({ _id: request.body.unitId })
+        })
+        .then((unit) => {
+            console.log(unit)
+            if (!unit) throw new Error('Unit is not in db')
+            userData.favoriteUnits.push(request.body.unitId)
+            userData.save()
+            response
+                .status(200)
+                .json('The unit has been added to user favorite units.')
+        })
+        .catch((error) => next(error))
+}
 
-module.exports.removeFavUnit = (request, response, next) => {
-    Agent.updateOne(
-        { _id: request.params.id },
-        { $pull: { favoriteUnits: request.body.favoriteUnits } }
-    )
+// module.exports.deleteUnitFromFavorites = (request, response, next) => {
+//     User.findOne({ _id: request.params.userId }, '_id favoriteUnits')
+//         .then((data) => {
+//             console.log(data)
+//             if (!data) throw new Error('User is not in db')
+//             if (data.favoriteUnits.includes(request.params.unitId))
+//                 data.favoriteUnits.splice(request.params.unitId, 1)
+//             //     throw new Error('Unit exists already in favoriteUnits.')
+//             // data.favoriteUnits.push(request.body.unitId)
+//             // // console.log(data)
+//             data.save()
+//             // response.status(200).json(data)
+//         })
+//         .catch((error) => next(error))
+// }
+
+module.exports.deleteUnitFromFavorites = (request, response, next) => {
+    User.findOne({ _id: request.params.userId })
 
         .then((data) => {
-            response.status(200).json(data)
+            console.log(data)
+            if (!data) throw new Error('User is not in db')
+            if (!data.favoriteUnits.includes(request.params.unitId))
+                throw new Error('This unit does not exist on favorite units.')
+
+            return User.findOneAndUpdate(
+                { _id: request.params.userId },
+                {
+                    $pull: { favoriteUnits: request.params.unitId },
+                },
+                { new: true }
+            )
         })
-        .catch((error) => {
-            next(error)
+        .then((data) => {
+            console.log(data)
+            response
+                .status(200)
+                .json('The unit has been deleted from user favorite units.')
         })
+        .catch((error) => next(error))
 }

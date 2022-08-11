@@ -33,8 +33,6 @@
             "application/json"
         ]
     },
-    "host": "localhost:8080",
-    "basePath": "/",
     "tags": [
         {
             "name": "Units",
@@ -51,6 +49,10 @@
         {
             "name": "Agents",
             "description": "API for agents in the system"
+        },
+        {
+            "name": "Admins",
+            "description": "API for admins in the system"
         },
         {
             "name": "Landlords",
@@ -134,6 +136,41 @@
                         "schema": {
                             "$ref": "#/definitions/Unit"
                         }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Units"
+                ],
+                "summary": "Update unit data that matches the given id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of unit that we want to update"
+                    },
+                    {
+                        "name": "unit data needs to be updated",
+                        "in": "body",
+                        "description": "choose unit data you want to update",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateUnit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unit data updated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
                     }
                 }
             },
@@ -686,6 +723,136 @@
                 }
             }
         },
+        "/admins": {
+            "get": {
+                "tags": [
+                    "Admins"
+                ],
+                "summary": "Get array of admins objects containing admins that exist on the given page with limit 30 landlords",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number that we want to display admins exist on it"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of landlords",
+                        "schema": {
+                            "$ref": "#/definitions/Admin"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admins"
+                ],
+                "summary": "Adding a new admin",
+                "parameters": [
+                    {
+                        "name": "Admin",
+                        "in": "body",
+                        "description": "Admin data that we want to add",
+                        "schema": {
+                            "$ref": "#/definitions/Admin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "The id of admin added"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admins"
+                ],
+                "summary": "Update admin data",
+                "parameters": [
+                    {
+                        "name": "id of admin we want to update its data and choose data we want to update",
+                        "in": "body",
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/UpdateAdmin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "updated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "422": {
+                        "description": " Unprocessable Entity"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/admins/{id}": {
+            "get": {
+                "tags": [
+                    "Admins"
+                ],
+                "summary": "Get specific admin data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of admin that we want to get its data"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data of admin",
+                        "schema": {
+                            "$ref": "#/definitions/Admin"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admins"
+                ],
+                "summary": "Delete admin data that matches the given id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Admin id that we want to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
         "/agents": {
             "get": {
                 "tags": [
@@ -752,6 +919,149 @@
                     },
                     "500": {
                         "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/agents/agentUnits": {
+            "put": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Update specific agent units",
+                "parameters": [
+                    {
+                        "name": "_id of agent,agentUnits",
+                        "in": "body",
+                        "description": "id of agent that we want to update its units",
+                        "schema": {
+                            "$ref": "#/definitions/AddingNewAgent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "agent data after updating"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/agents/agentUnits/{id}": {
+            "delete": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Delete specific agent units",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of agent that we want to delete its units",
+                        "schema": {
+                            "$ref": "#/definitions/deleteAgentUnit"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "body",
+                        "description": "id of agent that we want to update its units",
+                        "schema": {
+                            "$ref": "#/definitions/deleteAgentUnits"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "agent data after updating"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/users/{userId}/favorites": {
+            "get": {
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Get array of Favorite units of specific user",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "user id that we want to get its favorite units"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of user favorite units and _id of user"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "add unit to favorite units of specific agent",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "user id that we want to add unit to its favorite units"
+                    },
+                    {
+                        "name": "unitId",
+                        "in": "body",
+                        "description": "id of the unit we want to add to favorite units",
+                        "schema": {
+                            "$ref": "#/definitions/AddUserFavoriteUnits"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "The unit has been added to user favorite units."
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/users/{userId}/favorites/{unitId}": {
+            "delete": {
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "delete specific favorite unit from favorite units of specific user",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "user id that we want to delete unit from its favorite units"
+                    },
+                    {
+                        "name": "unitId",
+                        "in": "path",
+                        "description": "id of the unit we want to delete from favorite units"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "agent data"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "404": {
+                        "description": "Not found"
                     }
                 }
             }
@@ -1009,7 +1319,9 @@
                         "description": "average ratings of unit,number of reviews and reviews body"
                     }
                 }
-            },
+            }
+        },
+        "/units/{unitId}/reviews/{reviewId}": {
             "delete": {
                 "tags": [
                     "Reviews"
@@ -1017,17 +1329,14 @@
                 "summary": "Delete specific unit review",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "unitId",
                         "in": "path",
                         "description": "unitId that we want to delete its review"
                     },
                     {
                         "name": "reviewId",
-                        "in": "body",
-                        "description": "reviewId that we want to delete from unit reviews ",
-                        "schema": {
-                            "$ref": "#/definitions/deleteUnitReview"
-                        }
+                        "in": "path",
+                        "description": "reviewId that we want to delete from unit reviews "
                     }
                 ],
                 "responses": {
@@ -1543,6 +1852,56 @@
                 }
             }
         },
+        "UpdateUnit": {
+            "properties": {
+                "unitInfo": {
+                    "type": "object",
+                    "properties": {
+                        "description": {
+                            "type": "string"
+                        },
+                        "rooms": {
+                            "type": "number"
+                        },
+                        "bathrooms": {
+                            "type": "number"
+                        },
+                        "floor": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string"
+                        },
+                        "streetName": {
+                            "type": "number"
+                        },
+                        "buildingNumber": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "estateType": {
+                    "type": "string"
+                },
+                "isAvailable": {
+                    "type": "boolean"
+                },
+                "isPetsAllowed": {
+                    "type": "boolean"
+                },
+                "numberOfResidents": {
+                    "type": "number"
+                },
+                "dailyPrice": {
+                    "type": "number"
+                }
+            }
+        },
         "City": {
             "required": [
                 "name",
@@ -1742,6 +2101,34 @@
                 }
             }
         },
+        "UpdateAdmin": {
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "objectId"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "number"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "number"
+                }
+            }
+        },
         "UserSignUp": {
             "required": [
                 "firstName",
@@ -1896,6 +2283,24 @@
                 }
             }
         },
+        "deleteAgentUnits": {
+            "properties": {
+                "agentUnits": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "unitId": {
+                                "type": "objectId"
+                            },
+                            "numberOfRenting": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "HelpQuestion": {
             "required": [
                 "userId",
@@ -2034,9 +2439,9 @@
                 }
             }
         },
-        "deleteUnitReview": {
+        "AddUserFavoriteUnits": {
             "properties": {
-                "reviewId": {
+                "unitId": {
                     "type": "objectId"
                 }
             }
