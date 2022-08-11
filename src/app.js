@@ -78,6 +78,8 @@ app.get('/', (req, res) => {
     res.send('Done CI/CD')
 })
 
+app.use('/uploads', express.static('src/uploads'))
+
 app.use(loginRoute)
 app.use(signupRoute)
 app.use(adminRoute)
