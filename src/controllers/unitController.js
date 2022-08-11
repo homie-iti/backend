@@ -359,8 +359,9 @@ module.exports.addReview = (request, response, next) => {
         })
         .then((agent) => {
             console.log(`"agent" ${agent}`)
-            if (agent == null)
-                throw new Error("Agent has this unit doesn't found.")
+            // TODO removed the next two lines to enable anyone to comment
+            // if (agent == null)
+            //     throw new Error("Agent has this unit doesn't found.")
             // console.log('this agent has this unit')
             const newReview = new ReviewModel({
                 unitId: request.body.unitId,
