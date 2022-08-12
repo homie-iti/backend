@@ -549,7 +549,7 @@
                     {
                         "name": "user",
                         "in": "body",
-                        "description": "User data that we want to update",
+                        "description": "Choose user data that you want to update",
                         "schema": {
                             "$ref": "#/definitions/UpdateUser"
                         }
@@ -810,9 +810,9 @@
                 "summary": "Update admin data",
                 "parameters": [
                     {
-                        "name": "id of admin we want to update its data and choose data we want to update",
+                        "name": "id of admin we want to update its data",
                         "in": "body",
-                        "description": "",
+                        "description": "choose data we want to update",
                         "schema": {
                             "$ref": "#/definitions/UpdateAdmin"
                         }
@@ -952,6 +952,27 @@
                         "description": "Internal Server Error"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Delete specific agent data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of agent that we want to delete its data"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted agent"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
             }
         },
         "/agents/agentUnits": {
@@ -990,15 +1011,13 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "id of agent that we want to delete its units",
-                        "schema": {
-                            "$ref": "#/definitions/deleteAgentUnit"
-                        }
+                        "description": "id of agent that we want to delete its units"
+                    
                     },
                     {
                         "name": "id",
                         "in": "body",
-                        "description": "id of agent that we want to update its units",
+                        "description": "array of unitIds of agent units that we want to delete,numberOfRenting is not necessary",
                         "schema": {
                             "$ref": "#/definitions/deleteAgentUnits"
                         }
