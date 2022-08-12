@@ -98,48 +98,35 @@ describe('POST -> /help-questions', () => {
             .send({ userId: 'dc7daf3e33', question: 'hello', answer: 'ok' })
         // console.log(result)
         expect(result.status).toEqual(422)
-        expect(result._body.details).toBe(
-            'userId must be objectId / adminId must be objectId.'
-        )
+        expect(result._body.details).toBe('userId must be objectId.')
     })
 
     it('expected to respond with status code 500 with message"userId not available in users collection" ', async () => {
         // console.log(userId)
         result = await request.post('/help-questions').send({
             userId: 'dc7daf3e33aec47b4ceed945',
-            adminId,
             question: 'hello',
-            answer: 'ok',
         })
         // console.log(result)
         expect(result.status).toEqual(500)
-        expect(result._body.details).toBe(
-            "userId isn't available in users collection"
-        )
     })
 
-    it('expected to respond with status code 500 with message"adminId not available in users collection" ', async () => {
+    it('expected to respond with status code 422', async () => {
         // console.log(userId)
         result = await request.post('/help-questions').send({
             userId,
-            adminId: 'dc7daf3e33aec47b4ceed988',
-            question: 'what why?',
             answer: 'Yes No',
         })
         // console.log(result)
-        expect(result.status).toEqual(500)
-        expect(result._body.details).toBe(
-            "adminId isn't available in users collection"
-        )
+        expect(result.status).toEqual(422)
     })
 
-    it('expected to respond with status code 201 and type of "application/json"', async () => {
+    it('expected to respond with status code 201', async () => {
         result = await request
             .post('/help-questions')
-            .send({ userId, adminId, question: 'why?', answer: 'ok' })
+            .send({ userId, question: 'why?' })
         console.log(result)
         expect(result.status).toEqual(201)
-        expect(result.type).toBe('application/json')
     })
 })
 
@@ -152,32 +139,32 @@ describe('UPDATE -> /helpQuestion', () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999
         questionData = await request
             .post('/help-questions')
-            .send({ userId, adminId, question: 'finally?', answer: 'aywaa' })
+            .send({ userId, question: 'aywaa' })
         // console.log(questionData)
         questionId = questionData._body.id
         console.log(questionId)
     })
 
-    it('expected to respond with status code 422 with message "userId must be objectId/adminId must be objectId/Question name should be characters." ', async () => {
+    it('expected to respond with status code 422 with message "adminId must be objectId / Answer name should be characters." ', async () => {
         updateResult = await request.put(`/helpQuestion/${questionId}`).send({})
         expect(updateResult.status).toEqual(422)
         expect(updateResult._body.details).toEqual(
-            'userId must be objectId /  adminId must be objectId / Question name should be characters.'
+            'adminId must be objectId / Answer name should be characters.'
         )
     })
 
-    it('expected to respond with status code 500 with message "userId must be objectId." ', async () => {
+    it('expected to respond with status code 500 with message "Answer name should be characters." ', async () => {
         updateResult = await request
             .put(`/helpQuestion/${questionId}`)
             .send({ adminId, question: 'what' })
         expect(updateResult.status).toEqual(422)
-        expect(updateResult._body.details).toEqual('userId must be objectId.')
+        expect(updateResult._body.details).toEqual('Answer name should be characters.')
     })
 
     it('expected to respond with status code 200 with data of type "application/json" ', async () => {
         updateResult = await request
             .put(`/helpQuestion/${questionId}`)
-            .send({ adminId, userId, question: 'what' })
+            .send({ adminId, answer: 'Yes done' })
         expect(updateResult.status).toEqual(200)
         expect(updateResult.type).toBe('application/json')
     })
@@ -185,7 +172,7 @@ describe('UPDATE -> /helpQuestion', () => {
     it('expected to respond with status code 500 with message "Question not found" ', async () => {
         updateResult = await request
             .put(`/helpQuestion/d7e3d89a23f9b5b1ecf56a4e`)
-            .send({ adminId, userId, question: 'what' })
+            .send({ adminId, answer: 'what' })
         // console.log(updateResult)
         expect(updateResult.status).toEqual(500)
         expect(updateResult._body.details).toBe('Question not found')

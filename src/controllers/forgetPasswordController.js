@@ -6,7 +6,6 @@ const { isValidObjectId } = require('mongoose')
 const User = require('../models/userModel')
 const EmailClient = require('../utilities/sendEmail')
 
-
 const emailNotifier = new EmailClient()
 function notifyUser(event, user) {
     console.log(user)
@@ -38,7 +37,7 @@ module.exports.forgetPassword = (request, response, next) => {
             // })
 
             console.log(user)
-            user.updateOne({ resetLink: user._id }).then((updatedUser) => {
+            user.updateOne({}, { resetLink: user._id }).then((updatedUser) => {
                 // console.log(updatedUser, user)
                 console.log(user.resetLink)
                 if (updatedUser.modifiedCount === 0)

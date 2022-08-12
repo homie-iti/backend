@@ -23,7 +23,7 @@ const schema = new mongoose.Schema(
         },
         answer: {
             type: String,
-            required: [true, 'help question answer is required'],
+            // required: [true, 'help question answer is required'],
         },
     },
     { timestamps: true }
