@@ -45,8 +45,8 @@ To run this project, you will need to follow two steps:
     ')  
     `JWT_SECRET`: add secret key to be used while creating jwt tokens  
     `SALT_ROUNDS`: add number of salt rounds to be used while creating bcrypt hashes (default 10)  
-    `PEXELS_KEY`: create an accoount on [pexels.com](https://www.pexels.com) and add you api key  
-    `UNSPLASH_KEY`: create an accoount on [pexels.com](https://unsplash.com) and add you access key  
+    `PEXELS_KEY`: create an account on [pexels.com](https://www.pexels.com) and add you api key  
+    `UNSPLASH_KEY`: create an account on [unsplash.com](https://unsplash.com) and add you access key  
     `ATLAS_DB_HOST`: add your cloud db host  
     `ATLAS_DB_USER`: add your cloud db access username  
     `ATLAS_DB_PASSWORD`: add your cloud db access password  
