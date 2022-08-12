@@ -74,21 +74,26 @@ module.exports.resetPassword = (request, response, next) => {
     //         }
     if (!isValidObjectId(resetLink)) throw new Error('Not Valid reset Link ')
     User.findOne({
-        _id: toObjectId(resetLink),
+        // _id: toObjectId(resetLink),
         resetLink,
-    }).then((user) => {
-        console.log(user)
-        if (user == null) throw new Error("Expired link or user doesn't found ")
-        else {
-            const hashedPassword = bcrypt.hashSync(newPassword, saltRounds)
-            user.password = hashedPassword
-            user.resetLink = ''
-            console.log(user.password)
-            user.save()
-            notifyUser('password_changed', user)
-            response.status(200).json('Your password has been changed')
-        }
     })
+        .then((user) => {
+            console.log(user)
+            if (user == null)
+                throw new Error("Expired link or user doesn't found ")
+            else {
+                const hashedPassword = bcrypt.hashSync(newPassword, saltRounds)
+                user.password = hashedPassword
+                user.resetLink = ''
+                console.log(user.password)
+                user.save()
+                notifyUser('password_changed', user)
+                response.status(200).json('Your password has been changed')
+            }
+        })
+        .catch((error) => {
+            next(error)
+        })
     //     })
     // } else {
     //     response.status(401).json({ error: 'Not Authorized' })
