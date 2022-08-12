@@ -65,7 +65,7 @@ module.exports = class EmailClient {
                     <p>Your account activation link is
                     <a href=${activationLink}>${activationLink}</a>
                     </p>
-                    <p dir="rtl">تسلم يسطا و الله ربنا يكرمك ❤</p>
+                    <p>Have a nice day.</p>
                     <p dir="rtl">إدارة هومي الموقّرة</p>
                     `,
                 }
@@ -81,8 +81,8 @@ module.exports = class EmailClient {
                         <p>Now you can login and start your journey
                     <a href="https://homie-iti.vercel.app">https://homie-iti.vercel.app</a>
                     </p>
-                        <p dir="rtl">تسلم يسطا و الله ربنا يكرمك ❤</p>
-                        <p dir="rtl">إدارة هومي الموقّرة</p>
+                    <p>Have a nice day.</p>
+                    <p dir="rtl">إدارة هومي الموقّرة</p>
                         `,
                 }
                 break
@@ -101,8 +101,8 @@ module.exports = class EmailClient {
                         </button>         
                         </p>
                         <p>If you did not request this password reset, then please ignore this email.</p>
-                        <p dir="rtl">إدارة هومي الموقّرة</p>
-                        `,
+                        <p>Have a nice day.</p>
+                        <p dir="rtl">إدارة هومي الموقّرة</p>                        `,
                 }
                 break
 
@@ -114,6 +114,7 @@ module.exports = class EmailClient {
                     body: `
                     <h2>Password changed successfully</h2>
                     <p>Your password has been changed successfully... you can now try to login again.</p>
+                    <p>Have a nice day.</p>
                     <p dir="rtl">إدارة هومي الموقّرة</p>
                     `,
                 }
@@ -130,10 +131,10 @@ module.exports = class EmailClient {
                     body: `
                     <h2>Confirm booking a unit</h2>
                     <p>Someone needs to book a unit of yours. Please see the contract details below and then confirm or cancel it.</P>
-                    <h2>Unit:${unitLink}${
+                    <h2>Unit: ${unitLink}${
                         configs.contractDetails.contractData.unitId
                     }</h2>
-                    <h2>Rental Start:${
+                    <h2>Rental Start: ${
                         new Date(
                             configs.contractDetails.contractData.rentalStart
                         ).getDate() +
@@ -147,7 +148,7 @@ module.exports = class EmailClient {
                             configs.contractDetails.contractData.rentalStart
                         ).getFullYear()
                     }</h2>
-                    <h2>Rental End:${
+                    <h2>Rental End: ${
                         new Date(
                             configs.contractDetails.contractData.rentalEnd
                         ).getDate() +
@@ -161,34 +162,35 @@ module.exports = class EmailClient {
                             configs.contractDetails.contractData.rentalEnd
                         ).getFullYear()
                     }</h2>
-                    <h2>Total Amount:${
+                    <h2>Money you will get: ${
                         configs.contractDetails.contractData.totalAmount
                     }</h2>
-                    <h2>Payment Method:${
+                    <h2>Payment Method: ${
                         configs.contractDetails.contractData.paymentMethod
                     }</h2>
 
                     <h3>For more details about the agent, you can contact him/her through</h3>
                        
-                    <h4>AgentName:${configs.contractDetails.agentName}</h4>
+                    <h4>AgentName: ${configs.contractDetails.agentName}</h4>
 
-                    <h4>AgentPhone:${
+                    <h4>AgentPhone: ${
                         configs.contractDetails.agentPhoneNumber
                     }</h4>
 
-                    <h4>AgentEmail:${configs.contractDetails.agentEmail}</h4>
+                    <h4>AgentEmail: ${configs.contractDetails.agentEmail}</h4>
 
-                    ${JSON.stringify(configs.contractDetails)}
+                    // ${JSON.stringify(configs.contractDetails)}
 
                     <a href="${appWebsiteHost}/confirm-booking/${
-                        configs.contractDetails._id
+                        configs.contractDetails.contractData._id
                     }" >Confirm</a>
                     <a href="${appWebsiteHost}/cancel-booking/${
-                        configs.contractDetails._id
+                        configs.contractDetails.contractData._id
                     }">Cancel</a>
 
-                    <p>Have a good day.</p>
+                    <p>Have a nice day.</p>
                     <p dir="rtl">إدارة هومي الموقّرة</p>
+
                             `,
                 }
                 break
@@ -209,9 +211,8 @@ module.exports = class EmailClient {
                     <p>LandlordPhone:${configs.agentDetails.landlordPhoneNumber}</p>
     
                     <p>LandlordEmail:${configs.agentDetails.landlordEmail}</p>
-    
-                    <p>Have a good day.</p>
-    
+
+                    <p>Have a nice day.</p>
                     <p dir="rtl">إدارة هومي الموقّرة</p>
                     `,
                 }
@@ -227,8 +228,8 @@ module.exports = class EmailClient {
                     <h3>Sorry, but the landlord has cancelled your reservation for a unit..</h3>
         
                     <h3>You can log in to our website and choose another unit that suits you.</h3>
-                    <p>Have a good day.</p>          
-                    <p dir="rtl">إدارة هومي الموقّرة</p>    
+                    <p>Have a nice day.</p>
+                    <p dir="rtl">إدارة هومي الموقّرة</p>
                     `,
                 }
                 break
