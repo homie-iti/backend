@@ -120,6 +120,8 @@ module.exports = class EmailClient {
                 break
 
             case 'book_unit':
+                // const  =
+                // appWebsiteHost + '/reset-password/' + configs.resetLink
                 const unitLink = 'https://homie-iti.vercel.com/units/'
                 this.#message = {
                     subject: `Hola ${
@@ -142,8 +144,8 @@ module.exports = class EmailClient {
 
                     <h4>AgentEmail:${configs.contractDetails.agentEmail}</h4>
 
-                    <button>Confirm</button>
-                    <button>Cancel</button>
+                    <a href="${appWebsiteHost}/confirm-booking/${configs.contractDetails._id}" >Confirm</a>
+                    <a href="${appWebsiteHost}/cancel-booking/${configs.contractDetails._id}">Cancel</a>
 
                     <p>Have a good day.</p>
                     <p dir="rtl">إدارة هومي الموقّرة</p>
