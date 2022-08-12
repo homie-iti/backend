@@ -1809,14 +1809,12 @@
                 "summary": "Resetting Password after clicking the reset link",
                 "parameters": [
                     {
-                        "name": "New Password",
+                        "name": "New Password and resetLink",
                         "in": "body",
-                        "description": "new password to enable login again"
-                    },
-                    {
-                        "name": "Reset Link",
-                        "in": "body",
-                        "description": "reset link to enable changing password"
+                        "description": "new password to enable login again",
+                        "schema": {
+                            "$ref": "#/definitions/resetPassword"
+                        }
                     }
                 ],
                 "responses": {
@@ -2369,6 +2367,20 @@
                 },
                 "answer": {
                     "type": "string"
+                }
+            }
+        },
+        "resetPassword": {
+            "required": [
+                "newPassword",
+                "resetLink"
+            ],
+            "properties": {
+                "newPassword": {
+                    "type": "string"
+                },
+                "resetLink": {
+                    "type": "objectId"
                 }
             }
         },
