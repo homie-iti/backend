@@ -45,11 +45,6 @@ module.exports.createQuestion = (request, response, next) => {
         .then((data) => {
             if (!data)
                 throw new Error(`userId isn't available in users collection`)
-            return AdminModel.exists({ _id: request.body.adminId })
-        })
-        .then((data) => {
-            if (!data)
-                throw new Error(`adminId isn't available in users collection`)
             const object = new HelpQuestion(request.body)
             return object.save()
         })
@@ -61,7 +56,7 @@ module.exports.createQuestion = (request, response, next) => {
 
 module.exports.updateHelpQuestion = (request, response, next) => {
     // TODO move validations to the router
-    const allowed = ['userId', 'adminId', 'question', 'answer']
+    const allowed = ['adminId', 'answer']
     // console.log(allowed)
     const requested = Object.keys(request.body)
     console.log(requested)
@@ -71,14 +66,7 @@ module.exports.updateHelpQuestion = (request, response, next) => {
         throw new Error('Question not allowed')
     } else {
         // if (!Object.keys(request.body).includes('adminId'))
-        UserModel.exists({ _id: request.body.userId })
-            .then((data) => {
-                if (!data)
-                    throw new Error(
-                        `userId is not available in users collection`
-                    )
-                return AdminModel.exists({ _id: request.body.adminId })
-            })
+        AdminModel.exists({ _id: request.body.adminId })
             .then((data) => {
                 if (!data)
                     throw new Error(
