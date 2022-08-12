@@ -1012,7 +1012,6 @@
                         "name": "id",
                         "in": "path",
                         "description": "id of agent that we want to delete its units"
-                    
                     },
                     {
                         "name": "id",
@@ -1147,9 +1146,9 @@
                     {
                         "name": "help-question",
                         "in": "body",
-                        "description": "Question data that we want to add",
+                        "description": "Question that we want to add and userId add that question",
                         "schema": {
-                            "$ref": "#/definitions/HelpQuestion"
+                            "$ref": "#/definitions/PostHelpQuestion"
                         }
                     }
                 ],
@@ -1215,9 +1214,9 @@
                     {
                         "name": "help-question",
                         "in": "body",
-                        "description": "userId & adminId of the question and data desired to be be updated",
+                        "description": "answer to that specific helpquestion anf adminId added that answer",
                         "schema": {
-                            "$ref": "#/definitions/HelpQuestion"
+                            "$ref": "#/definitions/UpdateHelpQuestion"
                         }
                     }
                 ],
@@ -2345,22 +2344,28 @@
                 }
             }
         },
-        "HelpQuestion": {
+        "PostHelpQuestion": {
             "required": [
                 "userId",
-                "adminId",
-                "question",
-                "answer"
+                "question"
             ],
             "properties": {
                 "userId": {
                     "type": "objectId"
                 },
-                "adminId": {
-                    "type": "objectId"
-                },
                 "question": {
                     "type": "string"
+                }
+            }
+        },
+        "UpdateHelpQuestion": {
+            "required": [
+                "adminId",
+                "answer"
+            ],
+            "properties": {
+                "adminId": {
+                    "type": "objectId"
                 },
                 "answer": {
                     "type": "string"
