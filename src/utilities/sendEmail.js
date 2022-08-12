@@ -130,22 +130,62 @@ module.exports = class EmailClient {
                     body: `
                     <h2>Confirm booking a unit</h2>
                     <p>Someone needs to book a unit of yours. Please see the contract details below and then confirm or cancel it.</P>
-                    <h2>Unit:${unitLink}${configs.contractDetails.contractData.unitId}</h2>
-                    <h2>Rental Start:${configs.contractDetails.contractData.rentalStart}</h2>
-                    <h2>Rental End:${configs.contractDetails.contractData.rentalEnd}</h2>
-                    <h2>Total Amount:${configs.contractDetails.contractData.totalAmount}</h2>
-                    <h2>Payment Method:${configs.contractDetails.contractData.paymentMethod}</h2>
+                    <h2>Unit:${unitLink}${
+                        configs.contractDetails.contractData.unitId
+                    }</h2>
+                    <h2>Rental Start:${
+                        new Date(
+                            configs.contractDetails.contractData.rentalStart
+                        ).getDate() +
+                        '/' +
+                        (new Date(
+                            configs.contractDetails.contractData.rentalStart
+                        ).getMonth() +
+                            1) +
+                        '/' +
+                        new Date(
+                            configs.contractDetails.contractData.rentalStart
+                        ).getFullYear()
+                    }</h2>
+                    <h2>Rental End:${
+                        new Date(
+                            configs.contractDetails.contractData.rentalEnd
+                        ).getDate() +
+                        '/' +
+                        new Date(
+                            configs.contractDetails.contractData.rentalEnd
+                        ).getMonth() +
+                        1 +
+                        '/' +
+                        new Date(
+                            configs.contractDetails.contractData.rentalEnd
+                        ).getFullYear()
+                    }</h2>
+                    <h2>Total Amount:${
+                        configs.contractDetails.contractData.totalAmount
+                    }</h2>
+                    <h2>Payment Method:${
+                        configs.contractDetails.contractData.paymentMethod
+                    }</h2>
 
                     <h3>For more details about the agent, you can contact him/her through</h3>
                        
                     <h4>AgentName:${configs.contractDetails.agentName}</h4>
 
-                    <h4>AgentPhone:${configs.contractDetails.agentPhoneNumber}</h4>
+                    <h4>AgentPhone:${
+                        configs.contractDetails.agentPhoneNumber
+                    }</h4>
 
                     <h4>AgentEmail:${configs.contractDetails.agentEmail}</h4>
 
-                    <a href="${appWebsiteHost}/confirm-booking/${configs.contractDetails._id}" >Confirm</a>
-                    <a href="${appWebsiteHost}/cancel-booking/${configs.contractDetails._id}">Cancel</a>
+                    ${JSON.stringify(contractDetails)}
+
+                    <a href="${appWebsiteHost}/confirm-booking/${
+                        configs.contractDetails._id
+                    }" >Confirm</a>
+                    <a href="${appWebsiteHost}/cancel-booking/${
+                        configs.contractDetails._id
+                    }">Cancel</a>
 
                     <p>Have a good day.</p>
                     <p dir="rtl">إدارة هومي الموقّرة</p>
