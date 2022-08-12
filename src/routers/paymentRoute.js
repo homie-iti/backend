@@ -12,14 +12,14 @@ router.post(
     validationMW,
     paymentController.bookUnit
 )
-router.put(
+router.get(
     '/confirm-booking/:id',
     validateId('contract'),
     validationMW,
     paymentController.confirmBookingUnit
 )
 
-router.put(
+router.get(
     '/cancel-booking/:id',
     validateId('contract'),
     validationMW,

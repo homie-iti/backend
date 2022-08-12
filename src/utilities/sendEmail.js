@@ -179,7 +179,6 @@ module.exports = class EmailClient {
 
                     <h4>AgentEmail: ${configs.contractDetails.agentEmail}</h4>
 
-                    // ${JSON.stringify(configs.contractDetails)}
 
                     <a href="${appWebsiteHost}/confirm-booking/${
                         configs.contractDetails.contractData._id
