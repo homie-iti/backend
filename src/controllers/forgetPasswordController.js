@@ -23,6 +23,8 @@ function notifyUser(event, user) {
     })
 }
 module.exports.forgetPassword = (request, response, next) => {
+    let userData
+
     User.findOne({
         email: request.body.email,
     })
@@ -36,21 +38,21 @@ module.exports.forgetPassword = (request, response, next) => {
             //     expiresIn: '20m',
             // })
 
+            userData = user
+
             console.log(user)
-            user.updateOne({}, { resetLink: user._id }).then((updatedUser) => {
-                // console.log(updatedUser, user)
-                console.log(user.resetLink)
-                if (updatedUser.modifiedCount === 0)
-                    next(
-                        new Error(
-                            'Error occurred in setting resetLink property'
-                        )
-                    )
-                console.log(user)
-                notifyUser('reset_password', user)
-                response.status(200).json({
-                    data: 'Email with reset password link has been sent successfully.',
-                })
+            console.log(user.resetLink)
+            return user.updateOne({}, { resetLink: user._id })
+        })
+        .then((updatedUser) => {
+            // console.log(updatedUser, user)
+            if (updatedUser.modifiedCount === 0)
+                throw new Error('Error occurred in setting resetLink property')
+
+            // console.log(user)
+            notifyUser('reset_password', userData)
+            response.status(200).json({
+                data: 'Email with reset password link has been sent successfully.',
             })
         })
         .catch((error) => {

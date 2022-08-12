@@ -95,10 +95,7 @@ module.exports = class EmailClient {
                     body: `
                         <h2>Reset your forgotten password</h2>
                         <p>You are receiving this e-mail because you have requested a password reset.</p>
-                        <p>Please click the link below to reset your password:<br>
-                        <button>
-                        <a href=${resetPasswordLink}>${resetPasswordLink}</a>
-                        </button>         
+                        <p> password reset code: ${configs.resetLink}
                         </p>
                         <p>If you did not request this password reset, then please ignore this email.</p>
                         <p>Have a nice day.</p>
