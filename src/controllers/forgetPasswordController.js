@@ -64,6 +64,7 @@ module.exports.forgetPassword = (request, response, next) => {
 
 module.exports.resetPassword = (request, response, next) => {
     const { resetLink, newPassword } = request.body
+    console.log({ resetLink, newPassword })
     // if (resetLink) {
     //     jwt.verify(resetLink, 'forgetPassword', (error) => {
     //         console.log(decodedToken)
