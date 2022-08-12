@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
+const { toObjectId } = require('../utilities/convertString')
+
 const saltRounds = 10
 const { isValidObjectId } = require('mongoose')
 const User = require('../models/userModel')
@@ -71,9 +73,12 @@ module.exports.resetPassword = (request, response, next) => {
     //                 .json({ error: 'Incorrect or expired link' })
     //         }
     if (!isValidObjectId(resetLink)) throw new Error('Not Valid reset Link ')
-    User.findOne({ _id: resetLink, resetLink }).then((user) => {
+    User.findOne({
+        _id: toObjectId(resetLink),
+        resetLink,
+    }).then((user) => {
         console.log(user)
-        if (user == null) next(new Error("Expired link or user doesn't found "))
+        if (user == null) throw new Error("Expired link or user doesn't found ")
         else {
             const hashedPassword = bcrypt.hashSync(newPassword, saltRounds)
             user.password = hashedPassword
