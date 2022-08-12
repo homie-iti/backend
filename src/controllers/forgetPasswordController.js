@@ -39,9 +39,9 @@ module.exports.forgetPassword = (request, response, next) => {
             // })
 
             userData = user
-
-            console.log(user)
-            console.log(user.resetLink)
+            userData.resetLink = user._id
+            // console.log(user)
+            // console.log(user.resetLink)
             return user.updateOne({}, { resetLink: user._id })
         })
         .then((updatedUser) => {
