@@ -150,10 +150,10 @@ module.exports = class EmailClient {
                             configs.contractDetails.contractData.rentalEnd
                         ).getDate() +
                         '/' +
-                        new Date(
+                        (new Date(
                             configs.contractDetails.contractData.rentalEnd
                         ).getMonth() +
-                        1 +
+                            1) +
                         '/' +
                         new Date(
                             configs.contractDetails.contractData.rentalEnd
