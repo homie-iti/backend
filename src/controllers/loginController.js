@@ -39,7 +39,7 @@ module.exports.loginUser = (request, response, next) => {
                     const token = jwt.sign(
                         {
                             id: data._id,
-                            role: 'aser',
+                            role: 'User',
                         },
                         appConfig.jwtSecret,
                         // process.env.secret,
@@ -78,7 +78,7 @@ module.exports.loginAdmin = (request, response, next) => {
                     const token = jwt.sign(
                         {
                             id: data._id,
-                            role: 'admin',
+                            role: 'Admin',
                         },
                         appConfig.jwtSecret,
                         { expiresIn: '24h' }
