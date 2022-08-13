@@ -14,12 +14,12 @@ const addUnitValidations = [
 
     body('address').isObject().withMessage('Unit Address should be object '),
     body('address.city')
-        .isAlpha('en-US', { ignore: 's-.,;?' })
+        .isAlpha('en-US', { ignore: 's-.,;? ' })
         .withMessage('Unit City should be characters'),
 
     body('address.streetName')
         .optional()
-        .isAlphanumeric('en-US', { ignore: 's-.,;?' })
+        .isAlphanumeric('en-US', { ignore: 's-.,;? ' })
         .withMessage('Unit Street should be characters'),
 
     body('address.buildingNumber')
@@ -29,7 +29,7 @@ const addUnitValidations = [
 
     body('unitInfo').isObject().withMessage('unitInfo should be object '),
     body('unitInfo.description')
-        .isAlpha('en-US', { ignore: 's-.,;?' })
+        .isAlpha('en-US', { ignore: 's-.,;? ' })
         .withMessage('unitInfo.description should be characters'),
 
     body('unitInfo.rooms')
@@ -74,13 +74,13 @@ const updateUnitValidations = [
         .withMessage('Unit Address should be object ')
         .optional(),
     body('address.city')
-        .isAlpha('en-US', { ignore: 's-.,;?' })
+        .isAlpha('en-US', { ignore: 's-.,;? ' })
         .withMessage('Unit City should be characters')
         .optional(),
 
     body('address.streetName')
         .optional()
-        .isAlpha('en-US', { ignore: 's-.,;?' })
+        .isAlpha('en-US', { ignore: 's-.,;? ' })
         .withMessage('Unit Street '),
 
     body('address.buildingNumber')
