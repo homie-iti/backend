@@ -1,5 +1,4 @@
 const express = require('express')
-const { param } = require('express-validator')
 
 const router = express.Router()
 const validationMW = require('../middlewares/validationMW')

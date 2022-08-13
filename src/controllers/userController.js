@@ -2,7 +2,9 @@ const fs = require('fs')
 const { promisify } = require('util')
 
 const unlinkAsync = promisify(fs.unlink)
+const bcrypt = require('bcrypt')
 
+const saltRounds = 10
 const helperFunctions = require('./_HelperFunctions')
 
 const User = require('../models/userModel')
@@ -60,7 +62,7 @@ module.exports.createUser = (request, response, next) => {
         age: request.body.age,
         email: request.body.email,
         gender: request.body.gender,
-        password: request.body.password,
+        password: bcrypt.hashSync(request.body.password, saltRounds),
         phone: request.body.phone,
         national_id: request.body.national_id,
         balance: request.body.balance,
