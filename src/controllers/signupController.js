@@ -104,9 +104,9 @@ module.exports.activateAccount = (request, response, next) => {
         })
         .then((userInfo) => notifyUser('account_activated', userInfo))
         .then(() => {
-            response.status(200).json({
-                result: `account activated, you can login now`,
-            })
+            response.redirect(
+                'https://homie-iti.vercel.com/login?status=activated'
+            )
         })
         .catch((error) => next(error))
 }
