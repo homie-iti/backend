@@ -125,9 +125,10 @@ module.exports.confirmBookingUnit = (request, response, next) => {
         .then((contract) => {
             // console.log(contract)
             if (!contract) throw new Error(`Contract not found`)
+            contract.state = 'active'
             contractData = contract
-            contractData.state = 'active'
             // console.log(contractData)
+            contract.save()
 
             return UnitModel.findOneAndUpdate(
                 { _id: contractData.unitId },
@@ -225,8 +226,9 @@ module.exports.cancelBookingUnit = (request, response, next) => {
         .then((contract) => {
             // console.log(contract)
             if (!contract) throw new Error(`Contract not found`)
+            contract.state = 'canceled'
             contractData = contract
-            contractData.state = 'canceled'
+            contract.save()
             console.log(contractData)
             return UserModel.findOne(
                 { _id: contractData.agentId },
