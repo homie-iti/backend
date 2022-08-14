@@ -133,7 +133,7 @@ module.exports.confirmBookingUnit = (request, response, next) => {
                 { _id: contractData.unitId },
                 {
                     $set: {
-                        isAvailable: false,
+                        // isAvailable: false,
                         agentId: contractData.agentId,
                     },
                 },
