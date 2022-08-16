@@ -1,4 +1,4 @@
-const express = require( 'express' )
+const express = require('express')
 
 const router = express.Router()
 
@@ -54,6 +54,6 @@ router
         validationMW,
         contractController.getContractById
     )
-// .delete(contractController.deleteContractById)
+    .delete(contractController.deleteContractById)
 
 module.exports = router

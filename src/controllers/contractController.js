@@ -97,6 +97,16 @@ module.exports.getContractById = (request, response, next) => {
         .catch((error) => next(error))
 }
 
+module.exports.deleteContractById = (request, response, next) => {
+    ContractModel.deleteOne({ _id: request.params.id })
+        .then((data) => {
+            console.log(data)
+            if (data.deletedCount === 0) throw new Error('Contract Not Found')
+            response.status(200).json('contract deleted')
+        })
+        .catch((error) => next(error))
+}
+
 module.exports.deleteUnitContract = (request, response, next) => {
     ContractModel.deleteOne({
         unitId: request.params.id,
